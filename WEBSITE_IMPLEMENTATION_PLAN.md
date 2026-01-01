@@ -14,6 +14,7 @@ This document provides a complete, self-contained implementation plan for the ma
 ### Product Context
 
 **macprefs** is a declarative macOS preferences management CLI tool that:
+
 - Manages macOS `defaults` via JSON configuration files
 - Provides plan/apply/rollback workflow (like Terraform for preferences)
 - Targets power users, fleet admins, and CI/CD engineers
@@ -55,6 +56,7 @@ This document provides a complete, self-contained implementation plan for the ma
 | **Pages URL**  | `https://macprefs.app` (after DNS setup)      |
 
 **Why `macprefs-website`:**
+
 - Clear purpose (not just docs)
 - Separates website from closed-source CLI repo
 - Standard naming convention (`{product}-website`)
@@ -504,16 +506,16 @@ macprefs-website/
 
 ### Phase 1: Project Scaffold (Day 1-2) ✅ COMPLETE
 
-| Task | Description                                       | Status |
-| ---- | ------------------------------------------------- | ------ |
-| 1.1  | Create GitHub repository `macprefs-website`       | ✅      |
-| 1.2  | Initialize Astro + Starlight project              | ✅      |
-| 1.3  | Add Tailwind CSS integration                      | ✅      |
-| 1.4  | Configure `astro.config.mjs`                      | ✅      |
-| 1.5  | Create GitHub Actions deploy workflow             | ✅      |
-| 1.6  | Set up directory structure                        | ✅      |
-| 1.7  | Add placeholder pages (index, pricing, use-cases) | ✅      |
-| 1.8  | Verify deployment to GitHub Pages                 | ✅      |
+| Task | Description                                       | Status   |
+| ---- | ------------------------------------------------- | -------- |
+| 1.1  | Create GitHub repository `macprefs-website`       | Complete |
+| 1.2  | Initialize Astro + Starlight project              | Complete |
+| 1.3  | Add Tailwind CSS integration                      | Complete |
+| 1.4  | Configure `astro.config.mjs`                      | Complete |
+| 1.5  | Create GitHub Actions deploy workflow             | Complete |
+| 1.6  | Set up directory structure                        | Complete |
+| 1.7  | Add placeholder pages (index, pricing, use-cases) | Complete |
+| 1.8  | Verify deployment to GitHub Pages                 | Complete |
 
 **Deliverable:** Site deploys successfully to `jmcombs.github.io/macprefs-website` ✅ COMPLETE
 
@@ -656,25 +658,25 @@ This ensures the custom domain persists across deployments.
 
 #### 2. Feature Grid (6 tiles)
 
-| Icon | Title            | Description                                        |
-| ---- | ---------------- | -------------------------------------------------- |
-| 📄    | JSON Config      | Single file defines all your preferences           |
-| 🔍    | Drift Detection  | See exactly what will change before applying       |
-| ⏪    | Instant Rollback | Undo any change with one command                   |
-| 🚀    | Fast & Native    | Pure Swift, universal binary, <10s for 100 domains |
-| 🔒    | No Elevation     | User-level preferences, no sudo required           |
-| 🤖    | CI/CD Ready      | Headless mode for automation (Pro)                 |
+| Icon     | Title            | Description                                        |
+| -------- | ---------------- | -------------------------------------------------- |
+| Document | JSON Config      | Single file defines all your preferences           |
+| Search   | Drift Detection  | See exactly what will change before applying       |
+| Rewind   | Instant Rollback | Undo any change with one command                   |
+| Rocket   | Fast & Native    | Pure Swift, universal binary, <10s for 100 domains |
+| Lock     | No Elevation     | User-level preferences, no sudo required           |
+| Robot    | CI/CD Ready      | Headless mode for automation (Pro)                 |
 
 #### 3. Comparison Table
 
-| Feature               | macprefs      | nix-darwin   | MDM          | Scripts  |
-| --------------------- | ------------- | ------------ | ------------ | -------- |
-| Learning curve        | ✅ Minutes     | ❌ Days/Weeks | ❌ Complex    | ⚠️ Varies |
-| Configuration format  | JSON          | Nix          | XML Profiles | Bash     |
-| Drift detection       | ✅ Built-in    | ⚠️ Partial    | ❌ No         | ❌ Manual |
-| Rollback              | ✅ One command | ⚠️ Complex    | ❌ No         | ❌ Manual |
-| Infrastructure needed | ✅ None        | ✅ None       | ❌ Server     | ✅ None   |
-| Cost                  | Free / $39    | Free         | $$$          | Free     |
+| Feature               | macprefs     | nix-darwin | MDM          | Scripts |
+| --------------------- | ------------ | ---------- | ------------ | ------- |
+| Learning curve        | Yes Minutes  | No Days    | No Complex   | Varies  |
+| Configuration format  | JSON         | Nix        | XML Profiles | Bash    |
+| Drift detection       | Yes Built-in | Partial    | No           | Manual  |
+| Rollback              | Yes 1-cmd    | Complex    | No           | Manual  |
+| Infrastructure needed | None         | None       | Server       | None    |
+| Cost                  | Free / $39   | Free       | $$$          | Free    |
 
 ### Pricing Page
 
