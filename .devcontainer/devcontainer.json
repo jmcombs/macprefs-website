@@ -5,6 +5,7 @@
     "vscode": {
       "extensions": [
         "1password.op-vscode",
+        "astro-build.astro-vscode",
         "augment.vscode-augment",
         "davidanson.vscode-markdownlint",
         "dbaeumer.vscode-eslint",
