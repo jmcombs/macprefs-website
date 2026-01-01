@@ -1,0 +1,44 @@
+---
+title: CI/CD Guide
+description: Integrating macprefs into your CI/CD pipelines
+---
+
+# CI/CD Guide
+
+Automate preference management with CI/CD integration. *(Pro feature)*
+
+## Headless Mode
+
+Run macprefs without interactive prompts:
+
+```bash
+macprefs apply --yes
+```
+
+## JSON Output
+
+Get machine-readable output for parsing in scripts:
+
+```bash
+macprefs plan --output json
+```
+
+## Exit Codes
+
+macprefs uses standard exit codes for scripting:
+
+- `0`: Success
+- `1`: Error
+- `2`: Changes pending (no changes applied)
+
+## GitHub Actions Example
+
+```yaml
+- name: Apply preferences
+  run: macprefs apply --yes
+  env:
+    MACPREFS_LICENSE: ${{ secrets.MACPREFS_LICENSE }}
+```
+
+*Full content coming soon.*
+

@@ -1,0 +1,45 @@
+---
+title: Exit Codes
+description: Exit code reference for scripting and CI/CD
+---
+
+# Exit Codes
+
+macprefs uses standard exit codes for easy scripting integration.
+
+## Exit Code Reference
+
+| Code | Meaning | Description |
+|------|---------|-------------|
+| 0 | Success | Command completed successfully |
+| 1 | Error | An error occurred |
+| 2 | Changes Pending | Plan found changes (useful for CI) |
+| 3 | Configuration Error | Invalid configuration file |
+| 4 | Permission Error | Insufficient permissions |
+
+## Usage in Scripts
+
+```bash
+macprefs plan
+if [ $? -eq 2 ]; then
+  echo "Changes detected"
+  macprefs apply --yes
+fi
+```
+
+## CI/CD Integration
+
+Use exit codes to control pipeline flow:
+
+```yaml
+- name: Check for drift
+  run: |
+    macprefs plan
+    if [ $? -eq 0 ]; then
+      echo "No changes needed"
+    fi
+  continue-on-error: true
+```
+
+*Full documentation coming soon.*
+

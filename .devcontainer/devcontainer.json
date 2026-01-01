@@ -1,0 +1,53 @@
+{
+  "name": "macprefs Website Dev Container",
+  "image": "ghcr.io/jmcombs/devcontainer:node",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "1password.op-vscode",
+        "augment.vscode-augment",
+        "davidanson.vscode-markdownlint",
+        "dbaeumer.vscode-eslint",
+        "editorconfig.editorconfig",
+        "emmanuelbeziat.vscode-great-icons",
+        "esbenp.prettier-vscode",
+        "github.github-vscode-theme",
+        "github.vscode-github-actions",
+        "github.vscode-pull-request-github",
+        "mechatroner.rainbow-csv",
+        "meganrogge.template-string-converter",
+        "mermaidchart.vscode-mermaid-chart",
+        "mikestead.dotenv",
+        "ms-azuretools.vscode-azurecontainerapps",
+        "ms-azuretools.vscode-azureresourcegroups",
+        "ms-azuretools.vscode-containers",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode-remote.remote-ssh",
+        "ms-vscode-remote.remote-ssh-edit",
+        "ms-vscode-remote.remote-wsl",
+        "ms-vscode.makefile-tools",
+        "ms-vscode.remote-explorer",
+        "ms-vscode.remote-server",
+        "postman.postman-for-vscode",
+        "qwtel.sqlite-viewer",
+        "redhat.vscode-yaml",
+        "ryu1kn.text-marker",
+        "streetsidesoftware.code-spell-checker",
+        "tamasfe.even-better-toml",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 2,
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "json.schemaDownload.enable": true
+      }
+    }
+  },
+  "postCreateCommand": "cd vscode && npm install",
+  "remoteUser": "coder"
+}

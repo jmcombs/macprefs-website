@@ -1,0 +1,45 @@
+---
+title: First Config
+description: Create your first macprefs configuration file
+---
+
+# Creating Your First Configuration
+
+Learn how to create and structure your macprefs configuration file.
+
+## Configuration Structure
+
+A macprefs configuration is a JSON file that defines your desired macOS preferences:
+
+```json
+{
+  "version": "1.0",
+  "preferences": {
+    "com.apple.dock": {
+      "autohide": true,
+      "tilesize": 48
+    }
+  }
+}
+```
+
+## Domain Structure
+
+Each top-level key under `preferences` is a domain (like `com.apple.dock`). Within each domain, you specify key-value pairs for the preferences you want to set.
+
+## Supported Value Types
+
+macprefs supports all macOS preference types:
+
+- **String**: `"value"`
+- **Integer**: `42`
+- **Float**: `3.14`
+- **Boolean**: `true` or `false`
+- **Array**: `["item1", "item2"]`
+- **Dictionary**: `{"key": "value"}`
+
+## Next Steps
+
+- See [Dock examples](/examples/dock/) for common configurations
+- Learn about [Finder preferences](/examples/finder/)
+- Read the [config format reference](/reference/config-format/)

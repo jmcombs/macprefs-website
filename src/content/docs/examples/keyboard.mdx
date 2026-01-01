@@ -1,0 +1,67 @@
+---
+title: Keyboard Examples
+description: Configuration examples for macOS keyboard preferences
+---
+
+# Keyboard Configuration Examples
+
+Common keyboard and input preference configurations.
+
+## Key Repeat Rate
+
+```json
+{
+  "preferences": {
+    "NSGlobalDomain": {
+      "KeyRepeat": 2,
+      "InitialKeyRepeat": 15
+    }
+  }
+}
+```
+
+Lower values = faster repeat. `KeyRepeat` of 2 is very fast.
+
+## Function Keys Behavior
+
+```json
+{
+  "preferences": {
+    "NSGlobalDomain": {
+      "com.apple.keyboard.fnState": true
+    }
+  }
+}
+```
+
+When `true`, F1, F2, etc. behave as standard function keys.
+
+## Auto-Correct
+
+```json
+{
+  "preferences": {
+    "NSGlobalDomain": {
+      "NSAutomaticSpellingCorrectionEnabled": false,
+      "NSAutomaticCapitalizationEnabled": false,
+      "NSAutomaticPeriodSubstitutionEnabled": false
+    }
+  }
+}
+```
+
+## Smart Quotes
+
+```json
+{
+  "preferences": {
+    "NSGlobalDomain": {
+      "NSAutomaticQuoteSubstitutionEnabled": false,
+      "NSAutomaticDashSubstitutionEnabled": false
+    }
+  }
+}
+```
+
+*More examples coming soon.*
+

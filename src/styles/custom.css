@@ -1,0 +1,97 @@
+/* macprefs custom styles for Starlight */
+@import "tailwindcss";
+
+/* Brand color variables */
+:root {
+  --color-primary: #0066ff;
+  --color-primary-dark: #0052cc;
+  --color-primary-light: #3385ff;
+  --color-dark: #1a1a1a;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-600: #4b5563;
+  --color-gray-900: #111827;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-code-bg: #1e293b;
+
+  /* Starlight theme overrides */
+  --sl-color-accent-low: #e6f0ff;
+  --sl-color-accent: #0066ff;
+  --sl-color-accent-high: #0052cc;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #f9fafb;
+  --sl-color-gray-2: #f3f4f6;
+  --sl-color-gray-3: #e5e7eb;
+  --sl-color-gray-4: #9ca3af;
+  --sl-color-gray-5: #6b7280;
+  --sl-color-gray-6: #1a1a1a;
+  --sl-color-black: #111827;
+}
+
+/* Dark mode overrides */
+:root[data-theme="dark"] {
+  --sl-color-accent-low: #002966;
+  --sl-color-accent: #3385ff;
+  --sl-color-accent-high: #66a3ff;
+}
+
+/* Typography - Apple system fonts */
+:root {
+  --sl-font: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    sans-serif;
+  --sl-font-mono: "SF Mono", ui-monospace, "JetBrains Mono", monospace;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
+
+h1 {
+  font-weight: 700;
+}
+
+/* Code blocks */
+pre {
+  background-color: var(--color-code-bg) !important;
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Button styles */
+.sl-link-button {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.sl-link-button:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+/* Custom utility classes */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.border-primary {
+  border-color: var(--color-primary);
+}
+

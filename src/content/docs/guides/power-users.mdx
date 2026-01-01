@@ -1,0 +1,37 @@
+---
+title: Power Users Guide
+description: Advanced macprefs usage for individual power users
+---
+
+# Power Users Guide
+
+Advanced workflows for getting the most out of macprefs.
+
+## Multi-Mac Sync
+
+Keep your preferences synchronized across multiple Macs using Git:
+
+```bash
+# On your primary Mac
+cd ~/.config/macprefs
+git init
+git add preferences.json
+git commit -m "Initial preferences"
+git remote add origin <your-repo>
+git push -u origin main
+```
+
+## Partial Configurations
+
+Create focused configs for specific use cases instead of one monolithic file.
+
+## Domain Discovery
+
+Find which domain controls a specific preference:
+
+```bash
+macprefs diagnose
+```
+
+*Full content coming soon.*
+

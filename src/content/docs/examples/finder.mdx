@@ -1,0 +1,65 @@
+---
+title: Finder Examples
+description: Configuration examples for macOS Finder preferences
+---
+
+# Finder Configuration Examples
+
+Common Finder preference configurations.
+
+## Show File Extensions
+
+```json
+{
+  "preferences": {
+    "NSGlobalDomain": {
+      "AppleShowAllExtensions": true
+    }
+  }
+}
+```
+
+## Show Hidden Files
+
+```json
+{
+  "preferences": {
+    "com.apple.finder": {
+      "AppleShowAllFiles": true
+    }
+  }
+}
+```
+
+## Default View Mode
+
+```json
+{
+  "preferences": {
+    "com.apple.finder": {
+      "FXPreferredViewStyle": "clmv"
+    }
+  }
+}
+```
+
+Options:
+- `"icnv"` - Icon View
+- `"Nlsv"` - List View
+- `"clmv"` - Column View
+- `"glyv"` - Gallery View
+
+## Show Path Bar
+
+```json
+{
+  "preferences": {
+    "com.apple.finder": {
+      "ShowPathbar": true
+    }
+  }
+}
+```
+
+*More examples coming soon.*
+

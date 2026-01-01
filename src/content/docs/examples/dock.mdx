@@ -1,0 +1,67 @@
+---
+title: Dock Examples
+description: Configuration examples for macOS Dock preferences
+---
+
+# Dock Configuration Examples
+
+Common Dock preference configurations.
+
+## Auto-hide Dock
+
+```json
+{
+  "preferences": {
+    "com.apple.dock": {
+      "autohide": true,
+      "autohide-delay": 0,
+      "autohide-time-modifier": 0.5
+    }
+  }
+}
+```
+
+## Icon Size and Magnification
+
+```json
+{
+  "preferences": {
+    "com.apple.dock": {
+      "tilesize": 48,
+      "magnification": true,
+      "largesize": 64
+    }
+  }
+}
+```
+
+## Dock Position
+
+```json
+{
+  "preferences": {
+    "com.apple.dock": {
+      "orientation": "left"
+    }
+  }
+}
+```
+
+Options: `"bottom"`, `"left"`, `"right"`
+
+## Minimize Effect
+
+```json
+{
+  "preferences": {
+    "com.apple.dock": {
+      "mineffect": "scale"
+    }
+  }
+}
+```
+
+Options: `"genie"`, `"scale"`
+
+*More examples coming soon.*
+

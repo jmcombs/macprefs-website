@@ -1,0 +1,45 @@
+---
+title: Configuration Format
+description: JSON schema documentation for preferences.json
+---
+
+# Configuration Format
+
+Complete reference for the macprefs configuration file format.
+
+## File Structure
+
+```json
+{
+  "version": "1.0",
+  "preferences": {
+    "domain.name": {
+      "key": "value"
+    }
+  }
+}
+```
+
+## Domains
+
+Domains are the top-level identifiers for preference groups. Examples:
+
+- `com.apple.dock` - Dock preferences
+- `com.apple.finder` - Finder preferences
+- `NSGlobalDomain` - Global preferences
+
+## Supported Value Types
+
+| Type | JSON Example | macOS Type |
+|------|--------------|------------|
+| String | `"value"` | CFString |
+| Integer | `42` | CFNumber |
+| Float | `3.14` | CFNumber |
+| Boolean | `true` | CFBoolean |
+| Array | `["a", "b"]` | CFArray |
+| Dictionary | `{"k": "v"}` | CFDictionary |
+| Data | `"base64..."` | CFData |
+| Date | `"2024-01-01T00:00:00Z"` | CFDate |
+
+*Full documentation coming soon.*
+

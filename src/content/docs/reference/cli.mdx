@@ -1,0 +1,67 @@
+---
+title: CLI Reference
+description: Complete command-line interface reference for macprefs
+---
+
+# CLI Reference
+
+Complete documentation for all macprefs commands.
+
+## Commands
+
+### `macprefs init`
+
+Initialize a new configuration file.
+
+```bash
+macprefs init [--path <path>]
+```
+
+### `macprefs plan`
+
+Show what changes would be made without applying them.
+
+```bash
+macprefs plan [--config <file>] [--output <format>]
+```
+
+### `macprefs apply`
+
+Apply the configuration to your system.
+
+```bash
+macprefs apply [--config <file>] [--yes]
+```
+
+### `macprefs rollback`
+
+Revert to a previous state.
+
+```bash
+macprefs rollback [--run <id>]
+```
+
+### `macprefs history`
+
+View history of applied changes.
+
+```bash
+macprefs history [--limit <n>]
+```
+
+### `macprefs diagnose`
+
+Diagnose preference issues and discover domains.
+
+```bash
+macprefs diagnose [--domain <domain>]
+```
+
+## Global Options
+
+- `--help`: Show help information
+- `--version`: Show version number
+- `--verbose`: Enable verbose output
+
+*Full documentation coming soon.*
+
