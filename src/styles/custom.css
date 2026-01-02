@@ -1,102 +1,200 @@
-/* macprefs custom styles for Starlight */
+/* ==========================================================================
+   macprefs Custom Styles - Blue PSL 10K Theme
+   ========================================================================== */
 @import "tailwindcss";
 
-/* Brand color variables */
-:root {
-  --color-primary: #0066ff;
-  --color-primary-dark: #0052cc;
-  --color-primary-light: #3385ff;
-  --color-dark: #1a1a1a;
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-600: #4b5563;
-  --color-gray-900: #111827;
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-code-bg: #1e293b;
+/*
+ * Color Palette - GNOME/Tango Inspired "Path Blue" Theme
+ * Primary: Path Blue (#3465a4) - A sophisticated, professional blue
+ * The theme uses warm grays and the Path Blue accent for a balanced look.
+ */
 
-  /* Starlight theme overrides */
-  --sl-color-accent-low: #e6f0ff;
-  --sl-color-accent: #0066ff;
-  --sl-color-accent-high: #0052cc;
+/* ==========================================================================
+   Light Mode Theme (Default)
+   ========================================================================== */
+:root {
+  /* Path Blue Primary Colors */
+  --mp-path-blue: #3465a4;
+  --mp-path-blue-light: #729fcf;
+  --mp-path-blue-dark: #204a87;
+
+  /* Neutral Grays (slightly warm) */
+  --mp-gray-50: #fafaf9;
+  --mp-gray-100: #f5f5f4;
+  --mp-gray-200: #e7e5e4;
+  --mp-gray-300: #d6d3d1;
+  --mp-gray-400: #a8a29e;
+  --mp-gray-500: #78716c;
+  --mp-gray-600: #57534e;
+  --mp-gray-700: #44403c;
+  --mp-gray-800: #292524;
+  --mp-gray-900: #1c1917;
+
+  /* Starlight Theme Variables - Light Mode */
+  --sl-color-accent-low: #e8f0fa;
+  --sl-color-accent: var(--mp-path-blue);
+  --sl-color-accent-high: var(--mp-path-blue-dark);
   --sl-color-white: #ffffff;
-  --sl-color-gray-1: #f9fafb;
-  --sl-color-gray-2: #f3f4f6;
-  --sl-color-gray-3: #e5e7eb;
-  --sl-color-gray-4: #9ca3af;
-  --sl-color-gray-5: #6b7280;
-  --sl-color-gray-6: #1a1a1a;
-  --sl-color-black: #111827;
-}
+  --sl-color-gray-1: var(--mp-gray-50);
+  --sl-color-gray-2: var(--mp-gray-100);
+  --sl-color-gray-3: var(--mp-gray-200);
+  --sl-color-gray-4: var(--mp-gray-400);
+  --sl-color-gray-5: var(--mp-gray-600);
+  --sl-color-gray-6: var(--mp-gray-800);
+  --sl-color-black: var(--mp-gray-900);
 
-/* Dark mode overrides */
-:root[data-theme="dark"] {
-  --sl-color-accent-low: #002966;
-  --sl-color-accent: #3385ff;
-  --sl-color-accent-high: #66a3ff;
-}
+  /* Header and text colors */
+  --sl-color-text: var(--mp-gray-800);
+  --sl-color-text-accent: var(--mp-path-blue);
 
-/* Hero image - improve gear visibility on dark backgrounds */
-:root[data-theme="dark"] .hero img {
-  /* Add subtle glow effect to make dark gear visible */
-  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
-}
-
-/* Typography - Apple system fonts */
-:root {
+  /* Typography */
   --sl-font:
-    system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  --sl-font-mono: "SF Mono", ui-monospace, "JetBrains Mono", monospace;
+    system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    Roboto, sans-serif;
+  --sl-font-mono:
+    "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code", monospace;
 }
 
-/* Headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 600;
+/* ==========================================================================
+   Dark Mode Theme
+   ========================================================================== */
+:root[data-theme="dark"] {
+  /* Starlight Theme Variables - Dark Mode */
+  --sl-color-accent-low: #1a2d47;
+  --sl-color-accent: var(--mp-path-blue-light);
+  --sl-color-accent-high: #a3c7f0;
+  --sl-color-white: var(--mp-gray-900);
+  --sl-color-gray-1: var(--mp-gray-800);
+  --sl-color-gray-2: var(--mp-gray-700);
+  --sl-color-gray-3: var(--mp-gray-600);
+  --sl-color-gray-4: var(--mp-gray-500);
+  --sl-color-gray-5: var(--mp-gray-300);
+  --sl-color-gray-6: var(--mp-gray-100);
+  --sl-color-black: #ffffff;
+
+  /* Dark mode text */
+  --sl-color-text: var(--mp-gray-100);
+  --sl-color-text-accent: var(--mp-path-blue-light);
 }
 
-h1 {
-  font-weight: 700;
+/* ==========================================================================
+   Site Header - Always Path Blue Background
+   ========================================================================== */
+
+/*
+ * The header uses Path Blue (#3465a4) as background in both light and dark modes
+ * for consistent branding. White text/icons provide contrast.
+ */
+header.header {
+  background-color: var(--mp-path-blue) !important;
+  border-bottom: 1px solid var(--mp-path-blue-dark) !important;
 }
 
-/* Code blocks */
-pre {
-  background-color: var(--color-code-bg) !important;
+/* Logo styling in header - ensure visibility on blue background */
+.site-title {
+  color: #ffffff !important;
 }
 
-/* Links */
-a {
-  color: var(--color-primary);
+.site-title:hover {
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
-a:hover {
-  color: var(--color-primary-dark);
+/* Header icons and controls - white on blue */
+header.header .sl-flex svg,
+header.header button svg {
+  color: #ffffff !important;
 }
 
-/* Button styles */
-.sl-link-button {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+/* Search button styling */
+site-search button {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
 }
 
-.sl-link-button:hover {
-  background-color: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
+site-search button:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
 }
 
-/* Custom utility classes */
-.text-primary {
-  color: var(--color-primary);
+/* Theme toggle and other header buttons */
+starlight-theme-select select,
+starlight-menu-button button {
+  color: #ffffff !important;
 }
 
-.bg-primary {
-  background-color: var(--color-primary);
+/* ==========================================================================
+   Hero Section Styling
+   ========================================================================== */
+
+/* Hero heading - Path Blue in light mode */
+.hero h1 {
+  color: var(--mp-path-blue) !important;
+  font-weight: 700 !important;
 }
 
-.border-primary {
-  border-color: var(--color-primary);
+:root[data-theme="dark"] .hero h1 {
+  color: var(--mp-path-blue-light) !important;
+}
+
+/* Hero tagline */
+.hero .tagline {
+  color: var(--mp-gray-600) !important;
+}
+
+:root[data-theme="dark"] .hero .tagline {
+  color: var(--mp-gray-300) !important;
+}
+
+/* Hero image sizing and layout */
+.hero > img {
+  max-width: 140px !important;
+  max-height: 140px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* ==========================================================================
+   Hero Layout - Text Left, Image Right (Very Tight Spacing)
+   ========================================================================== */
+
+/* Desktop: Horizontal layout with very tight spacing */
+@media (min-width: 50rem) {
+  .hero {
+    grid-template-columns: auto auto !important;
+    gap: 1rem !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Allow text to display on single lines */
+  .hero .stack {
+    white-space: nowrap;
+  }
+
+  .hero h1 {
+    white-space: nowrap !important;
+  }
+
+  .hero .tagline {
+    white-space: nowrap !important;
+  }
+
+  /* Actions can wrap if needed */
+  .hero .actions {
+    white-space: normal;
+  }
+}
+
+/* Mobile: Stacked layout - allow wrapping */
+@media (max-width: 50rem) {
+  .hero .stack,
+  .hero h1,
+  .hero .tagline {
+    white-space: normal !important;
+  }
+
+  .hero > img {
+    max-width: 100px !important;
+    max-height: 100px !important;
+  }
 }
