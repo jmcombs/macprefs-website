@@ -521,36 +521,38 @@ macprefs-website/
 
 **Completed:** 2026-01-01 | **Commit:** c0aeacb | **44 files committed**
 
-### Phase 2: Logo & Assets (Day 2-3) ✅ COMPLETE
+### Phase 2: Logo & Assets (Day 2-3) - PARTIAL
 
-| Task | Description                                       | Status |
-| ---- | ------------------------------------------------- | ------ |
-| 2.1  | Convert PNG logo to SVG (Vectorizer.ai or manual) | Done   |
-| 2.2  | Create simplified favicon (gear icon only)        | Done   |
-| 2.3  | Generate apple-touch-icon and PWA icons           | Done   |
-| 2.4  | Create OG image (1200x630) with logo + tagline    | Done   |
-| 2.5  | Create Twitter card image (1200x600)              | Done   |
-| 2.6  | Create dark mode logo variant                     | Done   |
-| 2.7  | Add all assets to `public/` directory             | Done   |
+| Task | Description                                       | Status   | Notes                                                               |
+| ---- | ------------------------------------------------- | -------- | ------------------------------------------------------------------- |
+| 2.1  | Convert PNG logo to SVG (Vectorizer.ai or manual) | Complete | `logo-symbol.svg`, `logo-symbol-blue.svg` in src/assets/            |
+| 2.2  | Create simplified favicon (gear icon only)        | Complete | `favicon.ico`, `favicon.svg`, `favicon-32x32.png`                   |
+| 2.3  | Generate apple-touch-icon and PWA icons           | Partial  | `apple-touch-icon.png`, `icon-192.png` done; `icon-512.png` missing |
+| 2.4  | Create OG image (1200x630) with logo + tagline    | Missing  | Required for social sharing                                         |
+| 2.5  | Create Twitter card image (1200x600)              | Missing  | Required for Twitter/X previews                                     |
+| 2.6  | Create dark mode logo variant                     | Complete | `logo-wordmark-white.svg` for dark backgrounds                      |
+| 2.7  | Add all assets to `public/` directory             | Partial  | Core assets present, social images missing                          |
 
-**Deliverable:** All brand assets in place, favicon working ✅
+**Deliverable:** Core favicon assets working, social sharing images still needed
 
-**Completed:** 2026-01-02 | **Commit:** 164bc4a | **Assets from provided 'macprefs logos' folder**
+**Started:** 2026-01-02 | **Commit:** 164bc4a | **Remaining:** og-image.png, twitter-card.png, icon-512.png
 
-### Phase 3: Homepage Design (Day 3-5)
+### Phase 3: Homepage Design (Day 3-5) - PARTIAL
 
-| Task | Description                                       | Status |
-| ---- | ------------------------------------------------- | ------ |
-| 3.1  | Create Hero component with tagline                | ☐      |
-| 3.2  | Create FeatureGrid component (6 tiles)            | ☐      |
-| 3.3  | Create Terminal component (animated demo)         | ☐      |
-| 3.4  | Create CompareTable component (vs nix-darwin/MDM) | ☐      |
-| 3.5  | Create Footer component                           | ☐      |
-| 3.6  | Assemble homepage from components                 | ☐      |
-| 3.7  | Add SEO meta tags and OG data                     | ☐      |
-| 3.8  | Mobile responsive testing                         | ☐      |
+| Task | Description                                       | Status   | Notes                                                 |
+| ---- | ------------------------------------------------- | -------- | ----------------------------------------------------- |
+| 3.1  | Create Hero component with tagline                | Complete | Using Starlight hero frontmatter in `index.mdx`       |
+| 3.2  | Create FeatureGrid component (6 tiles)            | Complete | Using Starlight `<CardGrid>` with 6 cards             |
+| 3.3  | Create Terminal component (animated demo)         | Not Done | Only static code block exists, no animation           |
+| 3.4  | Create CompareTable component (vs nix-darwin/MDM) | Not Done | Comparison table not implemented                      |
+| 3.5  | Create Footer component                           | Complete | Using Starlight's default footer                      |
+| 3.6  | Assemble homepage from components                 | Complete | `index.mdx` has hero, cards, install, getting started |
+| 3.7  | Add SEO meta tags and OG data                     | Partial  | Basic OG tags present, `og:image` missing (no image)  |
+| 3.8  | Mobile responsive testing                         | Complete | Starlight responsive + custom CSS media queries       |
 
-**Deliverable:** Complete, polished homepage
+**Deliverable:** Homepage functional with hero + features, missing comparison table and terminal demo
+
+**Status:** 5/8 tasks complete | **Remaining:** Terminal animation, CompareTable, og:image
 
 ### Phase 4: Documentation (Day 5-8)
 
