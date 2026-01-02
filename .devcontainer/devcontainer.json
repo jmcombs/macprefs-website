@@ -49,6 +49,6 @@
       }
     }
   },
-  "postCreateCommand": "cd vscode && npm install",
+  "postCreateCommand": "npm install",
   "remoteUser": "coder"
 }
