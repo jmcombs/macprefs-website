@@ -11,19 +11,19 @@ export default defineConfig({
     starlight({
       title: "macprefs",
       description: "Declarative macOS preferences manager",
+      // Use catppuccin themes for code blocks - Latte for light, Frappé for dark
+      expressiveCode: {
+        themes: ["catppuccin-latte", "catppuccin-frappe"],
+        styleOverrides: {
+          borderRadius: "0.375rem",
+        },
+      },
       logo: {
-        // Use solid white logo for both themes since header background is dark blue
-        src: "./src/assets/logo-light.svg",
+        // White logo for both themes since header is always Path Blue
+        src: "./src/assets/logo-wordmark-white.svg",
         replacesTitle: true,
         alt: "macprefs - Declare your Mac",
       },
-      social: [
-        {
-          icon: "github",
-          label: "GitHub",
-          href: "https://github.com/jmcombs/macprefs",
-        },
-      ],
       sidebar: [
         {
           label: "Getting Started",
@@ -74,8 +74,9 @@ export default defineConfig({
           tag: "link",
           attrs: {
             rel: "icon",
-            href: "/favicon.ico",
+            href: "/favicon-32x32.png",
             sizes: "32x32",
+            type: "image/png",
           },
         },
         {
@@ -96,42 +97,7 @@ export default defineConfig({
           tag: "meta",
           attrs: {
             name: "theme-color",
-            content: "#0066FF",
-          },
-        },
-        {
-          tag: "meta",
-          attrs: {
-            property: "og:image",
-            content: "https://macprefs.app/og-image.png",
-          },
-        },
-        {
-          tag: "meta",
-          attrs: {
-            property: "og:image:width",
-            content: "1200",
-          },
-        },
-        {
-          tag: "meta",
-          attrs: {
-            property: "og:image:height",
-            content: "630",
-          },
-        },
-        {
-          tag: "meta",
-          attrs: {
-            name: "twitter:card",
-            content: "summary_large_image",
-          },
-        },
-        {
-          tag: "meta",
-          attrs: {
-            name: "twitter:image",
-            content: "https://macprefs.app/twitter-card.png",
+            content: "#3465a4",
           },
         },
       ],

@@ -1,102 +1,487 @@
-/* macprefs custom styles for Starlight */
-@import "tailwindcss";
+/* ==========================================================================
+   macprefs Custom Styles
+   Light Mode: Blue PSL 10K Theme
+   Dark Mode: Catppuccin Mocha Theme
 
-/* Brand color variables */
+   NOTE: Do NOT import Tailwind here. Tailwind is handled by the Vite plugin.
+   This file only contains Starlight theme overrides using --sl-color-* variables.
+   ========================================================================== */
+
+/* ==========================================================================
+   Global Color Definitions
+   These are available in both light and dark mode
+   ========================================================================== */
 :root {
-  --color-primary: #0066ff;
-  --color-primary-dark: #0052cc;
-  --color-primary-light: #3385ff;
-  --color-dark: #1a1a1a;
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-600: #4b5563;
-  --color-gray-900: #111827;
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-code-bg: #1e293b;
-
-  /* Starlight theme overrides */
-  --sl-color-accent-low: #e6f0ff;
-  --sl-color-accent: #0066ff;
-  --sl-color-accent-high: #0052cc;
-  --sl-color-white: #ffffff;
-  --sl-color-gray-1: #f9fafb;
-  --sl-color-gray-2: #f3f4f6;
-  --sl-color-gray-3: #e5e7eb;
-  --sl-color-gray-4: #9ca3af;
-  --sl-color-gray-5: #6b7280;
-  --sl-color-gray-6: #1a1a1a;
-  --sl-color-black: #111827;
+  /* Path Blue - Used for header in both modes */
+  --mp-path-blue: #3465a4;
+  --mp-path-blue-light: #729fcf;
+  --mp-path-blue-dark: #204a87;
 }
 
-/* Dark mode overrides */
-:root[data-theme="dark"] {
-  --sl-color-accent-low: #002966;
-  --sl-color-accent: #3385ff;
-  --sl-color-accent-high: #66a3ff;
-}
+/* ==========================================================================
+   Light Mode Theme (Blue PSL 10K)
+   Source: https://github.com/jmcombs/blue-psl-10k
 
-/* Hero image - improve gear visibility on dark backgrounds */
-:root[data-theme="dark"] .hero img {
-  /* Add subtle glow effect to make dark gear visible */
-  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
-}
+   IMPORTANT: Starlight's naming is semantic, NOT literal!
+   In light mode:
+   - --sl-color-white = page background (lightest)
+   - --sl-color-black = text color (darkest)
+   - Gray scale 1-6 goes from lightest to darkest
 
-/* Typography - Apple system fonts */
-:root {
+   NOTE: Starlight uses [data-theme="light"] explicitly, not just absence of dark.
+   ========================================================================== */
+:root[data-theme="light"] {
+  /* Blue PSL 10K - Semantic Colors */
+  --psl-success: #4e9a06;
+  --psl-warning: #c4a000;
+  --psl-error: #cc0000;
+
+  /* Blue PSL 10K - Neutral Grays (Stone palette - warm grays) */
+  --psl-gray-50: #fafaf9;
+  --psl-gray-100: #f5f5f4;
+  --psl-gray-200: #e7e5e4;
+  --psl-gray-300: #d6d3d1;
+  --psl-gray-400: #a8a29e;
+  --psl-gray-500: #78716c;
+  --psl-gray-600: #57534e;
+  --psl-gray-700: #44403c;
+  --psl-gray-800: #292524;
+  --psl-gray-900: #1c1917;
+
+  /* Starlight Theme Variables - Light Mode
+     Using light gray backgrounds for better contrast and usability
+     Target: Page background #f8f9fa, Sidebar #f1f3f4, Cards white with borders */
+  --sl-color-accent-low: #e8f0fa;
+  --sl-color-accent: var(--mp-path-blue);
+  --sl-color-accent-high: var(--mp-path-blue-dark);
+
+  /* Light mode gray scale (light to dark) - optimized for 4.5:1+ contrast ratio */
+  --sl-color-white: #f8f9fa; /* Light gray page background instead of pure white */
+  --sl-color-gray-1: #f1f3f4; /* Sidebar/nav background */
+  --sl-color-gray-2: #e8eaed; /* Borders, code block backgrounds */
+  --sl-color-gray-3: #dadce0; /* Heavier borders */
+  --sl-color-gray-4: #9aa0a6; /* Muted text */
+  --sl-color-gray-5: #5f6368; /* Secondary text */
+  --sl-color-gray-6: #3c4043; /* Primary text */
+  --sl-color-black: #202124; /* Headings, emphasized text */
+
+  /* Light mode text - dark gray for high contrast (7:1+ ratio) */
+  --sl-color-text: #202124;
+  --sl-color-text-accent: var(--mp-path-blue);
+
+  /* Override Starlight's derived background variables for light mode */
+  --sl-color-bg: #f8f9fa; /* Light gray page background */
+  --sl-color-bg-nav: #f1f3f4; /* Slightly darker for nav/sidebar */
+  --sl-color-bg-sidebar: #f1f3f4;
+  --sl-color-bg-inline-code: #e8eaed;
+  --sl-color-hairline-light: #e8eaed;
+  --sl-color-hairline: #dadce0;
+  --sl-color-hairline-shade: #9aa0a6;
+
+  /* Typography */
   --sl-font:
-    system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  --sl-font-mono: "SF Mono", ui-monospace, "JetBrains Mono", monospace;
+    system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    Roboto, sans-serif;
+  --sl-font-mono:
+    "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code", monospace;
 }
 
-/* Headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 600;
+/* ==========================================================================
+   Light Mode Component Overrides
+   Starlight components use --sl-color-black and --sl-color-white directly
+   rather than semantic variables, so we need explicit CSS overrides.
+   ========================================================================== */
+
+/* Card Component - Light mode backgrounds and text
+   NOTE: Starlight uses `.card:where(.astro-XXX)` which has low specificity,
+   but is inside @layer starlight.components. Our unlayered CSS wins. */
+:root[data-theme="light"] .card,
+:root[data-theme="light"] article.card,
+:root[data-theme="light"] .card.sl-flex {
+  background-color: #ffffff !important;
+  border: 1px solid #dadce0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
-h1 {
-  font-weight: 700;
+:root[data-theme="light"] .card .title,
+:root[data-theme="light"] .card p.title,
+:root[data-theme="light"] .card .title span {
+  color: #202124 !important;
 }
 
-/* Code blocks */
-pre {
-  background-color: var(--color-code-bg) !important;
+:root[data-theme="light"] .card .body,
+:root[data-theme="light"] .card .body p {
+  color: #3c4043 !important;
 }
 
-/* Links */
-a {
-  color: var(--color-primary);
+/* Sidebar - Light mode with light gray background */
+:root[data-theme="light"] nav.sidebar,
+:root[data-theme="light"] .sidebar,
+:root[data-theme="light"] .sidebar-pane,
+:root[data-theme="light"] .sidebar-content {
+  background-color: #f1f3f4 !important;
 }
 
-a:hover {
-  color: var(--color-primary-dark);
+/* Sidebar text - Dark gray for contrast */
+:root[data-theme="light"] .sidebar a,
+:root[data-theme="light"] .sidebar summary,
+:root[data-theme="light"] .sidebar span,
+:root[data-theme="light"] .sidebar .large,
+:root[data-theme="light"] .top-level > li > details > summary {
+  color: #292524 !important;
 }
 
-/* Button styles */
-.sl-link-button {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+/* Sidebar group labels */
+:root[data-theme="light"] .sidebar .group-label span {
+  color: #44403c !important;
+  font-weight: 600 !important;
 }
 
-.sl-link-button:hover {
-  background-color: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
+/* Active/current sidebar item - Blue highlight */
+:root[data-theme="light"] .sidebar a[aria-current="page"],
+:root[data-theme="light"] .sidebar a[aria-current="true"] {
+  background-color: #3465a4 !important;
+  color: #ffffff !important;
 }
 
-/* Custom utility classes */
-.text-primary {
-  color: var(--color-primary);
+/* Sidebar hover state */
+:root[data-theme="light"] .sidebar a:hover {
+  color: #3465a4 !important;
 }
 
-.bg-primary {
-  background-color: var(--color-primary);
+/* Sidebar collapse icons */
+:root[data-theme="light"] .sidebar summary svg,
+:root[data-theme="light"] .sidebar details svg {
+  color: #57534e !important;
 }
 
-.border-primary {
-  border-color: var(--color-primary);
+/* Main content text - Light mode */
+:root[data-theme="light"] .content-panel,
+:root[data-theme="light"] .sl-markdown-content {
+  color: #292524 !important;
+}
+
+:root[data-theme="light"] .sl-markdown-content h1,
+:root[data-theme="light"] .sl-markdown-content h2,
+:root[data-theme="light"] .sl-markdown-content h3,
+:root[data-theme="light"] .sl-markdown-content h4 {
+  color: #1c1917 !important;
+}
+
+:root[data-theme="light"] .sl-markdown-content p,
+:root[data-theme="light"] .sl-markdown-content li {
+  color: #292524 !important;
+}
+
+/* Right sidebar (table of contents) - Light mode */
+:root[data-theme="light"] .right-sidebar a {
+  color: #57534e !important;
+}
+
+:root[data-theme="light"] .right-sidebar a:hover,
+:root[data-theme="light"] .right-sidebar a[aria-current="true"] {
+  color: #3465a4 !important;
+}
+
+/* Code blocks in light mode */
+:root[data-theme="light"] .expressive-code pre {
+  background-color: #f5f5f4 !important;
+  border: 1px solid #e7e5e4 !important;
+}
+
+/* Table styling in light mode */
+:root[data-theme="light"] table {
+  border-color: #e7e5e4 !important;
+}
+
+:root[data-theme="light"] th {
+  background-color: #f5f5f4 !important;
+  color: #292524 !important;
+}
+
+:root[data-theme="light"] td {
+  color: #292524 !important;
+  border-color: #e7e5e4 !important;
+}
+
+/* Link styling in light mode */
+:root[data-theme="light"] .sl-markdown-content a {
+  color: #3465a4 !important;
+}
+
+:root[data-theme="light"] .sl-markdown-content a:hover {
+  color: #204a87 !important;
+}
+
+/* Main page body - Light mode background */
+:root[data-theme="light"] body,
+:root[data-theme="light"] .main-pane,
+:root[data-theme="light"] main {
+  background-color: #f8f9fa !important;
+}
+
+/* Page main content area */
+:root[data-theme="light"] .main-frame {
+  background-color: #f8f9fa !important;
+}
+
+/* Content wrapper */
+:root[data-theme="light"] .content-panel {
+  background-color: transparent !important;
+}
+
+/* Hero section on homepage - Light gray background */
+:root[data-theme="light"] .hero {
+  background-color: transparent !important;
+}
+
+/* "Why macprefs?" section heading */
+:root[data-theme="light"] h2 {
+  color: #202124 !important;
+}
+
+/* Hero "Get Started" button - White text on Path Blue for contrast */
+:root[data-theme="light"] .sl-link-button.primary {
+  background-color: #3465a4 !important;
+  border-color: #3465a4 !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="light"] .sl-link-button.primary:hover {
+  background-color: #204a87 !important;
+  border-color: #204a87 !important;
+  color: #ffffff !important;
+}
+
+/* Previous/Next pagination links - Dark text for visibility */
+:root[data-theme="light"] .pagination-links a {
+  color: #5f6368 !important;
+  background-color: #ffffff !important;
+  border-color: #dadce0 !important;
+}
+
+:root[data-theme="light"] .pagination-links a:hover {
+  border-color: #3465a4 !important;
+  color: #3465a4 !important;
+}
+
+/* Pagination link title (page name) - Dark for contrast */
+:root[data-theme="light"] .pagination-links .link-title {
+  color: #202124 !important;
+}
+
+:root[data-theme="light"] .pagination-links a:hover .link-title {
+  color: #3465a4 !important;
+}
+
+/* Pagination arrows */
+:root[data-theme="light"] .pagination-links svg {
+  color: #5f6368 !important;
+}
+
+:root[data-theme="light"] .pagination-links a:hover svg {
+  color: #3465a4 !important;
+}
+
+/* ==========================================================================
+   Dark Mode Theme (Catppuccin Mocha)
+   Source: https://catppuccin.com/palette/
+   Style Guide: https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md
+   ========================================================================== */
+:root[data-theme="dark"] {
+  /* Catppuccin Mocha - Accent Colors */
+  --ctp-rosewater: #f5e0dc;
+  --ctp-flamingo: #f2cdcd;
+  --ctp-pink: #f5c2e7;
+  --ctp-mauve: #cba6f7;
+  --ctp-red: #f38ba8;
+  --ctp-maroon: #eba0ac;
+  --ctp-peach: #fab387;
+  --ctp-yellow: #f9e2af;
+  --ctp-green: #a6e3a1;
+  --ctp-teal: #94e2d5;
+  --ctp-sky: #89dceb;
+  --ctp-sapphire: #74c7ec;
+  --ctp-blue: #89b4fa;
+  --ctp-lavender: #b4befe;
+
+  /* Catppuccin Mocha - Text Colors (per style guide) */
+  --ctp-text: #cdd6f4;
+  --ctp-subtext1: #bac2de;
+  --ctp-subtext0: #a6adc8;
+
+  /* Catppuccin Mocha - Overlay Colors */
+  --ctp-overlay2: #9399b2;
+  --ctp-overlay1: #7f849c;
+  --ctp-overlay0: #6c7086;
+
+  /* Catppuccin Mocha - Surface Colors */
+  --ctp-surface2: #585b70;
+  --ctp-surface1: #45475a;
+  --ctp-surface0: #313244;
+
+  /* Catppuccin Mocha - Base Colors (per style guide) */
+  /* Base = Background Pane, Mantle/Crust = Secondary Panes */
+  --ctp-base: #1e1e2e;
+  --ctp-mantle: #181825;
+  --ctp-crust: #11111b;
+
+  /* Starlight Theme Variables - Dark Mode (Catppuccin Mocha)
+
+     IMPORTANT: Starlight's naming is semantic, NOT literal!
+     - --sl-color-black = page background (darkest in dark mode)
+     - --sl-color-white = text color (lightest in dark mode)
+     - Gray scale 1-6 goes from light (near-white) to dark (near-black)
+
+     For Catppuccin Mocha mapping:
+     - black → base (#1e1e2e) - page background
+     - white → text (#cdd6f4) - main text
+     - gray-1 through gray-6 → surface/overlay colors */
+  --sl-color-accent-low: #313244;
+  --sl-color-accent: #89b4fa;
+  --sl-color-accent-high: #b4befe;
+
+  /* Catppuccin Mocha gray scale (light to dark for text/borders) */
+  --sl-color-white: #cdd6f4;
+  --sl-color-gray-1: #bac2de;
+  --sl-color-gray-2: #a6adc8;
+  --sl-color-gray-3: #6c7086;
+  --sl-color-gray-4: #585b70;
+  --sl-color-gray-5: #45475a;
+  --sl-color-gray-6: #313244;
+  --sl-color-black: #1e1e2e;
+
+  /* Dark mode text - matches logo-symbol.svg color */
+  --sl-color-text: #cdd6f4;
+  --sl-color-text-accent: #89b4fa;
+
+  /* Typography */
+  --sl-font:
+    system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    Roboto, sans-serif;
+  --sl-font-mono:
+    "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code", monospace;
+}
+
+/* ==========================================================================
+   Site Header Styling
+   BOTH modes use Path Blue (#3465a4) for consistent branding
+   ========================================================================== */
+
+/* Header - Path Blue background in BOTH light and dark modes */
+header.header {
+  background-color: var(--mp-path-blue) !important;
+  border-bottom: 1px solid var(--mp-path-blue-dark) !important;
+}
+
+/* Logo/site title - white text on blue header (both modes) */
+.site-title {
+  color: #ffffff !important;
+}
+
+.site-title:hover {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Header icons and controls - white on blue (both modes) */
+header.header .sl-flex svg,
+header.header button svg {
+  color: #ffffff !important;
+}
+
+/* Search button styling - translucent white on blue header (both modes) */
+site-search button {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+site-search button:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Theme toggle and other header buttons - white text (both modes) */
+starlight-theme-select select,
+starlight-menu-button button {
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Hero Section Styling
+   ========================================================================== */
+
+/* Hero heading - Light mode: Path Blue */
+:root[data-theme="light"] .hero h1 {
+  color: var(--mp-path-blue) !important;
+  font-weight: 700 !important;
+}
+
+/* Hero heading - Dark mode: Catppuccin Blue (#89b4fa) */
+:root[data-theme="dark"] .hero h1 {
+  color: #89b4fa !important;
+  font-weight: 700 !important;
+}
+
+/* Hero tagline - Light mode */
+:root[data-theme="light"] .hero .tagline {
+  color: #57534e !important;
+}
+
+/* Hero tagline - Dark mode: Catppuccin Subtext0 */
+:root[data-theme="dark"] .hero .tagline {
+  color: #a6adc8 !important;
+}
+
+/* Hero image sizing and layout */
+.hero > img {
+  max-width: 140px !important;
+  max-height: 140px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* ==========================================================================
+   Hero Layout - Text Left, Image Right (Very Tight Spacing)
+   ========================================================================== */
+
+/* Desktop: Horizontal layout with very tight spacing */
+@media (min-width: 50rem) {
+  .hero {
+    grid-template-columns: auto auto !important;
+    gap: 1rem !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Allow text to display on single lines */
+  .hero .stack {
+    white-space: nowrap;
+  }
+
+  .hero h1 {
+    white-space: nowrap !important;
+  }
+
+  .hero .tagline {
+    white-space: nowrap !important;
+  }
+
+  /* Actions can wrap if needed */
+  .hero .actions {
+    white-space: normal;
+  }
+}
+
+/* Mobile: Stacked layout - allow wrapping */
+@media (max-width: 50rem) {
+  .hero .stack,
+  .hero h1,
+  .hero .tagline {
+    white-space: normal !important;
+  }
+
+  .hero > img {
+    max-width: 100px !important;
+    max-height: 100px !important;
+  }
 }

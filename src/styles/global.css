@@ -1,1 +1,7 @@
+/* ==========================================================================
+   Tailwind CSS v4 Base Styles
+
+   This file provides Tailwind utilities for use in templates.
+   Starlight theming is handled separately in custom.css using --sl-color-* vars.
+   ========================================================================== */
 @import "tailwindcss";
