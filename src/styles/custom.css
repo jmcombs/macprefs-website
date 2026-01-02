@@ -36,10 +36,16 @@
   --sl-color-accent-high: #66a3ff;
 }
 
+/* Hero image - improve gear visibility on dark backgrounds */
+:root[data-theme="dark"] .hero img {
+  /* Add subtle glow effect to make dark gear visible */
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+}
+
 /* Typography - Apple system fonts */
 :root {
-  --sl-font: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    sans-serif;
+  --sl-font:
+    system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   --sl-font-mono: "SF Mono", ui-monospace, "JetBrains Mono", monospace;
 }
 
@@ -94,4 +100,3 @@ a:hover {
 .border-primary {
   border-color: var(--color-primary);
 }
-

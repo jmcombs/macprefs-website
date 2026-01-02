@@ -12,8 +12,11 @@ export default defineConfig({
       title: "macprefs",
       description: "Declarative macOS preferences manager",
       logo: {
-        src: "./src/assets/logo.svg",
-        replacesTitle: false,
+        // Light/dark logo variants for proper contrast in both themes
+        light: "./src/assets/logo.svg",
+        dark: "./src/assets/logo-dark.svg",
+        replacesTitle: true,
+        alt: "macprefs - Declare your Mac",
       },
       social: [
         {
