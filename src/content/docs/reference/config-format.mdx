@@ -1,9 +1,9 @@
 ---
 title: Configuration Format
-description: JSON schema documentation for preferences.json
+description: JSON schema documentation for macprefs configuration files
 ---
 
-# Configuration Format
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Complete reference for the macprefs configuration file format.
 
@@ -12,34 +12,131 @@ Complete reference for the macprefs configuration file format.
 ```json
 {
   "version": "1.0",
-  "preferences": {
-    "domain.name": {
+  "os": "26",
+  "domains": {
+    "com.apple.dock": {
       "key": "value"
     }
   }
 }
 ```
 
+## Required Fields
+
+Every config file must have:
+
+| Field | Description |
+|-------|-------------|
+| `version` | Config schema version (currently `"1.0"`) |
+| `domains` | Map of domain names to key-value pairs |
+
+## Optional Fields
+
+| Field | Description |
+|-------|-------------|
+| `os` | Target macOS version (informational, e.g., `"26"` for Tahoe) |
+
 ## Domains
 
-Domains are the top-level identifiers for preference groups. Examples:
+Domains are the top-level identifiers for preference groups:
 
-- `com.apple.dock` - Dock preferences
-- `com.apple.finder` - Finder preferences
-- `NSGlobalDomain` - Global preferences
+- `com.apple.dock` — Dock preferences
+- `com.apple.finder` — Finder preferences
+- `NSGlobalDomain` — Global system preferences
+- `com.googlecode.iterm2` — Third-party app (Pro+ only)
+
+<Aside type="note" title="License Tier Scope">
+- **Free tier:** Config files can only reference Apple domains (`com.apple.*`, `NSGlobalDomain`)
+- **Pro+ tier:** Config files can include third-party domains
+
+When using a config with third-party domains on Free tier, `plan` and `apply` will skip non-Apple domains with a warning.
+</Aside>
+
+## Value Forms
+
+### Shorthand Form
+
+Direct `"key": value` with type inferred from JSON:
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "tilesize": 48,
+      "orientation": "left"
+    }
+  }
+}
+```
+
+### Extended Form
+
+Use extended form for compare hints and notes:
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.finder": {
+      "FavoriteItems": {
+        "value": ["Applications", "Documents", "Downloads"],
+        "compare": "unordered",
+        "note": "Sidebar items - order doesn't matter"
+      }
+    }
+  }
+}
+```
+
+**Extended form fields:**
+- `value` — The actual preference value
+- `compare` — Compare mode: `"default"`, `"strict"`, or `"unordered"`
+- `note` — Optional documentation comment
+
+## Compare Modes
+
+| Mode | Description |
+|------|-------------|
+| `default` / `strict` | Exact equality including array order |
+| `unordered` | Arrays/dicts compared by content, ignoring order |
 
 ## Supported Value Types
 
-| Type | JSON Example | macOS Type |
-|------|--------------|------------|
-| String | `"value"` | CFString |
-| Integer | `42` | CFNumber |
-| Float | `3.14` | CFNumber |
-| Boolean | `true` | CFBoolean |
-| Array | `["a", "b"]` | CFArray |
-| Dictionary | `{"k": "v"}` | CFDictionary |
-| Data | `"base64..."` | CFData |
-| Date | `"2024-01-01T00:00:00Z"` | CFDate |
+| JSON Type | macOS Type | Example |
+|-----------|------------|---------|
+| String | CFString | `"value"` |
+| Integer | CFNumber | `42` |
+| Float | CFNumber | `3.14` |
+| Boolean | CFBoolean → Integer | `true` → `1` |
+| Array | CFArray | `["a", "b"]` |
+| Object | CFDictionary | `{"k": "v"}` |
 
-*Full documentation coming soon.*
+<Aside type="tip">
+JSON booleans (`true`/`false`) are converted to plist integers (`1`/`0`).
+</Aside>
+
+## Special Characters
+
+Full Unicode, emojis, and escape sequences are supported:
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.TextEdit": {
+      "author": "日本語テスト",
+      "emoji-test": "🎉🚀💻",
+      "path-with-spaces": "/Users/test/My Documents/file.txt"
+    }
+  }
+}
+```
+
+## Key Behaviors
+
+- **Managed-subset apply:** Only listed keys are compared/applied; unlisted keys are ignored
+- **Large configs:** 100+ domains handled efficiently (~73ms per domain write)
+- **Concurrent access:** Last-writer-wins for conflicting writes; no file locking
 

@@ -3,15 +3,14 @@ title: Keyboard Examples
 description: Configuration examples for macOS keyboard preferences
 ---
 
-# Keyboard Configuration Examples
-
 Common keyboard and input preference configurations.
 
 ## Key Repeat Rate
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "NSGlobalDomain": {
       "KeyRepeat": 2,
       "InitialKeyRepeat": 15
@@ -26,7 +25,8 @@ Lower values = faster repeat. `KeyRepeat` of 2 is very fast.
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "NSGlobalDomain": {
       "com.apple.keyboard.fnState": true
     }
@@ -40,7 +40,8 @@ When `true`, F1, F2, etc. behave as standard function keys.
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "NSGlobalDomain": {
       "NSAutomaticSpellingCorrectionEnabled": false,
       "NSAutomaticCapitalizationEnabled": false,
@@ -54,7 +55,8 @@ When `true`, F1, F2, etc. behave as standard function keys.
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "NSGlobalDomain": {
       "NSAutomaticQuoteSubstitutionEnabled": false,
       "NSAutomaticDashSubstitutionEnabled": false
@@ -63,5 +65,26 @@ When `true`, F1, F2, etc. behave as standard function keys.
 }
 ```
 
-*More examples coming soon.*
+## Full Keyboard Customization
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "NSGlobalDomain": {
+      "AppleKeyboardUIMode": 3,
+      "com.apple.keyboard.fnState": true,
+      "KeyRepeat": 2,
+      "InitialKeyRepeat": 15,
+      "NSAutomaticSpellingCorrectionEnabled": false,
+      "NSAutomaticCapitalizationEnabled": false,
+      "NSAutomaticPeriodSubstitutionEnabled": false,
+      "NSAutomaticQuoteSubstitutionEnabled": false,
+      "NSAutomaticDashSubstitutionEnabled": false
+    }
+  }
+}
+```
+
+`AppleKeyboardUIMode: 3` enables full keyboard access (Tab to navigate all controls).
 

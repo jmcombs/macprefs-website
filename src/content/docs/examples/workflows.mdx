@@ -1,0 +1,186 @@
+---
+title: Workflow Examples
+description: Common macprefs workflows and command patterns
+---
+
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+Practical workflows for common macprefs use cases.
+
+## Export and Apply (Free Tier)
+
+Basic workflow for personal preference management:
+
+```bash
+# Export current Apple preferences
+macprefs export my-prefs.json
+
+# Review what would change
+macprefs plan --config my-prefs.json
+
+# Apply with interactive confirmation
+macprefs apply --config my-prefs.json
+```
+
+## CI/CD Workflow (Pro+ Required)
+
+Headless automation for CI/CD pipelines:
+
+```bash
+# Headless apply for automation
+macprefs apply --config my-prefs.json --yes
+
+# JSON output for parsing
+macprefs plan --config my-prefs.json --format json
+```
+
+<Aside type="caution">
+The `--yes` flag and `--format json` require a Pro+ license.
+</Aside>
+
+## New Machine Setup
+
+Setting up a fresh Mac with your preferences:
+
+```bash
+# 1. Run preflight to verify system
+macprefs preflight
+
+# 2. Review what will be applied
+macprefs plan --config my-prefs.json --verbose
+
+# 3. Apply preferences
+macprefs apply --config my-prefs.json
+
+# 4. Restart affected applications
+killall Dock Finder
+```
+
+## Rolling Back Changes
+
+If something goes wrong:
+
+```bash
+# Free tier - rollback to last run
+macprefs rollback
+
+# Pro+ - rollback to specific run
+macprefs rollback --run-id 2026-01-04T10-30-00
+```
+
+Snapshots are stored in `~/Library/Application Support/macprefs/runs/`.
+
+## Validating Config Files
+
+Check config syntax before applying:
+
+```bash
+# Validate JSON structure and required fields
+macprefs validate --config my-prefs.json
+```
+
+## Exploring Domains
+
+Discover available domains and keys:
+
+```bash
+# List all available domains
+macprefs list
+
+# List keys in a specific domain
+macprefs list --domain com.apple.dock
+
+# Inspect current values
+macprefs inspect --domains com.apple.dock --keys autohide,tilesize
+```
+
+## Comparing Current vs Desired State
+
+Use plan with verbose mode to see all changes:
+
+```bash
+# Summary only (default)
+macprefs plan --config my-prefs.json
+
+# Full details
+macprefs plan --config my-prefs.json --verbose
+
+# Filter by type (Pro+)
+macprefs plan --config my-prefs.json --filter conflicts
+```
+
+## Third-Party Apps (Pro+)
+
+Managing third-party application preferences:
+
+```json
+{
+  "version": "1.0",
+  "os": "26",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true
+    },
+    "com.googlecode.iterm2": {
+      "PromptOnQuit": false,
+      "OnlyWhenMoreTabs": true
+    },
+    "com.microsoft.VSCode": {
+      "ApplePressAndHoldEnabled": false
+    }
+  }
+}
+```
+
+<Aside type="note">
+Third-party domains are only processed with a Pro+ license. Free tier will skip these domains with a warning.
+</Aside>
+
+## Dark Mode Setup
+
+Configure system-wide dark mode:
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "NSGlobalDomain": {
+      "AppleInterfaceStyle": "Dark"
+    }
+  }
+}
+```
+
+## Multiple Domains Example
+
+A complete setup with multiple system domains:
+
+```json
+{
+  "version": "1.0",
+  "os": "26",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "orientation": "left",
+      "show-process-indicators": false,
+      "show-recents": false,
+      "tilesize": 48,
+      "magnification": true,
+      "largesize": 96
+    },
+    "com.apple.finder": {
+      "AppleShowAllExtensions": true,
+      "ShowPathbar": true,
+      "FXEnableExtensionChangeWarning": false,
+      "FXPreferredViewStyle": "Nlsv"
+    },
+    "NSGlobalDomain": {
+      "AppleKeyboardUIMode": 3,
+      "com.apple.keyboard.fnState": true,
+      "AppleInterfaceStyle": "Dark"
+    }
+  }
+}
+```
+

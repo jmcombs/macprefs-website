@@ -3,15 +3,14 @@ title: Dock Examples
 description: Configuration examples for macOS Dock preferences
 ---
 
-# Dock Configuration Examples
-
 Common Dock preference configurations.
 
 ## Auto-hide Dock
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "com.apple.dock": {
       "autohide": true,
       "autohide-delay": 0,
@@ -25,11 +24,12 @@ Common Dock preference configurations.
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "com.apple.dock": {
       "tilesize": 48,
       "magnification": true,
-      "largesize": 64
+      "largesize": 96
     }
   }
 }
@@ -39,7 +39,8 @@ Common Dock preference configurations.
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "com.apple.dock": {
       "orientation": "left"
     }
@@ -53,7 +54,8 @@ Options: `"bottom"`, `"left"`, `"right"`
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "com.apple.dock": {
       "mineffect": "scale"
     }
@@ -63,5 +65,36 @@ Options: `"bottom"`, `"left"`, `"right"`
 
 Options: `"genie"`, `"scale"`
 
-*More examples coming soon.*
+## Show Process Indicators
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "show-process-indicators": false,
+      "show-recents": false
+    }
+  }
+}
+```
+
+## Full Dock Configuration
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "orientation": "left",
+      "show-process-indicators": false,
+      "show-recents": false,
+      "tilesize": 48,
+      "magnification": true,
+      "largesize": 96
+    }
+  }
+}
+```
 

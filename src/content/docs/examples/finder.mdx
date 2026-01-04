@@ -3,16 +3,15 @@ title: Finder Examples
 description: Configuration examples for macOS Finder preferences
 ---
 
-# Finder Configuration Examples
-
 Common Finder preference configurations.
 
 ## Show File Extensions
 
 ```json
 {
-  "preferences": {
-    "NSGlobalDomain": {
+  "version": "1.0",
+  "domains": {
+    "com.apple.finder": {
       "AppleShowAllExtensions": true
     }
   }
@@ -23,7 +22,8 @@ Common Finder preference configurations.
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "com.apple.finder": {
       "AppleShowAllFiles": true
     }
@@ -35,7 +35,8 @@ Common Finder preference configurations.
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "com.apple.finder": {
       "FXPreferredViewStyle": "clmv"
     }
@@ -44,16 +45,17 @@ Common Finder preference configurations.
 ```
 
 Options:
-- `"icnv"` - Icon View
-- `"Nlsv"` - List View
-- `"clmv"` - Column View
-- `"glyv"` - Gallery View
+- `"icnv"` — Icon View
+- `"Nlsv"` — List View
+- `"clmv"` — Column View
+- `"glyv"` — Gallery View
 
 ## Show Path Bar
 
 ```json
 {
-  "preferences": {
+  "version": "1.0",
+  "domains": {
     "com.apple.finder": {
       "ShowPathbar": true
     }
@@ -61,5 +63,49 @@ Options:
 }
 ```
 
-*More examples coming soon.*
+## Disable Extension Change Warning
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.finder": {
+      "FXEnableExtensionChangeWarning": false
+    }
+  }
+}
+```
+
+## Sidebar Favorites (Unordered Compare)
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.finder": {
+      "FavoriteItems": {
+        "value": ["Applications", "Documents", "Downloads"],
+        "compare": "unordered",
+        "note": "Sidebar items - order doesn't matter"
+      }
+    }
+  }
+}
+```
+
+## Full Finder Configuration
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.finder": {
+      "AppleShowAllExtensions": true,
+      "ShowPathbar": true,
+      "FXEnableExtensionChangeWarning": false,
+      "FXPreferredViewStyle": "Nlsv"
+    }
+  }
+}
+```
 

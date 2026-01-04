@@ -1,67 +1,317 @@
 ---
 title: CLI Reference
-description: Complete command-line interface reference for macprefs
+description: Complete command-line interface reference for macprefs v1.0
 ---
 
-# CLI Reference
+import { Tabs, TabItem, Badge, Aside } from '@astrojs/starlight/components';
 
-Complete documentation for all macprefs commands.
+Complete documentation for all macprefs commands and flags.
 
 ## Commands
 
-### `macprefs init`
+### `preflight`
 
-Initialize a new configuration file.
-
-```bash
-macprefs init [--path <path>]
-```
-
-### `macprefs plan`
-
-Show what changes would be made without applying them.
+Checks write access to user Preferences, runs a safe `defaults` write/delete smoke test, and warns if MDM profiles are present. No permanent changes are made.
 
 ```bash
-macprefs plan [--config <file>] [--output <format>]
+macprefs preflight
 ```
 
-### `macprefs apply`
+**Output Format:** Always human-readable (PASS/FAIL/ISSUES FOUND)
+- `PASS: All checks passed`
+- `ISSUES FOUND: N issue(s) detected` with itemized warnings
+- `FAIL: N critical issue(s) detected` with itemized errors
 
-Apply the configuration to your system.
+**Exit codes:**
+- `0` = PASS
+- `2` = ISSUES FOUND (non-critical)
+- `1` = FAIL (blocking)
+
+---
+
+### `plan`
+
+Shows what changes would be made without applying them. Read-only operation.
 
 ```bash
-macprefs apply [--config <file>] [--yes]
+macprefs plan [--config <path>] [--format table|json] [-v, --verbose] [--filter <types>]
 ```
 
-### `macprefs rollback`
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--config <path>` | Path to config file | Free |
+| `--format table\|json` | Output format (table default) | json requires Pro+ |
+| `-v, --verbose` | Show full detailed list of all changes | Free |
+| `--filter <types>` | Filter: `conflicts`, `additions`, `all`, or comma-separated | Pro+ |
+| `--enforce-domain` | Not implemented, planned for v1.1 | — |
 
-Revert to a previous state.
+<Aside type="note">
+`--filter` and `--verbose` are mutually exclusive.
+</Aside>
+
+**Default output (summary mode):**
+
+```text
+=== Plan Summary ===
+Conflicts:    156 keys (value differs)
+Additions:  2,108 keys (not on target)
+─────────────────────────────────────
+Total:      2,264 changes
+
+Top domains with conflicts:
+  NSGlobalDomain (12)
+  com.apple.dock (8)
+  com.apple.finder (5)
+
+Use --verbose for full details
+Use --filter <type> for filtered details (Pro)
+```
+
+**Exit codes:**
+- `0` = no drift
+- `2` = drift detected
+- `1` = error
+
+---
+
+### `apply`
+
+Applies config changes. Creates snapshot before any changes.
 
 ```bash
-macprefs rollback [--run <id>]
+macprefs apply [--config <path>] [--yes] [--rollback-on-fail]
 ```
 
-### `macprefs history`
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--config <path>` | Path to config file | Free |
+| `--yes` | Skip interactive confirmation (headless execution) | Pro+ |
+| `--rollback-on-fail` | Rollback on failure (default: on) | Free |
+| `--enforce-domain` | Not implemented, planned for v1.1 | — |
 
-View history of applied changes.
+**Interactive Prompt (Free tier):** When `--yes` is absent, prompts:
+```text
+N changes detected. Apply? [y/N]:
+```
+
+Snapshots are stored in `~/Library/Application Support/macprefs/runs/`.
+
+**Performance:** ~73-77ms per domain write on Apple Silicon.
+
+**Exit codes:**
+- `0` = success
+- `1` = error
+
+---
+
+### `export`
+
+Exports preferences to JSON file.
 
 ```bash
-macprefs history [--limit <n>]
+macprefs export <output-file> [--domains <list>] [--no-progress]
 ```
 
-### `macprefs diagnose`
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--domains <list>` | Comma-separated list of domains to export | Free |
+| `--baseline` | Not implemented in v1.0 | Pro+ (v1.1) |
+| `--no-progress` | Disable progress output | Free |
 
-Diagnose preference issues and discover domains.
+**Tier-based Scope:**
+- **Free tier:** Exports Apple domains only (`com.apple.*`, `NSGlobalDomain`)
+- **Pro+ tier:** Exports all domains including third-party
+
+Output is always pretty-printed with OS version automatically included.
+
+**Exit codes:**
+- `0` = success
+- `1` = error
+
+---
+
+### `inspect`
+
+View current values in specified domains/keys.
 
 ```bash
-macprefs diagnose [--domain <domain>]
+macprefs inspect [--domains <list>] [--keys <list>] [--format table|json]
 ```
 
-## Global Options
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--domains <list>` | Comma-separated list of domains | Free |
+| `--keys <list>` | Comma-separated list of keys | Free |
+| `--format table\|json` | Output format | json requires Pro+ |
 
-- `--help`: Show help information
-- `--version`: Show version number
-- `--verbose`: Enable verbose output
+**Exit codes:**
+- `0` = success
+- `1` = error
 
-*Full documentation coming soon.*
+---
+
+### `list`
+
+Lists available domains or keys within a domain.
+
+```bash
+macprefs list [--domain <name>] [--format table|json]
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--domain <name>` | Show keys within this domain | Free |
+| `--format table\|json` | Output format | json requires Pro+ |
+
+**Tier-based Scope:**
+- **Free tier:** Shows Apple domains only
+- **Pro+ tier:** Shows all domains
+
+**Exit codes:**
+- `0` = success
+- `1` = error
+
+---
+
+### `validate`
+
+Check config file syntax and schema.
+
+```bash
+macprefs validate [--config <path>] [--format table|json]
+```
+
+Validates JSON structure and required fields (`version`, `domains`).
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--config <path>` | Path to config file | Free |
+| `--format table\|json` | Output format | json requires Pro+ |
+
+**Exit codes:**
+- `0` = valid
+- `1` = invalid
+
+---
+
+### `rollback`
+
+Restores values from a previous snapshot.
+
+```bash
+macprefs rollback [--run-id <id>]
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--run-id <id>` | Specific run ID to rollback to | Pro+ |
+
+**Tier-based behavior:**
+- **Free tier:** Can only rollback to last run
+- **Pro+ tier:** Can rollback to any run by ID
+
+Snapshots are stored in `~/Library/Application Support/macprefs/runs/`.
+
+**Exit codes:**
+- `0` = success
+- `1` = error
+
+---
+
+### `license`
+
+Manage license status and activation.
+
+```bash
+macprefs license status
+macprefs license activate --key <key>
+macprefs license deactivate
+```
+
+| Subcommand | Description | Status |
+|------------|-------------|--------|
+| `status` | Shows current tier and feature availability | Available |
+| `activate --key <key>` | Activate with license key | Coming soon |
+| `deactivate` | Deactivate license | Coming soon |
+
+**Exit codes:**
+- `0` = success (informational)
+
+---
+
+### `upgrade`
+
+Displays tier comparison and upgrade information.
+
+```bash
+macprefs upgrade [--plan pro|enterprise]
+```
+
+Shows "Coming Soon" message for all upgrade paths in v1.0.
+
+**Exit codes:**
+- `0` = success (informational)
+
+---
+
+### `about`
+
+Shows version, license tier, and project information.
+
+```bash
+macprefs about
+```
+
+**Exit codes:**
+- `0` = success
+
+---
+
+## Tier Gating Summary
+
+| Feature | Free | Pro+ |
+|---------|:----:|:----:|
+| `--verbose` (plan) | ✓ | ✓ |
+| `--filter` (plan) | ✗ | ✓ |
+| `--format json` (plan, inspect, list, validate) | ✗ | ✓ |
+| `--yes` (headless apply) | ✗ | ✓ |
+| `--run-id` (rollback to specific run) | ✗ | ✓ |
+| Third-party domains (export, list) | ✗ | ✓ |
+| `--baseline` (export) | ✗ | ✓ (v1.1) |
+
+<Aside type="caution">
+When a gated feature is used without proper license, the CLI returns exit code 1 with message:
+`"This feature requires a Pro license. Run 'macprefs upgrade' for details."`
+</Aside>
+
+---
+
+## Exit Codes Reference
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success / PASS / No drift / Valid |
+| `1` | Error / FAIL / Invalid / Gated feature |
+| `2` | Non-critical issues / Drift detected |
+
+---
+
+## Behaviors and Defaults
+
+- **Managed-subset apply:** Only keys present in config are compared/applied; others ignored
+- **Snapshots:** Stored in `~/Library/Application Support/macprefs/runs/` as JSON files
+- **Permissions:** No TCC permissions required for user-level defaults
+- **Unicode support:** Full Unicode, emojis, and international characters supported
+- **Large configs:** 100+ domains handled efficiently (~73ms per domain write)
+- **Concurrent access:** Last-writer-wins for conflicting writes; no file locking
+
+---
+
+## v1.1 Planned Additions
+
+- Baselines: ship verified macOS 26 baseline with comparison support
+- Full `--enforce-domain` implementation with key deletion
+- Exclude patterns for ephemeral keys (Recent*, LastOpened*, caches)
+- Registry integration for community baselines
+- `--baseline` flag for export command
 
