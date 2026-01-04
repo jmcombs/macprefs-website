@@ -3,7 +3,7 @@ title: First Config
 description: Create your first macprefs configuration file
 ---
 
-# Creating Your First Configuration
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Learn how to create and structure your macprefs configuration file.
 
@@ -14,7 +14,7 @@ A macprefs configuration is a JSON file that defines your desired macOS preferen
 ```json
 {
   "version": "1.0",
-  "preferences": {
+  "domains": {
     "com.apple.dock": {
       "autohide": true,
       "tilesize": 48
@@ -23,20 +23,103 @@ A macprefs configuration is a JSON file that defines your desired macOS preferen
 }
 ```
 
+<Aside type="note">
+The schema uses `domains` as the top-level key (not `preferences`). Each domain corresponds to a macOS preference domain like `com.apple.dock` or `NSGlobalDomain`.
+</Aside>
+
+## Creating a Config from Scratch
+
+You can create a config file manually, or export your current settings as a starting point:
+
+<Tabs>
+  <TabItem label="Export Current Settings">
+```bash
+# Export all current preferences
+macprefs export my-prefs.json
+
+# Then edit the file to keep only what you want
+```
+  </TabItem>
+  <TabItem label="Create Manually">
+```bash
+# Create a new config file
+cat > my-prefs.json << 'EOF'
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "tilesize": 48,
+      "orientation": "bottom"
+    }
+  }
+}
+EOF
+```
+  </TabItem>
+</Tabs>
+
 ## Domain Structure
 
-Each top-level key under `preferences` is a domain (like `com.apple.dock`). Within each domain, you specify key-value pairs for the preferences you want to set.
+Each key under `domains` is a preference domain (like `com.apple.dock`). Within each domain, you specify key-value pairs for the preferences you want to manage.
+
+Common domains include:
+- `com.apple.dock` — Dock settings
+- `com.apple.finder` — Finder settings
+- `NSGlobalDomain` — System-wide settings
+- `com.apple.screencapture` — Screenshot settings
+
+<Aside type="tip">
+Use `macprefs list` to see all available domains, and `macprefs list --domain com.apple.dock` to see keys within a specific domain.
+</Aside>
+
+## Discovering Preference Keys
+
+To find which keys control a specific setting:
+
+```bash
+# List all keys in a domain
+macprefs list --domain com.apple.dock
+
+# Inspect specific key values
+macprefs inspect --domains com.apple.dock --keys autohide,tilesize
+```
 
 ## Supported Value Types
 
 macprefs supports all macOS preference types:
 
-- **String**: `"value"`
-- **Integer**: `42`
-- **Float**: `3.14`
-- **Boolean**: `true` or `false`
-- **Array**: `["item1", "item2"]`
-- **Dictionary**: `{"key": "value"}`
+| Type | Example | Description |
+|------|---------|-------------|
+| String | `"value"` | Text values |
+| Integer | `42` | Whole numbers |
+| Float | `3.14` | Decimal numbers |
+| Boolean | `true` / `false` | True or false |
+| Array | `["a", "b"]` | Ordered lists |
+| Dictionary | `{"key": "val"}` | Nested objects |
+
+## Validate Your Config
+
+Before applying, validate your configuration:
+
+```bash
+macprefs validate --config my-prefs.json
+```
+
+This checks for schema errors, unknown domains, and invalid keys.
+
+## Preview and Apply
+
+```bash
+# Preview changes (dry run)
+macprefs plan --config my-prefs.json
+
+# Apply changes
+macprefs apply --config my-prefs.json
+
+# Restart affected apps to see changes
+killall Dock Finder
+```
 
 ## Next Steps
 
