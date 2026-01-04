@@ -85,22 +85,3 @@ Use exit codes to control pipeline flow:
     MACPREFS_LICENSE: ${{ secrets.MACPREFS_LICENSE }}
 ```
 
-## Free Tier Scripting
-
-For Free tier, parse the human-readable output instead of relying on exit codes:
-
-```bash
-#!/bin/bash
-# Free tier approach - parse output text
-
-OUTPUT=$(macprefs plan --config config.json 2>&1)
-
-if echo "$OUTPUT" | grep -q "No changes"; then
-  echo "No drift detected"
-elif echo "$OUTPUT" | grep -q "changes"; then
-  echo "Drift detected"
-  # Note: --yes requires Pro+ license
-  macprefs apply --config config.json
-fi
-```
-
