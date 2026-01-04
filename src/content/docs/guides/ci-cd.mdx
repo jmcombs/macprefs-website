@@ -3,42 +3,149 @@ title: CI/CD Guide
 description: Integrating macprefs into your CI/CD pipelines
 ---
 
-# CI/CD Guide
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
-Automate preference management with CI/CD integration. *(Pro feature)*
+Automate preference management with CI/CD integration.
+
+<Aside type="caution" title="Pro+ Required">
+Headless mode (`--yes`) and JSON output (`--format json`) require a Pro+ license.
+</Aside>
 
 ## Headless Mode
 
 Run macprefs without interactive prompts:
 
 ```bash
-macprefs apply --yes
+macprefs apply --config my-prefs.json --yes
 ```
+
+The `--yes` flag skips the interactive confirmation prompt, enabling unattended execution.
 
 ## JSON Output
 
 Get machine-readable output for parsing in scripts:
 
 ```bash
-macprefs plan --output json
+macprefs plan --config my-prefs.json --format json
 ```
+
+<Aside type="note">
+Use `--format json`, not `--output json`. The flag is `--format` with values `table` (default) or `json`.
+</Aside>
 
 ## Exit Codes
 
 macprefs uses standard exit codes for scripting:
 
-- `0`: Success
-- `1`: Error
-- `2`: Changes pending (no changes applied)
+| Code | Meaning |
+|------|---------|
+| `0` | Success / No drift / Valid |
+| `1` | Error / Gated feature / Invalid |
+| `2` | Drift detected (changes pending) / Non-critical issues |
+
+**Examples:**
+- `plan` returns `0` if config matches current state, `2` if changes are needed
+- `apply` returns `0` on success, `1` on error
+- `preflight` returns `0` (PASS), `2` (ISSUES FOUND), or `1` (FAIL)
 
 ## GitHub Actions Example
 
+<Tabs>
+  <TabItem label="Basic Apply">
 ```yaml
-- name: Apply preferences
-  run: macprefs apply --yes
-  env:
-    MACPREFS_LICENSE: ${{ secrets.MACPREFS_LICENSE }}
+name: Apply Preferences
+on:
+  workflow_dispatch:
+
+jobs:
+  apply:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install macprefs
+        run: brew install macprefs
+
+      - name: Run preflight
+        run: macprefs preflight
+
+      - name: Apply preferences
+        run: macprefs apply --config ./config.json --yes
+        env:
+          MACPREFS_LICENSE: ${{ secrets.MACPREFS_LICENSE }}
+```
+  </TabItem>
+  <TabItem label="Plan Check">
+```yaml
+name: Check Drift
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Every Monday at 9am
+
+jobs:
+  check:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install macprefs
+        run: brew install macprefs
+
+      - name: Check for drift
+        id: plan
+        run: |
+          macprefs plan --config ./config.json --format json > plan.json
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+        env:
+          MACPREFS_LICENSE: ${{ secrets.MACPREFS_LICENSE }}
+
+      - name: Report drift
+        if: steps.plan.outputs.exit_code == '2'
+        run: echo "Configuration drift detected!"
+```
+  </TabItem>
+</Tabs>
+
+## Validation in CI
+
+Add config validation to your PR checks:
+
+```yaml
+name: Validate Config
+on:
+  pull_request:
+    paths:
+      - '**.json'
+
+jobs:
+  validate:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install macprefs
+        run: brew install macprefs
+
+      - name: Validate config files
+        run: |
+          for f in configs/*.json; do
+            echo "Validating $f..."
+            macprefs validate --config "$f"
+          done
 ```
 
-*Full content coming soon.*
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `MACPREFS_LICENSE` | License key for Pro+ features |
+| `MACPREFS_CONFIG` | Default config file path (optional) |
+
+## Best Practices
+
+1. **Always run preflight first** - Ensure the target system is ready
+2. **Use `--rollback-on-fail`** - Enabled by default, reverts on errors
+3. **Validate configs in CI** - Catch schema errors before deployment
+4. **Store configs in version control** - Track changes over time
+5. **Use exit codes for logic** - Branch on `0`, `1`, or `2` as needed
 

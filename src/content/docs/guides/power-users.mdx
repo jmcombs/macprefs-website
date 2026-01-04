@@ -3,7 +3,7 @@ title: Power Users Guide
 description: Advanced macprefs usage for individual power users
 ---
 
-# Power Users Guide
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Advanced workflows for getting the most out of macprefs.
 
@@ -12,26 +12,131 @@ Advanced workflows for getting the most out of macprefs.
 Keep your preferences synchronized across multiple Macs using Git:
 
 ```bash
-# On your primary Mac
-cd ~/.config/macprefs
+# On your primary Mac - export your preferences
+macprefs export my-prefs.json
+
+# Set up a Git repo for your config
+mkdir ~/.config/macprefs && cd ~/.config/macprefs
 git init
-git add preferences.json
+cp ~/my-prefs.json ./config.json
+git add config.json
 git commit -m "Initial preferences"
 git remote add origin <your-repo>
 git push -u origin main
 ```
 
+On another Mac:
+
+```bash
+# Clone and apply
+git clone <your-repo> ~/.config/macprefs
+macprefs plan --config ~/.config/macprefs/config.json --verbose
+macprefs apply --config ~/.config/macprefs/config.json
+killall Dock Finder
+```
+
 ## Partial Configurations
 
-Create focused configs for specific use cases instead of one monolithic file.
+Create focused configs for specific use cases instead of one monolithic file:
+
+<Tabs>
+  <TabItem label="dock.json">
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "orientation": "left",
+      "tilesize": 48
+    }
+  }
+}
+```
+  </TabItem>
+  <TabItem label="finder.json">
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.finder": {
+      "AppleShowAllExtensions": true,
+      "ShowPathbar": true,
+      "FXPreferredViewStyle": "Nlsv"
+    }
+  }
+}
+```
+  </TabItem>
+  <TabItem label="keyboard.json">
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "NSGlobalDomain": {
+      "AppleKeyboardUIMode": 3,
+      "com.apple.keyboard.fnState": true
+    }
+  }
+}
+```
+  </TabItem>
+</Tabs>
+
+Apply specific configs as needed:
+
+```bash
+macprefs apply --config dock.json
+macprefs apply --config keyboard.json
+```
 
 ## Domain Discovery
 
 Find which domain controls a specific preference:
 
 ```bash
-macprefs diagnose
+# List all available domains
+macprefs list
+
+# List keys in a specific domain
+macprefs list --domain com.apple.dock
+
+# Inspect current values for specific keys
+macprefs inspect --domains com.apple.dock --keys autohide,tilesize,orientation
 ```
 
-*Full content coming soon.*
+<Aside type="tip">
+Export your current preferences and search the JSON file to discover which domain/key controls a setting:
+```bash
+macprefs export current.json
+grep -r "tilesize" current.json
+```
+</Aside>
+
+## Comparing State
+
+Before applying, always preview changes:
+
+```bash
+# Summary view
+macprefs plan --config my-prefs.json
+
+# Detailed view of all changes
+macprefs plan --config my-prefs.json --verbose
+```
+
+## Rollback Strategy
+
+If something goes wrong after applying:
+
+```bash
+# Rollback to the previous state (Free tier)
+macprefs rollback
+
+# Rollback to a specific run (Pro+ only)
+macprefs rollback --run-id 2026-01-04T10-30-00
+```
+
+Snapshots are automatically created before each `apply` and stored in:
+`~/Library/Application Support/macprefs/runs/`
 

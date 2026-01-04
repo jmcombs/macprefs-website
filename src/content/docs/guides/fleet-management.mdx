@@ -3,27 +3,32 @@ title: Fleet Management Guide
 description: Managing macOS preferences across multiple machines
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+
 # Fleet Management Guide
 
-Use macprefs to manage preferences across a fleet of Macs.
+<Aside type="caution" title="Coming Soon">
+Fleet management features are planned for a future release. This guide will be updated when enterprise fleet management capabilities become available.
+</Aside>
 
-## Centralized Configuration
+## Planned Features
 
-Store your configuration in a central Git repository that all machines can pull from.
+The following features are planned for future releases:
 
-## Team Collaboration
+- **Centralized Configuration** — Store configurations in a central Git repository
+- **Team Collaboration** — Share configuration files for consistent team setups
+- **Compliance Checking** — Verify machines match expected state
+- **Audit Trail** — Track all changes with timestamps and previous values
+- **Gradual Rollout** — Test changes on a subset of machines first
+- **Environment-specific Configs** — Different settings for dev vs. production
 
-Share configuration files with your team for consistent setups.
+## Current Alternatives
 
-## Rollout Strategies
+For now, you can achieve basic multi-machine management using:
 
-- **Gradual rollout**: Test on a few machines first
-- **Environment-specific configs**: Different settings for dev vs. production
-- **Compliance checking**: Verify machines match expected state
+1. **Git-based sync** — See the [Power Users Guide](/guides/power-users/) for Git workflows
+2. **CI/CD automation** — See the [CI/CD Guide](/guides/ci-cd/) for automation patterns
+3. **Manual distribution** — Share config files via your existing deployment tools
 
-## Audit Trail
-
-Every change is logged with timestamps and previous values for easy auditing.
-
-*Full content coming soon.*
+Check back for updates or [subscribe to the newsletter](/) for announcements.
 
