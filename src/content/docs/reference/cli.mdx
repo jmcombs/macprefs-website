@@ -23,9 +23,12 @@ macprefs preflight
 - `FAIL: N critical issue(s) detected` with itemized errors
 
 **Exit codes:**
-- `0` = PASS
-- `2` = ISSUES FOUND (non-critical)
-- `1` = FAIL (blocking)
+- **Pro+ tier:** `0` = PASS; `2` = ISSUES FOUND (semantic); `1` = FAIL
+- **Free tier:** Always `0` for PASS/ISSUES outcomes; `1` = generic failure only
+
+<Aside type="note">
+Free tier users should rely on human-readable output for status. See [Exit Codes Reference](/reference/exit-codes/) for details.
+</Aside>
 
 ---
 
@@ -68,9 +71,8 @@ Use --filter <type> for filtered details (Pro)
 ```
 
 **Exit codes:**
-- `0` = no drift
-- `2` = drift detected
-- `1` = error
+- **Pro+ tier:** `0` = no drift; `2` = drift detected (semantic); `1` = error
+- **Free tier:** Always `0` when command completes; `1` = generic failure only
 
 ---
 
@@ -189,8 +191,8 @@ Validates JSON structure and required fields (`version`, `domains`).
 | `--format table\|json` | Output format | json requires Pro+ |
 
 **Exit codes:**
-- `0` = valid
-- `1` = invalid
+- **Pro+ tier:** `0` = valid; `1` = invalid schema (semantic)
+- **Free tier:** Always `0` for valid/invalid outcomes; `1` = generic failure only (missing file, malformed JSON)
 
 ---
 
@@ -277,6 +279,7 @@ macprefs about
 | `--yes` (headless apply) | ✗ | ✓ |
 | `--run-id` (rollback to specific run) | ✗ | ✓ |
 | Third-party domains (export, list) | ✗ | ✓ |
+| Semantic exit codes (automation-ready) | ✗ | ✓ |
 | `--baseline` (export) | ✗ | ✓ (v1.1) |
 
 <Aside type="caution">
@@ -293,6 +296,10 @@ When a gated feature is used without proper license, the CLI returns exit code 1
 | `0` | Success / PASS / No drift / Valid |
 | `1` | Error / FAIL / Invalid / Gated feature |
 | `2` | Non-critical issues / Drift detected |
+
+<Aside type="note">
+Semantic exit codes (using `2` for drift/issues) are a **Pro+ feature**. Free tier always returns `0` for semantic outcomes. See [Exit Codes Reference](/reference/exit-codes/) for full details.
+</Aside>
 
 ---
 
@@ -314,4 +321,15 @@ When a gated feature is used without proper license, the CLI returns exit code 1
 - Exclude patterns for ephemeral keys (Recent*, LastOpened*, caches)
 - Registry integration for community baselines
 - `--baseline` flag for export command
+- License activation/deactivation with Lemon Squeezy integration
+
+---
+
+## Known Limitation: Array Type Coercion
+
+When numeric values (integers, floats) or booleans are stored inside arrays or dictionaries, they may be read back as strings. For example, `[100, 200, 800, 600]` becomes `["100", "200", "800", "600"]`. This can cause false drift detection in `plan` even when preferences are functionally correct.
+
+**Workaround:** Use string values inside arrays and dictionaries (e.g., `["100", "200"]` instead of `[100, 200]`). Top-level scalar values (integers, booleans, floats) are not affected.
+
+This will be resolved in a future version by migrating to native CFPreferences APIs.
 

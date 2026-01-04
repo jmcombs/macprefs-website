@@ -3,43 +3,104 @@ title: Exit Codes
 description: Exit code reference for scripting and CI/CD
 ---
 
-# Exit Codes
+import { Aside } from '@astrojs/starlight/components';
 
-macprefs uses standard exit codes for easy scripting integration.
+macprefs uses standard exit codes for scripting integration.
 
 ## Exit Code Reference
 
-| Code | Meaning | Description |
-|------|---------|-------------|
-| 0 | Success | Command completed successfully |
-| 1 | Error | An error occurred |
-| 2 | Changes Pending | Plan found changes (useful for CI) |
-| 3 | Configuration Error | Invalid configuration file |
-| 4 | Permission Error | Insufficient permissions |
+| Code | Meaning |
+|------|---------|
+| `0` | Success / PASS / No drift / Valid |
+| `1` | Error / FAIL / Invalid / Gated feature |
+| `2` | Non-critical issues / Drift detected |
 
-## Usage in Scripts
+<Aside type="caution" title="Tier-Based Exit Codes">
+Exit codes for **semantic outcomes** (drift detection, validation results, preflight issues) behave differently based on license tier. See below for details.
+</Aside>
+
+## Semantic Exit Codes by Command
+
+| Command | Condition | Pro+ Exit Code | Free Exit Code |
+|---------|-----------|----------------|----------------|
+| `preflight` | All checks passed | `0` | `0` |
+| `preflight` | Issues found | `2` | `0` |
+| `plan` | No drift | `0` | `0` |
+| `plan` | Drift detected | `2` | `0` |
+| `validate` | Config valid | `0` | `0` |
+| `validate` | Invalid schema | `1` | `0` |
+| `apply` | Success | `0` | `0` |
+| `apply` | Error | `1` | `1` |
+| `rollback` | Success | `0` | `0` |
+| `rollback` | Error | `1` | `1` |
+
+### Important Distinctions
+
+- **Semantic outcomes** (drift, issues, invalid schema): Exit codes are **tier-gated**
+- **Generic failures** (missing files, bad flags, IO errors): Non-zero for **all tiers**
+
+<Aside type="note">
+Free tier users should rely on **human-readable output** for semantic conditions like drift detection or validation results. The exit code will always be `0` for these outcomes on Free tier.
+</Aside>
+
+## Usage in Scripts (Pro+ Only)
+
+Reliable exit code branching requires Pro+ license:
 
 ```bash
-macprefs plan
-if [ $? -eq 2 ]; then
-  echo "Changes detected"
-  macprefs apply --yes
+#!/bin/bash
+# This pattern only works reliably with Pro+ license
+
+macprefs plan --config config.json --format json
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -eq 0 ]; then
+  echo "No drift detected"
+elif [ $EXIT_CODE -eq 2 ]; then
+  echo "Drift detected, applying changes..."
+  macprefs apply --config config.json --yes
+else
+  echo "Error occurred"
+  exit 1
 fi
 ```
 
-## CI/CD Integration
+## CI/CD Integration (Pro+ Only)
 
 Use exit codes to control pipeline flow:
 
 ```yaml
 - name: Check for drift
+  id: plan
   run: |
-    macprefs plan
-    if [ $? -eq 0 ]; then
-      echo "No changes needed"
-    fi
-  continue-on-error: true
+    macprefs plan --config config.json --format json
+    echo "exit_code=$?" >> $GITHUB_OUTPUT
+  env:
+    MACPREFS_LICENSE: ${{ secrets.MACPREFS_LICENSE }}
+
+- name: Apply if drift detected
+  if: steps.plan.outputs.exit_code == '2'
+  run: macprefs apply --config config.json --yes
+  env:
+    MACPREFS_LICENSE: ${{ secrets.MACPREFS_LICENSE }}
 ```
 
-*Full documentation coming soon.*
+## Free Tier Scripting
+
+For Free tier, parse the human-readable output instead of relying on exit codes:
+
+```bash
+#!/bin/bash
+# Free tier approach - parse output text
+
+OUTPUT=$(macprefs plan --config config.json 2>&1)
+
+if echo "$OUTPUT" | grep -q "No changes"; then
+  echo "No drift detected"
+elif echo "$OUTPUT" | grep -q "changes"; then
+  echo "Drift detected"
+  # Note: --yes requires Pro+ license
+  macprefs apply --config config.json
+fi
+```
 

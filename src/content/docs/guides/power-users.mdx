@@ -140,3 +140,22 @@ macprefs rollback --run-id 2026-01-04T10-30-00
 Snapshots are automatically created before each `apply` and stored in:
 `~/Library/Application Support/macprefs/runs/`
 
+## Discovering Keys via `defaults`
+
+The native `defaults` command is useful for exploring preferences:
+
+```bash
+# Read all values for a domain
+defaults read com.apple.dock
+
+# Read a specific key
+defaults read com.apple.dock autohide
+
+# Export entire domain to stdout
+defaults export com.apple.dock -
+```
+
+### Community Resources
+
+- [macOS Defaults](https://macos-defaults.com/) — Curated database of macOS preference keys with descriptions and examples
+
