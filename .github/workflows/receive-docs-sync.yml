@@ -20,15 +20,13 @@ jobs:
           owner: jmcombs
           repositories: macprefs,macprefs-website
 
-      - uses: actions/checkout@v4
-        with:
-          repository: jmcombs/macprefs
-          path: macprefs-source
-          sparse-checkout: |
-            docs/CLI.md
-            docs/config-examples.md
-            README.md
-          token: ${{ steps.app-token.outputs.token }}
+      - name: Fetch source documentation
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/jmcombs/macprefs.git \
+            macprefs-source
+          cd macprefs-source
+          git sparse-checkout set docs/CLI.md docs/config-examples.md README.md
 
       - uses: actions/setup-node@v4
         with:
@@ -40,6 +38,9 @@ jobs:
           if [ -f macprefs-source/docs/config-examples.md ]; then
             node scripts/transform-config-docs.cjs macprefs-source/docs/config-examples.md src/content/docs/reference/configuration.mdx
           fi
+
+      - name: Cleanup source checkout
+        run: rm -rf macprefs-source
 
       - uses: peter-evans/create-pull-request@v6
         with:
