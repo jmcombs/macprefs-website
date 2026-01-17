@@ -1,0 +1,193 @@
+---
+title: Configuration Format
+description: macprefs JSON configuration file format and examples
+---
+
+import { Tabs, TabItem, Badge, Aside } from '@astrojs/starlight/components';
+
+All examples have been validated on macOS 26 (Tahoe).
+
+## License Tier Scope
+
+- **Free tier**: Config files can only reference Apple domains (`com.apple.*`, `NSGlobalDomain`)
+- **Pro+ tier**: Config files can include third-party domains (e.g., `com.googlecode.iterm2`)
+
+When using a config with third-party domains on Free tier, `plan` and `apply` will skip non-Apple domains with a warning.
+
+## Minimal Config
+
+The simplest valid config requires `version` and `domains`:
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "orientation": "left",
+      "show-recents": false
+    }
+  }
+}
+```json
+
+## Full Example (Multiple Domains)
+
+```json
+{
+  "version": "1.0",
+  "os": "26",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "orientation": "left",
+      "show-process-indicators": false,
+      "show-recents": false,
+      "tilesize": 48,
+      "magnification": true,
+      "largesize": 96
+    },
+    "com.apple.finder": {
+      "AppleShowAllExtensions": true,
+      "ShowPathbar": true,
+      "FXEnableExtensionChangeWarning": false,
+      "FXPreferredViewStyle": "Nlsv"
+    },
+    "NSGlobalDomain": {
+      "AppleKeyboardUIMode": 3,
+      "com.apple.keyboard.fnState": true,
+      "AppleInterfaceStyle": "Dark"
+    }
+  }
+}
+```json
+
+## Extended Form with Compare Hints
+
+Use extended form for arrays that should ignore order:
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.finder": {
+      "FavoriteItems": {
+        "value": ["Applications", "Documents", "Downloads"],
+        "compare": "unordered",
+        "note": "Sidebar items - order doesn't matter"
+      }
+    }
+  }
+}
+```json
+
+**Compare modes** (validated in testing):
+
+- `default` or `strict`: Exact equality including array order
+- `unordered`: Arrays/dicts compared by content, ignoring order
+
+## Special Characters
+
+All Unicode, emojis, and escape sequences are supported:
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.TextEdit": {
+      "author": "日本語テスト",
+      "emoji-test": "🎉🚀💻",
+      "path-with-spaces": "/Users/test/My Documents/file.txt"
+    }
+  }
+}
+```json
+
+## Large Configs
+
+Configs with 100+ domains are supported with good performance (~73ms per domain):
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.domain1": { "key1": "value1" },
+    "com.apple.domain2": { "key2": "value2" },
+    ...
+    "com.apple.domain100": { "key100": "value100" }
+  }
+}
+```json
+
+## Pro+ Example: Third-Party Domains
+
+With a Pro+ license, you can manage third-party application preferences:
+
+```json
+{
+  "version": "1.0",
+  "os": "26",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true
+    },
+    "com.googlecode.iterm2": {
+      "PromptOnQuit": false,
+      "OnlyWhenMoreTabs": true
+    },
+    "com.microsoft.VSCode": {
+      "ApplePressAndHoldEnabled": false
+    }
+  }
+}
+```json
+
+**Note**: Third-party domains are only processed with Pro+ license. Free tier will skip these domains with a warning.
+
+## Required Fields
+
+Every config must have:
+
+1. `"version": "1.0"` - Config schema version
+2. `"domains": { ... }` - Map of domain names to key-value pairs
+
+Optional fields:
+
+- `"os": "26"` - Target macOS version (informational)
+
+## Workflow Examples
+
+### Export and Apply (Free Tier)
+
+```bash
+# Export current Apple preferences
+macprefs export my-prefs.json
+
+# Review what would change
+macprefs plan --config my-prefs.json
+
+# Apply with interactive confirmation
+macprefs apply --config my-prefs.json
+```json
+
+### CI/CD Workflow (Pro+ Required)
+
+```bash
+# Headless apply for automation
+macprefs apply --config my-prefs.json --yes
+
+# JSON output for parsing
+macprefs plan --config my-prefs.json --format json
+```json
+
+## Notes
+
+- **Shorthand form**: Direct `"key": value` infers type from JSON
+- **Extended form**: `"key": {"value": ..., "compare": "unordered", "note": "..."}` for options
+- **Managed-subset apply**: Only listed keys are compared/applied; unlisted keys ignored
+- **Domain scope**: Free tier supports Apple domains only; Pro+ supports all domains
+- **Types**: JSON bool → plist integer (0/1), JSON number → plist integer/float, JSON string → plist string
+
+---
+
+*Documentation auto-synced from macprefs configuration examples.*
