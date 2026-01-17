@@ -233,8 +233,8 @@ macprefs license deactivate
 | Subcommand | Description | Status |
 |------------|-------------|--------|
 | `status` | Shows current tier and feature availability | Available |
-| `activate --key <key>` | Activate with license key | Coming soon |
-| `deactivate` | Deactivate license | Coming soon |
+| `activate --key <key>` | Activate with license key | Available |
+| `deactivate` | Deactivate license | Available |
 
 **Exit codes:**
 - `0` = success (informational)
@@ -311,17 +311,6 @@ Semantic exit codes (using `2` for drift/issues) are a **Pro+ feature**. Free ti
 - **Unicode support:** Full Unicode, emojis, and international characters supported
 - **Large configs:** 100+ domains handled efficiently (~73ms per domain write)
 - **Concurrent access:** Last-writer-wins for conflicting writes; no file locking
-
----
-
-## v1.1 Planned Additions
-
-- Baselines: ship verified macOS 26 baseline with comparison support
-- Full `--enforce-domain` implementation with key deletion
-- Exclude patterns for ephemeral keys (Recent*, LastOpened*, caches)
-- Registry integration for community baselines
-- `--baseline` flag for export command
-- License activation/deactivation with Lemon Squeezy integration
 
 ---
 

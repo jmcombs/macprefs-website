@@ -1,0 +1,140 @@
+{
+  "$schema": "cli-enrichments-schema.json",
+  "version": "1.0",
+  "commands": {
+    "preflight": {
+      "description": "Checks write access to user Preferences, runs a safe `defaults` write/delete smoke test, and warns if MDM profiles are present. No permanent changes are made.",
+      "asides": [
+        {
+          "type": "note",
+          "content": "Free tier users should rely on human-readable output for status. See [Exit Codes Reference](/reference/exit-codes/) for details."
+        }
+      ],
+      "exitCodes": {
+        "pro": { "0": "PASS", "2": "ISSUES FOUND", "1": "FAIL" },
+        "free": { "0": "PASS/ISSUES", "1": "generic failure" }
+      },
+      "flags": {}
+    },
+    "list": {
+      "description": "Lists all preference domains, or keys within a specific domain.",
+      "asides": [
+        {
+          "type": "tip",
+          "content": "Free tier shows Apple domains only. Pro+ unlocks third-party app domains."
+        }
+      ],
+      "flags": {
+        "--domain": { "tier": "Free", "description": "Show keys within this domain" },
+        "--format": { "tier": "Pro+", "description": "Output format (table|json)" }
+      }
+    },
+    "inspect": {
+      "description": "Shows current values for preferences. Domain scope determined by license tier.",
+      "asides": [],
+      "flags": {
+        "--domains": { "tier": "Free", "description": "Comma-separated domains to inspect" },
+        "--keys": { "tier": "Free", "description": "Comma-separated keys to filter" },
+        "--format": { "tier": "Pro+", "description": "Output format (table|json)" }
+      }
+    },
+    "export": {
+      "description": "Exports macOS preferences to a JSON configuration file.",
+      "asides": [
+        {
+          "type": "note",
+          "content": "Free tier exports Apple domains only. Pro+ exports all domains including third-party apps."
+        }
+      ],
+      "flags": {
+        "--domains": { "tier": "Free", "description": "Comma-separated domains to include" },
+        "--baseline": { "tier": "Pro+", "description": "Compare against baseline (v1.1)" },
+        "--no-progress": { "tier": "Free", "description": "Suppress progress output" }
+      }
+    },
+    "validate": {
+      "description": "Checks that a config file is valid JSON with correct structure.",
+      "asides": [],
+      "flags": {
+        "--config": { "tier": "Free", "description": "Path to config JSON" },
+        "--format": { "tier": "Pro+", "description": "Output format (table|json)" }
+      }
+    },
+    "plan": {
+      "description": "Shows what changes would be made without applying them. Read-only operation.",
+      "asides": [
+        {
+          "type": "note",
+          "content": "`--filter` and `--verbose` are mutually exclusive."
+        }
+      ],
+      "exitCodes": {
+        "pro": { "0": "no drift", "2": "drift detected", "1": "error" },
+        "free": { "0": "command completed", "1": "generic failure" }
+      },
+      "flags": {
+        "--config": { "tier": "Free", "description": "Path to config file" },
+        "--format": { "tier": "Pro+", "description": "Output format (table|json)" },
+        "--verbose": { "tier": "Free", "description": "Show full detailed list of all changes" },
+        "--filter": { "tier": "Pro+", "description": "Filter: conflicts, additions, all" }
+      }
+    },
+    "apply": {
+      "description": "Applies config changes. Creates snapshot before any changes.",
+      "asides": [
+        {
+          "type": "caution",
+          "content": "Without `--yes`, Free tier will prompt for confirmation before applying changes."
+        }
+      ],
+      "exitCodes": {
+        "pro": { "0": "success", "1": "failure" },
+        "free": { "0": "success", "1": "failure" }
+      },
+      "flags": {
+        "--config": { "tier": "Free", "description": "Path to config file" },
+        "--yes": { "tier": "Pro+", "description": "Skip interactive confirmation" },
+        "--rollback-on-fail": { "tier": "Free", "description": "Rollback on failure (default: on)" },
+        "--verbose": { "tier": "Free", "description": "Verbose output" }
+      }
+    },
+    "rollback": {
+      "description": "Restores preferences to their state before an apply operation.",
+      "asides": [],
+      "flags": {
+        "--run-id": { "tier": "Pro+", "description": "Specific run ID to rollback" }
+      }
+    },
+    "license": {
+      "description": "Manage license activation and status.",
+      "asides": [],
+      "subcommands": {
+        "status": { "description": "Shows current tier and feature availability", "tier": "Free" },
+        "activate": { "description": "Activate with license key", "tier": "Free" },
+        "deactivate": { "description": "Deactivate license", "tier": "Free" }
+      }
+    },
+    "upgrade": {
+      "description": "Opens the macprefs store to purchase or manage your license.",
+      "asides": [],
+      "flags": {}
+    },
+    "about": {
+      "description": "Show version, license, and system information.",
+      "asides": [],
+      "flags": {}
+    }
+  },
+  "tierComparison": {
+    "features": [
+      { "feature": "Apple domains (com.apple.*, NSGlobalDomain)", "free": true, "pro": true },
+      { "feature": "JSON export format", "free": false, "pro": true },
+      { "feature": "Third-party app domains", "free": false, "pro": true },
+      { "feature": "Headless mode (--yes)", "free": false, "pro": true },
+      { "feature": "--filter flag (plan)", "free": false, "pro": true },
+      { "feature": "Semantic exit codes (2 for drift)", "free": false, "pro": true },
+      { "feature": "--run-id (rollback to specific run)", "free": false, "pro": true },
+      { "feature": "--baseline (export)", "free": false, "pro": true }
+    ]
+  }
+}
