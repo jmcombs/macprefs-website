@@ -178,7 +178,7 @@ function generateTierComparison() {
 function transform(cliMdContent) {
   // Parse all command blocks
   const commandBlocks = {};
-  const regex = /### (\w+(?:\s+\w+)?)\n\n```\n([\s\S]*?)```/g;
+  const regex = /### (\w+(?:\s+\w+)?)\n+```\n([\s\S]*?)```/g;
   let match;
   while ((match = regex.exec(cliMdContent)) !== null) {
     const name = match[1].trim();
