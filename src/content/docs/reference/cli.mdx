@@ -1,6 +1,6 @@
 ---
 title: CLI Reference
-description: Complete command-line interface reference for macprefs v1.0
+description: Complete command-line interface reference for macprefs
 ---
 
 import { Tabs, TabItem, Badge, Aside } from '@astrojs/starlight/components';
@@ -14,21 +14,88 @@ Complete documentation for all macprefs commands and flags.
 Checks write access to user Preferences, runs a safe `defaults` write/delete smoke test, and warns if MDM profiles are present. No permanent changes are made.
 
 ```bash
-macprefs preflight
+macprefs preflight [--config <config>]
 ```
 
-**Output Format:** Always human-readable (PASS/FAIL/ISSUES FOUND)
-- `PASS: All checks passed`
-- `ISSUES FOUND: N issue(s) detected` with itemized warnings
-- `FAIL: N critical issue(s) detected` with itemized errors
+| Flag | Description | Tier |
+|------|-------------|------|
+| `-c,` | --config <config>   Path to config JSON (optional, validates if provided) | Free |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
 
 **Exit codes:**
-- **Pro+ tier:** `0` = PASS; `2` = ISSUES FOUND (semantic); `1` = FAIL
-- **Free tier:** Always `0` for PASS/ISSUES outcomes; `1` = generic failure only
+- **pro:** `0` = PASS; `1` = FAIL; `2` = ISSUES FOUND
+- **free:** `0` = PASS/ISSUES; `1` = generic failure
 
-<Aside type="note">
-Free tier users should rely on human-readable output for status. See [Exit Codes Reference](/reference/exit-codes/) for details.
-</Aside>
+---
+
+### `list`
+
+Lists all preference domains, or keys within a specific domain.
+
+```bash
+macprefs list [--domain <domain>] [--format <format>]
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--domain <domain>` | Show keys within this domain instead of listing domains | Free |
+| `--format <format>` | Output format (table|json) - json requires Pro+ tier (default: table) | Pro+ |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
+
+---
+
+### `inspect`
+
+Shows current values for preferences. Domain scope determined by license tier.
+
+```bash
+macprefs inspect [--domains <domains>] [--keys <keys>] [--format <format>]
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--domains <domains>` | Comma-separated domains to inspect | Free |
+| `--keys <keys>` | Comma-separated keys to filter | Free |
+| `--format <format>` | Output format (table|json) - json requires Pro+ tier (default: table) | Pro+ |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
+
+---
+
+### `export`
+
+Exports macOS preferences to a JSON configuration file.
+
+```bash
+macprefs export <output-file> [--domains <domains>] [--baseline] [--no-progress]
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--domains <domains>` | Comma-separated domains to include (overrides tier-based scope) | Free |
+| `--baseline` | Compare against baseline (Pro+ only, v1.1) | Pro+ |
+| `--no-progress` | Suppress progress output (for CI/scripting) | Free |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
+
+---
+
+### `validate`
+
+Checks that a config file is valid JSON with correct structure.
+
+```bash
+macprefs validate [--config <config>] [--format <format>]
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `-c,` | --config <config>   Path to config JSON | Free |
+| `--format <format>` | Output format (table|json) - json requires Pro+ tier (default: table) | Pro+ |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
 
 ---
 
@@ -37,42 +104,21 @@ Free tier users should rely on human-readable output for status. See [Exit Codes
 Shows what changes would be made without applying them. Read-only operation.
 
 ```bash
-macprefs plan [--config <path>] [--format table|json] [-v, --verbose] [--filter <types>]
+macprefs plan [--config <config>] [--format <format>] [--verbose] [--filter <filter>]
 ```
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `--config <path>` | Path to config file | Free |
-| `--format table\|json` | Output format (table default) | json requires Pro+ |
-| `-v, --verbose` | Show full detailed list of all changes | Free |
-| `--filter <types>` | Filter: `conflicts`, `additions`, `all`, or comma-separated | Pro+ |
-| `--enforce-domain` | Not implemented, planned for v1.1 | — |
-
-<Aside type="note">
-`--filter` and `--verbose` are mutually exclusive.
-</Aside>
-
-**Default output (summary mode):**
-
-```text
-=== Plan Summary ===
-Conflicts:    156 keys (value differs)
-Additions:  2,108 keys (not on target)
-─────────────────────────────────────
-Total:      2,264 changes
-
-Top domains with conflicts:
-  NSGlobalDomain (12)
-  com.apple.dock (8)
-  com.apple.finder (5)
-
-Use --verbose for full details
-Use --filter <type> for filtered details (Pro)
-```
+| `-c,` | --config <config>   Path to config JSON | Free |
+| `--format <format>` | Output format (table|json) - json requires Pro+ tier (default: table) | Pro+ |
+| `-v,` | --verbose           Show all changes in detail | Free |
+| `--filter <filter>` | Filter changes: conflicts, additions, all (Pro+ required) | Pro+ |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
 
 **Exit codes:**
-- **Pro+ tier:** `0` = no drift; `2` = drift detected (semantic); `1` = error
-- **Free tier:** Always `0` when command completes; `1` = generic failure only
+- **pro:** `0` = no drift; `1` = error; `2` = drift detected
+- **free:** `0` = command completed; `1` = generic failure
 
 ---
 
@@ -81,244 +127,150 @@ Use --filter <type> for filtered details (Pro)
 Applies config changes. Creates snapshot before any changes.
 
 ```bash
-macprefs apply [--config <path>] [--yes] [--rollback-on-fail]
+macprefs apply [--config <config>] [--yes] [--rollback-on-fail] [--no-rollback-on-fail] [--verbose]
 ```
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `--config <path>` | Path to config file | Free |
-| `--yes` | Skip interactive confirmation (headless execution) | Pro+ |
-| `--rollback-on-fail` | Rollback on failure (default: on) | Free |
-| `--enforce-domain` | Not implemented, planned for v1.1 | — |
-
-**Interactive Prompt (Free tier):** When `--yes` is absent, prompts:
-```text
-N changes detected. Apply? [y/N]:
-```
-
-Snapshots are stored in `~/Library/Application Support/macprefs/runs/`.
-
-**Performance:** ~73-77ms per domain write on Apple Silicon.
+| `-c,` | --config <config>   Path to config JSON | Free |
+| `--yes` | Auto-confirm apply (Pro+ tier, for CI/CD) | Pro+ |
+| `--rollback-on-fail/--no-rollback-on-fail` |  Rollback on failure (default: --rollback-on-fail) | Free |
+| `--verbose` | Verbose output | Free |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
 
 **Exit codes:**
-- `0` = success
-- `1` = error
-
----
-
-### `export`
-
-Exports preferences to JSON file.
-
-```bash
-macprefs export <output-file> [--domains <list>] [--no-progress]
-```
-
-| Flag | Description | Tier |
-|------|-------------|------|
-| `--domains <list>` | Comma-separated list of domains to export | Free |
-| `--baseline` | Not implemented in v1.0 | Pro+ (v1.1) |
-| `--no-progress` | Disable progress output | Free |
-
-**Tier-based Scope:**
-- **Free tier:** Exports Apple domains only (`com.apple.*`, `NSGlobalDomain`)
-- **Pro+ tier:** Exports all domains including third-party
-
-Output is always pretty-printed with OS version automatically included.
-
-**Exit codes:**
-- `0` = success
-- `1` = error
-
----
-
-### `inspect`
-
-View current values in specified domains/keys.
-
-```bash
-macprefs inspect [--domains <list>] [--keys <list>] [--format table|json]
-```
-
-| Flag | Description | Tier |
-|------|-------------|------|
-| `--domains <list>` | Comma-separated list of domains | Free |
-| `--keys <list>` | Comma-separated list of keys | Free |
-| `--format table\|json` | Output format | json requires Pro+ |
-
-**Exit codes:**
-- `0` = success
-- `1` = error
-
----
-
-### `list`
-
-Lists available domains or keys within a domain.
-
-```bash
-macprefs list [--domain <name>] [--format table|json]
-```
-
-| Flag | Description | Tier |
-|------|-------------|------|
-| `--domain <name>` | Show keys within this domain | Free |
-| `--format table\|json` | Output format | json requires Pro+ |
-
-**Tier-based Scope:**
-- **Free tier:** Shows Apple domains only
-- **Pro+ tier:** Shows all domains
-
-**Exit codes:**
-- `0` = success
-- `1` = error
-
----
-
-### `validate`
-
-Check config file syntax and schema.
-
-```bash
-macprefs validate [--config <path>] [--format table|json]
-```
-
-Validates JSON structure and required fields (`version`, `domains`).
-
-| Flag | Description | Tier |
-|------|-------------|------|
-| `--config <path>` | Path to config file | Free |
-| `--format table\|json` | Output format | json requires Pro+ |
-
-**Exit codes:**
-- **Pro+ tier:** `0` = valid; `1` = invalid schema (semantic)
-- **Free tier:** Always `0` for valid/invalid outcomes; `1` = generic failure only (missing file, malformed JSON)
+- **pro:** `0` = success; `1` = failure
+- **free:** `0` = success; `1` = failure
 
 ---
 
 ### `rollback`
 
-Restores values from a previous snapshot.
+Restores preferences to their state before an apply operation.
 
 ```bash
-macprefs rollback [--run-id <id>]
+macprefs rollback [--run-id <run-id>]
 ```
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `--run-id <id>` | Specific run ID to rollback to | Pro+ |
-
-**Tier-based behavior:**
-- **Free tier:** Can only rollback to last run
-- **Pro+ tier:** Can rollback to any run by ID
-
-Snapshots are stored in `~/Library/Application Support/macprefs/runs/`.
-
-**Exit codes:**
-- `0` = success
-- `1` = error
+| `--run-id <run-id>` | Specific run ID to rollback (default: most recent) | Pro+ |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
 
 ---
 
 ### `license`
 
-Manage license status and activation.
+Manage license activation and status.
 
 ```bash
 macprefs license status
-macprefs license activate --key <key>
-macprefs license deactivate
 ```
 
-| Subcommand | Description | Status |
-|------------|-------------|--------|
-| `status` | Shows current tier and feature availability | Available |
-| `activate --key <key>` | Activate with license key | Available |
-| `deactivate` | Deactivate license | Available |
-
-**Exit codes:**
-- `0` = success (informational)
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
 
 ---
 
 ### `upgrade`
 
-Displays tier comparison and upgrade information.
+Opens the macprefs store to purchase or manage your license.
 
 ```bash
-macprefs upgrade [--plan pro|enterprise]
+macprefs upgrade
 ```
 
-Shows "Coming Soon" message for all upgrade paths in v1.0.
-
-**Exit codes:**
-- `0` = success (informational)
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
 
 ---
 
 ### `about`
 
-Shows version, license tier, and project information.
+Show version, license, and system information.
 
 ```bash
 macprefs about
 ```
 
-**Exit codes:**
-- `0` = success
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
 
 ---
 
-## Tier Gating Summary
+### `license status`
+
+Show current license tier and features
+
+```bash
+macprefs license status
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
+
+---
+
+### `license activate`
+
+Activate a license key on this device
+
+```bash
+macprefs license activate --key <key>
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `--key <key>` | License key to activate | Free |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
+
+---
+
+### `license deactivate`
+
+Deactivate the license on this device
+
+```bash
+macprefs license deactivate [--yes]
+```
+
+| Flag | Description | Tier |
+|------|-------------|------|
+| `-y,` | --yes               Skip confirmation prompt | Free |
+| `--version` | Show the version. | Free |
+| `-h,` | --help              Show help information. | Free |
+
+---
+
+## Tier Feature Comparison
 
 | Feature | Free | Pro+ |
 |---------|:----:|:----:|
-| `--verbose` (plan) | ✓ | ✓ |
-| `--filter` (plan) | ✗ | ✓ |
-| `--format json` (plan, inspect, list, validate) | ✗ | ✓ |
-| `--yes` (headless apply) | ✗ | ✓ |
-| `--run-id` (rollback to specific run) | ✗ | ✓ |
-| Third-party domains (export, list) | ✗ | ✓ |
-| Semantic exit codes (automation-ready) | ✗ | ✓ |
-| `--baseline` (export) | ✗ | ✓ (v1.1) |
+| Apple domains (com.apple.*, NSGlobalDomain) | ✓ | ✓ |
+| JSON export format | ✗ | ✓ |
+| Third-party app domains | ✗ | ✓ |
+| Headless mode (--yes) | ✗ | ✓ |
+| --filter flag (plan) | ✗ | ✓ |
+| Semantic exit codes (2 for drift) | ✗ | ✓ |
+| --run-id (rollback to specific run) | ✗ | ✓ |
+| --baseline (export) | ✗ | ✓ |
 
 <Aside type="caution">
 When a gated feature is used without proper license, the CLI returns exit code 1 with message:
-`"This feature requires a Pro license. Run 'macprefs upgrade' for details."`
+`This feature requires Pro tier or higher. Run 'macprefs upgrade' to unlock.`
 </Aside>
 
 ---
 
-## Exit Codes Reference
-
-| Code | Meaning |
-|------|---------|
-| `0` | Success / PASS / No drift / Valid |
-| `1` | Error / FAIL / Invalid / Gated feature |
-| `2` | Non-critical issues / Drift detected |
-
-<Aside type="note">
-Semantic exit codes (using `2` for drift/issues) are a **Pro+ feature**. Free tier always returns `0` for semantic outcomes. See [Exit Codes Reference](/reference/exit-codes/) for full details.
-</Aside>
-
----
-
-## Behaviors and Defaults
-
-- **Managed-subset apply:** Only keys present in config are compared/applied; others ignored
-- **Snapshots:** Stored in `~/Library/Application Support/macprefs/runs/` as JSON files
-- **Permissions:** No TCC permissions required for user-level defaults
-- **Unicode support:** Full Unicode, emojis, and international characters supported
-- **Large configs:** 100+ domains handled efficiently (~73ms per domain write)
-- **Concurrent access:** Last-writer-wins for conflicting writes; no file locking
-
----
-
-## Known Limitation: Array Type Coercion
-
-When numeric values (integers, floats) or booleans are stored inside arrays or dictionaries, they may be read back as strings. For example, `[100, 200, 800, 600]` becomes `["100", "200", "800", "600"]`. This can cause false drift detection in `plan` even when preferences are functionally correct.
-
-**Workaround:** Use string values inside arrays and dictionaries (e.g., `["100", "200"]` instead of `[100, 200]`). Top-level scalar values (integers, booleans, floats) are not affected.
-
-This will be resolved in a future version by migrating to native CFPreferences APIs.
-
+*Documentation auto-synced from macprefs CLI help.*
