@@ -1,192 +1,162 @@
 #!/usr/bin/env node
 /**
- * Transform CLI.md to Starlight MDX format
- * 
- * Usage: node transform-cli-docs.js <cli-md-path> [output-path]
- * 
- * Reads CLI.md (auto-generated from macprefs --help) and enriches it with
- * tier information, aside notes, and proper Starlight MDX formatting.
+ * transform-cli-docs.cjs
+ * Transforms docs/CLI.json to Starlight MDX format
+ * Uses structured JSON instead of parsing markdown
  */
 
 const fs = require('fs');
 const path = require('path');
 
-// Load enrichments
+// Load enrichment data
 const enrichmentsPath = path.join(__dirname, 'cli-enrichments.json');
 const enrichments = JSON.parse(fs.readFileSync(enrichmentsPath, 'utf8'));
 
-/**
- * Parse a command block from CLI.md
- */
-function parseCommandBlock(name, content) {
-  const lines = content.split('\n');
-  const result = {
-    name,
-    overview: '',
-    usage: '',
-    options: [],
-    arguments: [],
-    examples: []
-  };
+// Input/output paths
+const inputPath = process.argv[2];
+const outputPath = process.argv[3];
 
-  let section = null;
+if (!inputPath) {
+  console.error('Usage: transform-cli-docs.cjs <input-json> [output-mdx]');
+  process.exit(1);
+}
+
+// Read JSON - try .json first, fall back to parsing .md path to find .json
+let jsonPath = inputPath;
+if (inputPath.endsWith('.md')) {
+  jsonPath = inputPath.replace(/\.md$/, '.json');
+}
+
+if (!fs.existsSync(jsonPath)) {
+  console.error(`Error: JSON file not found: ${jsonPath}`);
+  process.exit(1);
+}
+
+const cliData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+
+/**
+ * Parse help text to extract flags and their descriptions
+ */
+function parseFlags(helpText) {
+  const flags = [];
+  const lines = helpText.split('\n');
+  let inOptions = false;
+  let currentFlag = null;
+  
   for (const line of lines) {
-    if (line.startsWith('OVERVIEW:')) {
-      result.overview = line.replace('OVERVIEW:', '').trim();
-      section = 'overview';
-    } else if (line.startsWith('USAGE:')) {
-      result.usage = line.replace('USAGE:', '').trim();
-      section = 'usage';
-    } else if (line.startsWith('OPTIONS:')) {
-      section = 'options';
-    } else if (line.startsWith('ARGUMENTS:')) {
-      section = 'arguments';
-    } else if (line.startsWith('Examples:')) {
-      section = 'examples';
-    } else if (section === 'overview' && line.trim() && !line.startsWith('USAGE:')) {
-      result.overview += ' ' + line.trim();
-    } else if (section === 'options' && line.trim().startsWith('-')) {
-      const match = line.match(/^\s*(--?\S+(?:\s+<\S+>)?(?:\/--?\S+)?)\s+(.+)$/);
-      if (match) {
-        result.options.push({ flag: match[1].trim(), description: match[2].trim() });
+    if (line.trim() === 'OPTIONS:') {
+      inOptions = true;
+      continue;
+    }
+    if (line.trim() === 'ARGUMENTS:') {
+      inOptions = false;
+      continue;
+    }
+    
+    if (inOptions && line.trim()) {
+      // Check if this is a new flag line (starts with spaces then -)
+      const flagMatch = line.match(/^\s+(-[^\s]+(?:,\s*--[^\s]+)?(?:\s+<[^>]+>)?)\s*(.*)/);
+      if (flagMatch) {
+        if (currentFlag) flags.push(currentFlag);
+        currentFlag = {
+          flag: flagMatch[1].trim(),
+          description: flagMatch[2].trim()
+        };
+      } else if (currentFlag && line.match(/^\s{20,}/)) {
+        // Continuation of previous description
+        currentFlag.description += ' ' + line.trim();
       }
-    } else if (section === 'arguments' && line.trim().startsWith('<')) {
-      const match = line.match(/^\s*(<\S+>)\s+(.+)$/);
-      if (match) {
-        result.arguments.push({ arg: match[1], description: match[2].trim() });
-      }
-    } else if (section === 'examples' && line.trim().startsWith('macprefs')) {
-      result.examples.push(line.trim());
     }
   }
+  if (currentFlag) flags.push(currentFlag);
+  
+  return flags;
+}
 
-  return result;
+/**
+ * Extract OVERVIEW from help text
+ */
+function extractOverview(helpText) {
+  const match = helpText.match(/OVERVIEW:\s*(.+?)(?:\n\n|\nUSAGE:)/s);
+  if (match) {
+    return match[1].trim().split('\n')[0];
+  }
+  return '';
+}
+
+/**
+ * Extract USAGE from help text
+ */
+function extractUsage(helpText) {
+  const match = helpText.match(/USAGE:\s*(.+?)(?:\n\n|\nOPTIONS:|\nARGUMENTS:)/s);
+  if (match) {
+    return match[1].trim().split('\n')[0];
+  }
+  return '';
+}
+
+/**
+ * Get tier for a flag based on enrichments
+ */
+function getFlagTier(cmdName, flagName) {
+  const cmdEnrichment = enrichments.commands[cmdName];
+  if (cmdEnrichment && cmdEnrichment.flags) {
+    const flagEnrichment = cmdEnrichment.flags[flagName];
+    if (flagEnrichment) {
+      return flagEnrichment.tier || 'Free';
+    }
+  }
+  return 'Free';
 }
 
 /**
  * Generate MDX for a command
  */
-function generateCommandMDX(parsed, enrichment) {
-  let mdx = '';
+function generateCommandMdx(cmdKey, cmdData) {
+  const cmdName = cmdData.name;
+  const helpText = cmdData.help_text;
+  const enrichment = enrichments.commands[cmdName] || {};
   
-  // Command heading
-  mdx += `### \`${parsed.name}\`\n\n`;
+  const overview = enrichment.description || extractOverview(helpText);
+  const usage = extractUsage(helpText);
+  const flags = parseFlags(helpText);
   
-  // Description from enrichment (preferred) or parsed overview
-  const description = enrichment?.description || parsed.overview;
-  mdx += `${description}\n\n`;
+  let mdx = `### \`${cmdName}\`\n\n`;
+  mdx += `${overview}\n\n`;
+  mdx += `\`\`\`bash\n${usage}\n\`\`\`\n\n`;
   
-  // Usage code block
-  if (parsed.usage) {
-    mdx += '```bash\n';
-    mdx += parsed.usage + '\n';
-    mdx += '```\n\n';
-  }
-  
-  // Arguments table
-  if (parsed.arguments.length > 0) {
-    mdx += '| Argument | Description |\n';
-    mdx += '|----------|-------------|\n';
-    for (const arg of parsed.arguments) {
-      mdx += `| \`${arg.arg}\` | ${arg.description} |\n`;
+  // Flags table
+  if (flags.length > 0) {
+    mdx += `| Flag | Description | Tier |\n`;
+    mdx += `|------|-------------|------|\n`;
+    for (const flag of flags) {
+      const tier = getFlagTier(cmdName, flag.flag.split(/[\s,]/)[0]);
+      mdx += `| \`${flag.flag}\` | ${flag.description} | ${tier} |\n`;
     }
     mdx += '\n';
   }
   
-  // Flags table with tier info
-  if (parsed.options.length > 0) {
-    const flagEnrichments = enrichment?.flags || {};
-    mdx += '| Flag | Description | Tier |\n';
-    mdx += '|------|-------------|------|\n';
-    for (const opt of parsed.options) {
-      // Skip common flags
-      if (opt.flag === '--version' || opt.flag === '-h, --help') continue;
-      
-      const flagKey = opt.flag.split(' ')[0].replace(',', '');
-      const tierInfo = flagEnrichments[flagKey] || flagEnrichments[opt.flag.split(' ')[0]];
-      const tier = tierInfo?.tier || 'Free';
-      mdx += `| \`${opt.flag}\` | ${opt.description} | ${tier} |\n`;
+  // Add enrichment notes
+  if (enrichment.exitCodes) {
+    mdx += `**Exit codes:**\n`;
+    for (const [tier, codes] of Object.entries(enrichment.exitCodes)) {
+      const codeStr = Object.entries(codes).map(([c,d]) => `\`${c}\` = ${d}`).join("; "); mdx += `- **${tier}:** ${codeStr}\n`;
     }
     mdx += '\n';
   }
   
-  // Exit codes if present
-  if (enrichment?.exitCodes) {
-    mdx += '**Exit codes:**\n';
-    if (enrichment.exitCodes.pro) {
-      const proCodes = Object.entries(enrichment.exitCodes.pro)
-        .map(([code, desc]) => `\`${code}\` = ${desc}`)
-        .join('; ');
-      mdx += `- **Pro+ tier:** ${proCodes}\n`;
-    }
-    if (enrichment.exitCodes.free) {
-      const freeCodes = Object.entries(enrichment.exitCodes.free)
-        .map(([code, desc]) => `\`${code}\` = ${desc}`)
-        .join('; ');
-      mdx += `- **Free tier:** ${freeCodes}\n`;
-    }
-    mdx += '\n';
+  if (enrichment.aside) {
+    mdx += `<Aside type="${enrichment.aside.type}">\n`;
+    mdx += `${enrichment.aside.content}\n`;
+    mdx += `</Aside>\n\n`;
   }
   
-  // Aside notes
-  if (enrichment?.asides) {
-    for (const aside of enrichment.asides) {
-      mdx += `<Aside type="${aside.type}">\n`;
-      mdx += `${aside.content}\n`;
-      mdx += `</Aside>\n\n`;
-    }
-  }
-  
-  // Subcommands (for license command)
-  if (enrichment?.subcommands) {
-    mdx += '| Subcommand | Description | Status |\n';
-    mdx += '|------------|-------------|--------|\n';
-    for (const [name, info] of Object.entries(enrichment.subcommands)) {
-      mdx += `| \`${name}\` | ${info.description} | Available |\n`;
-    }
-    mdx += '\n';
-  }
-  
-  mdx += '---\n\n';
+  mdx += `---\n\n`;
   return mdx;
 }
 
-/**
- * Generate tier comparison section
- */
-function generateTierComparison() {
-  const features = enrichments.tierComparison?.features || [];
-  let mdx = '## Tier Feature Comparison\n\n';
-  mdx += '| Feature | Free | Pro+ |\n';
-  mdx += '|---------|:----:|:----:|\n';
-  for (const f of features) {
-    const free = f.free ? '✓' : '✗';
-    const pro = f.pro ? '✓' : '✓';
-    mdx += `| ${f.feature} | ${free} | ${pro} |\n`;
-  }
-  mdx += '\n';
-  mdx += '<Aside type="caution">\n';
-  mdx += 'When a gated feature is used without proper license, the CLI returns exit code 1 with message:\n';
-  mdx += '`This feature requires Pro tier or higher. Run \'macprefs upgrade\' to unlock.`\n';
-  mdx += '</Aside>\n\n';
-  return mdx;
-}
-
-/**
- * Main transformation function
- */
-function transform(cliMdContent) {
-  // Parse all command blocks
-  const commandBlocks = {};
-  const regex = /### (\w+(?:\s+\w+)?)\n+```\n([\s\S]*?)```/g;
-  let match;
-  while ((match = regex.exec(cliMdContent)) !== null) {
-    const name = match[1].trim();
-    commandBlocks[name] = parseCommandBlock(name, match[2]);
-  }
-
-  // Generate MDX
-  let mdx = `---
+// Generate MDX output
+let mdx = `---
 title: CLI Reference
 description: Complete command-line interface reference for macprefs
 ---
@@ -199,49 +169,48 @@ Complete documentation for all macprefs commands and flags.
 
 `;
 
-  // Order commands logically
-  const commandOrder = [
-    'preflight', 'list', 'inspect', 'export', 'validate',
-    'plan', 'apply', 'rollback', 'license', 'upgrade', 'about'
-  ];
+// Order commands logically
+const commandOrder = [
+  'preflight', 'list', 'inspect', 'export', 'validate',
+  'plan', 'apply', 'rollback', 'license', 'upgrade', 'about',
+  'license_status', 'license_activate', 'license_deactivate'
+];
 
-  for (const cmdName of commandOrder) {
-    const parsed = commandBlocks[cmdName];
-    if (parsed) {
-      const enrichment = enrichments.commands[cmdName];
-      mdx += generateCommandMDX(parsed, enrichment);
-    }
-  }
-
-  // Add tier comparison
-  mdx += generateTierComparison();
-
-  // Footer
-  mdx += '---\n\n';
-  mdx += '*Documentation auto-synced from macprefs CLI help.*\n';
-
-  return mdx;
-}
-
-// CLI entry point
-if (require.main === module) {
-  const inputPath = process.argv[2];
-  const outputPath = process.argv[3];
-
-  if (!inputPath) {
-    console.error('Usage: node transform-cli-docs.js <cli-md-path> [output-path]');
-    process.exit(1);
-  }
-
-  const content = fs.readFileSync(inputPath, 'utf8');
-  const result = transform(content);
-
-  if (outputPath) {
-    fs.writeFileSync(outputPath, result);
-    console.log(`Transformed CLI.md -> ${outputPath}`);
-  } else {
-    console.log(result);
+for (const cmdKey of commandOrder) {
+  const cmdData = cliData.commands[cmdKey];
+  if (cmdData) {
+    mdx += generateCommandMdx(cmdKey, cmdData);
   }
 }
 
-module.exports = { transform, parseCommandBlock };
+// Add tier comparison table
+mdx += `## Tier Feature Comparison
+
+| Feature | Free | Pro+ |
+|---------|:----:|:----:|
+| Apple domains (com.apple.*, NSGlobalDomain) | ✓ | ✓ |
+| JSON export format | ✗ | ✓ |
+| Third-party app domains | ✗ | ✓ |
+| Headless mode (--yes) | ✗ | ✓ |
+| --filter flag (plan) | ✗ | ✓ |
+| Semantic exit codes (2 for drift) | ✗ | ✓ |
+| --run-id (rollback to specific run) | ✗ | ✓ |
+| --baseline (export) | ✗ | ✓ |
+
+<Aside type="caution">
+When a gated feature is used without proper license, the CLI returns exit code 1 with message:
+\`This feature requires Pro tier or higher. Run 'macprefs upgrade' to unlock.\`
+</Aside>
+
+---
+
+*Documentation auto-synced from macprefs CLI help.*
+`;
+
+// Output
+if (outputPath) {
+  fs.writeFileSync(outputPath, mdx);
+  console.log(`Transformed ${jsonPath} -> ${outputPath}`);
+} else {
+  console.log(mdx);
+}

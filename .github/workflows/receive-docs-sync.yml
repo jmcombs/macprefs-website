@@ -34,7 +34,8 @@ jobs:
 
       - name: Transform documentation
         run: |
-          node scripts/transform-cli-docs.cjs macprefs-source/docs/CLI.md src/content/docs/reference/cli.mdx
+          # Use JSON for CLI docs (more robust than markdown parsing)
+          node scripts/transform-cli-docs.cjs macprefs-source/docs/CLI.json src/content/docs/reference/cli.mdx
           if [ -f macprefs-source/docs/config-examples.md ]; then
             node scripts/transform-config-docs.cjs macprefs-source/docs/config-examples.md src/content/docs/reference/configuration.mdx
           fi
