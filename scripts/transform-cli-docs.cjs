@@ -96,6 +96,15 @@ function extractUsage(helpText) {
 }
 
 /**
+ * Escape angle brackets for MDX (they're interpreted as JSX)
+ */
+function escapeMdx(text) {
+  return text
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/**
  * Get tier for a flag based on enrichments
  */
 function getFlagTier(cmdName, flagName) {
@@ -120,9 +129,10 @@ function generateCommandMdx(cmdKey, cmdData) {
   const overview = enrichment.description || extractOverview(helpText);
   const usage = extractUsage(helpText);
   const flags = parseFlags(helpText);
-  
+
   let mdx = `### \`${cmdName}\`\n\n`;
-  mdx += `${overview}\n\n`;
+  // Escape angle brackets in overview text (not in code blocks)
+  mdx += `${escapeMdx(overview)}\n\n`;
   mdx += `\`\`\`bash\n${usage}\n\`\`\`\n\n`;
   
   // Flags table
@@ -131,7 +141,10 @@ function generateCommandMdx(cmdKey, cmdData) {
     mdx += `|------|-------------|------|\n`;
     for (const flag of flags) {
       const tier = getFlagTier(cmdName, flag.flag.split(/[\s,]/)[0]);
-      mdx += `| \`${flag.flag}\` | ${flag.description} | ${tier} |\n`;
+      // Escape angle brackets in flag and description to prevent MDX/JSX parsing issues
+      const escapedFlag = escapeMdx(flag.flag);
+      const escapedDesc = escapeMdx(flag.description);
+      mdx += `| \`${escapedFlag}\` | ${escapedDesc} | ${tier} |\n`;
     }
     mdx += '\n';
   }
