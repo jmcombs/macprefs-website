@@ -19,13 +19,13 @@ macprefs preflight [--config <config>]
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `-c,` | --config <config>   Path to config JSON (optional, validates if provided) | Free |
+| `-c, --config <config>` | Path to config JSON (optional, validates if provided) | Free |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 **Exit codes:**
-- **pro:** `0` = PASS; `1` = FAIL; `2` = ISSUES FOUND
-- **free:** `0` = PASS/ISSUES; `1` = generic failure
+- `0` — All checks passed
+- `2` — One or more issues detected
 
 ---
 
@@ -40,9 +40,9 @@ macprefs list [--domain <domain>] [--format <format>]
 | Flag | Description | Tier |
 |------|-------------|------|
 | `--domain <domain>` | Show keys within this domain instead of listing domains | Free |
-| `--format <format>` | Output format (table|json) - json requires Pro tier (default: table) | Pro+ |
+| `--format <format>` | Output format (table|json) - json requires Pro tier | Pro |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
@@ -58,9 +58,9 @@ macprefs inspect [--domains <domains>] [--keys <keys>] [--format <format>]
 |------|-------------|------|
 | `--domains <domains>` | Comma-separated domains to inspect | Free |
 | `--keys <keys>` | Comma-separated keys to filter | Free |
-| `--format <format>` | Output format (table|json) - json requires Pro tier (default: table) | Pro+ |
+| `--format <format>` | Output format (table|json) - json requires Pro tier | Pro |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
@@ -72,13 +72,16 @@ Exports macOS preferences to a JSON configuration file.
 macprefs export <output-file> [--domains <domains>] [--baseline] [--no-progress]
 ```
 
+**Arguments:**
+- `<output-file>` — Output JSON file path (required)
+
 | Flag | Description | Tier |
 |------|-------------|------|
 | `--domains <domains>` | Comma-separated domains to include (overrides tier-based scope) | Free |
-| `--baseline` | Compare against baseline (Pro only, v1.1) | Pro+ |
+| `--baseline` | Compare against baseline (Pro only, v1.1) | Pro |
 | `--no-progress` | Suppress progress output (for CI/scripting) | Free |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
@@ -92,10 +95,10 @@ macprefs validate [--config <config>] [--format <format>]
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `-c,` | --config <config>   Path to config JSON | Free |
-| `--format <format>` | Output format (table|json) - json requires Pro tier (default: table) | Pro+ |
+| `-c, --config <config>` | Path to config JSON | Free |
+| `--format <format>` | Output format (table|json) - json requires Pro tier | Pro |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
@@ -109,16 +112,16 @@ macprefs plan [--config <config>] [--format <format>] [--verbose] [--filter <fil
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `-c,` | --config <config>   Path to config JSON | Free |
-| `--format <format>` | Output format (table|json) - json requires Pro tier (default: table) | Pro+ |
-| `-v,` | --verbose           Show all changes in detail | Free |
-| `--filter <filter>` | Filter changes: conflicts, additions, all (Pro required) | Pro+ |
+| `-c, --config <config>` | Path to config JSON | Free |
+| `--format <format>` | Output format (table|json) - json requires Pro tier | Pro |
+| `-v, --verbose` | Show all changes in detail | Free |
+| `--filter <filter>` | Filter changes: conflicts, additions, all (Pro required) | Pro |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 **Exit codes:**
-- **pro:** `0` = no drift; `1` = error; `2` = drift detected
-- **free:** `0` = command completed; `1` = generic failure
+- `0` — No changes needed (in sync)
+- `2` — Changes detected (drift found)
 
 ---
 
@@ -132,16 +135,17 @@ macprefs apply [--config <config>] [--yes] [--rollback-on-fail] [--no-rollback-o
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `-c,` | --config <config>   Path to config JSON | Free |
-| `--yes` | Auto-confirm apply (Pro tier, for CI/CD) | Pro+ |
-| `--rollback-on-fail/--no-rollback-on-fail` |  Rollback on failure (default: --rollback-on-fail) | Free |
+| `-c, --config <config>` | Path to config JSON | Free |
+| `--yes` | Auto-confirm apply (Pro tier, for CI/CD) | Pro |
+| `--rollback-on-fail` | Rollback on failure (default: enabled) | Free |
+| `--no-rollback-on-fail` | Disable rollback on failure | Free |
 | `--verbose` | Verbose output | Free |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 **Exit codes:**
-- **pro:** `0` = success; `1` = failure
-- **free:** `0` = success; `1` = failure
+- `0` — Changes applied successfully (or no changes needed)
+- `1` — Apply failed
 
 ---
 
@@ -155,9 +159,9 @@ macprefs rollback [--run-id <run-id>]
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `--run-id <run-id>` | Specific run ID to rollback (default: most recent) | Pro+ |
+| `--run-id <run-id>` | Specific run ID to rollback (default: most recent) | Free |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
@@ -172,7 +176,9 @@ macprefs license <subcommand>
 | Flag | Description | Tier |
 |------|-------------|------|
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
+
+**Subcommands:** `status`, `activate`, `deactivate`
 
 ---
 
@@ -187,7 +193,7 @@ macprefs upgrade
 | Flag | Description | Tier |
 |------|-------------|------|
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
@@ -202,13 +208,13 @@ macprefs about
 | Flag | Description | Tier |
 |------|-------------|------|
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
 ### `license status`
 
-Show current license tier and features
+Displays your current license tier and available features.
 
 ```bash
 macprefs license status
@@ -217,13 +223,13 @@ macprefs license status
 | Flag | Description | Tier |
 |------|-------------|------|
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
 ### `license activate`
 
-Activate a license key on this device
+Activates a macprefs Pro license on this device. Prompts interactively if --key is omitted.
 
 ```bash
 macprefs license activate [--key <key>]
@@ -233,13 +239,13 @@ macprefs license activate [--key <key>]
 |------|-------------|------|
 | `--key <key>` | License key (prompts interactively if omitted) | Free |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
 ### `license deactivate`
 
-Deactivate the license on this device
+Removes the license from this device, freeing an activation slot.
 
 ```bash
 macprefs license deactivate [--yes]
@@ -247,9 +253,9 @@ macprefs license deactivate [--yes]
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `-y,` | --yes               Skip confirmation prompt | Free |
+| `-y, --yes` | Skip confirmation prompt | Free |
 | `--version` | Show the version. | Free |
-| `-h,` | --help              Show help information. | Free |
+| `-h, --help` | Show help information. | Free |
 
 ---
 
