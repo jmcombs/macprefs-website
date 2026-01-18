@@ -57,3 +57,6 @@ jobs:
           labels: documentation,automated
           committer: macprefs-release-bot[bot] <macprefs-release-bot[bot]@users.noreply.github.com>
           author: macprefs-release-bot[bot] <macprefs-release-bot[bot]@users.noreply.github.com>
+          # Only include documentation files to avoid requiring workflows permission
+          add-paths: |
+            src/content/docs/**
