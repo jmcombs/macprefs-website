@@ -1,14 +1,29 @@
 #!/usr/bin/env node
 /**
  * transform-cli-docs.cjs
- * Transforms docs/CLI.json to Starlight MDX format
- * Uses structured JSON instead of parsing markdown
+ * Transforms docs/CLI.json (structured format) to Starlight MDX format
+ *
+ * New structured JSON format (from macprefs generate-cli-docs):
+ * {
+ *   "commands": {
+ *     "name": {
+ *       "name": "...",
+ *       "abstract": "...",
+ *       "description": "...",
+ *       "usage": "...",
+ *       "flags": [{ "short": "-c", "long": "--config", "argument": "config", "description": "...", "tier": "free" }],
+ *       "arguments": [...],
+ *       "exit_codes": { "0": "...", "2": "..." },
+ *       "subcommands": ["..."]
+ *     }
+ *   }
+ * }
  */
 
 const fs = require('fs');
 const path = require('path');
 
-// Load enrichment data
+// Load enrichment data (for any additional enrichments beyond structured data)
 const enrichmentsPath = path.join(__dirname, 'cli-enrichments.json');
 const enrichments = JSON.parse(fs.readFileSync(enrichmentsPath, 'utf8'));
 
@@ -24,7 +39,7 @@ if (!inputPath) {
 // Read JSON - try .json first, fall back to parsing .md path to find .json
 let jsonPath = inputPath;
 if (inputPath.endsWith('.md')) {
-  jsonPath = inputPath.replace(/\.md$/, '.json');
+  jsonPath = jsonPath.replace(/\.md$/, '.json');
 }
 
 if (!fs.existsSync(jsonPath)) {
@@ -35,122 +50,92 @@ if (!fs.existsSync(jsonPath)) {
 const cliData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
 /**
- * Parse help text to extract flags and their descriptions
+ * Format a flag for display in MDX
+ * Builds flag string like: -c, --config <config>
  */
-function parseFlags(helpText) {
-  const flags = [];
-  const lines = helpText.split('\n');
-  let inOptions = false;
-  let currentFlag = null;
-  
-  for (const line of lines) {
-    if (line.trim() === 'OPTIONS:') {
-      inOptions = true;
-      continue;
-    }
-    if (line.trim() === 'ARGUMENTS:') {
-      inOptions = false;
-      continue;
-    }
-    
-    if (inOptions && line.trim()) {
-      // Check if this is a new flag line (starts with spaces then -)
-      const flagMatch = line.match(/^\s+(-[^\s]+(?:,\s*--[^\s]+)?(?:\s+<[^>]+>)?)\s*(.*)/);
-      if (flagMatch) {
-        if (currentFlag) flags.push(currentFlag);
-        currentFlag = {
-          flag: flagMatch[1].trim(),
-          description: flagMatch[2].trim()
-        };
-      } else if (currentFlag && line.match(/^\s{20,}/)) {
-        // Continuation of previous description
-        currentFlag.description += ' ' + line.trim();
-      }
-    }
+function formatFlag(flag) {
+  let parts = [];
+  if (flag.short) parts.push(flag.short);
+  if (flag.long) parts.push(flag.long);
+  let flagStr = parts.join(', ');
+  if (flag.argument) {
+    flagStr += ` <${flag.argument}>`;
   }
-  if (currentFlag) flags.push(currentFlag);
-  
-  return flags;
+  return flagStr;
 }
 
 /**
- * Extract OVERVIEW from help text
+ * Get display tier (capitalize first letter)
  */
-function extractOverview(helpText) {
-  const match = helpText.match(/OVERVIEW:\s*(.+?)(?:\n\n|\nUSAGE:)/s);
-  if (match) {
-    return match[1].trim().split('\n')[0];
-  }
-  return '';
+function formatTier(tier) {
+  if (!tier) return 'Free';
+  return tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase();
 }
 
 /**
- * Extract USAGE from help text
- */
-function extractUsage(helpText) {
-  const match = helpText.match(/USAGE:\s*(.+?)(?:\n\n|\nOPTIONS:|\nARGUMENTS:)/s);
-  if (match) {
-    return match[1].trim().split('\n')[0];
-  }
-  return '';
-}
-
-/**
- * Get tier for a flag based on enrichments
- */
-function getFlagTier(cmdName, flagName) {
-  const cmdEnrichment = enrichments.commands[cmdName];
-  if (cmdEnrichment && cmdEnrichment.flags) {
-    const flagEnrichment = cmdEnrichment.flags[flagName];
-    if (flagEnrichment) {
-      return flagEnrichment.tier || 'Free';
-    }
-  }
-  return 'Free';
-}
-
-/**
- * Generate MDX for a command
+ * Generate MDX for a command using structured JSON data
  */
 function generateCommandMdx(cmdKey, cmdData) {
   const cmdName = cmdData.name;
-  const helpText = cmdData.help_text;
   const enrichment = enrichments.commands[cmdName] || {};
-  
-  const overview = enrichment.description || extractOverview(helpText);
-  const usage = extractUsage(helpText);
-  const flags = parseFlags(helpText);
-  
+
+  // Use structured data directly - no parsing needed!
+  const overview = enrichment.description || cmdData.description || cmdData.abstract;
+  const usage = cmdData.usage || '';
+  const flags = cmdData.flags || [];
+  const args = cmdData.arguments || [];
+  const exitCodes = cmdData.exit_codes || null;
+
   let mdx = `### \`${cmdName}\`\n\n`;
   mdx += `${overview}\n\n`;
-  mdx += `\`\`\`bash\n${usage}\n\`\`\`\n\n`;
-  
-  // Flags table
+
+  if (usage) {
+    mdx += `\`\`\`bash\n${usage}\n\`\`\`\n\n`;
+  }
+
+  // Arguments section (if any)
+  if (args.length > 0) {
+    mdx += `**Arguments:**\n`;
+    for (const arg of args) {
+      const required = arg.is_required ? ' (required)' : '';
+      mdx += `- \`<${arg.argument}>\` — ${arg.description}${required}\n`;
+    }
+    mdx += '\n';
+  }
+
+  // Flags table - use structured flag data directly
   if (flags.length > 0) {
     mdx += `| Flag | Description | Tier |\n`;
     mdx += `|------|-------------|------|\n`;
     for (const flag of flags) {
-      const tier = getFlagTier(cmdName, flag.flag.split(/[\s,]/)[0]);
-      mdx += `| \`${flag.flag}\` | ${flag.description} | ${tier} |\n`;
+      const flagStr = formatFlag(flag);
+      const tier = formatTier(flag.tier);
+      mdx += `| \`${flagStr}\` | ${flag.description} | ${tier} |\n`;
     }
     mdx += '\n';
   }
-  
-  // Add enrichment notes
-  if (enrichment.exitCodes) {
+
+  // Subcommands (if any)
+  if (cmdData.subcommands && cmdData.subcommands.length > 0) {
+    mdx += `**Subcommands:** ${cmdData.subcommands.map(s => `\`${s}\``).join(', ')}\n\n`;
+  }
+
+  // Exit codes from structured data
+  if (exitCodes && Object.keys(exitCodes).length > 0) {
     mdx += `**Exit codes:**\n`;
-    for (const [tier, codes] of Object.entries(enrichment.exitCodes)) {
-      const codeStr = Object.entries(codes).map(([c,d]) => `\`${c}\` = ${d}`).join("; "); mdx += `- **${tier}:** ${codeStr}\n`;
+    for (const [code, desc] of Object.entries(exitCodes)) {
+      mdx += `- \`${code}\` — ${desc}\n`;
     }
     mdx += '\n';
   }
-  
+
+  // Additional enrichments from cli-enrichments.json (for anything not in structured data)
   if (enrichment.aside) {
     mdx += `<Aside type="${enrichment.aside.type}">\n`;
     mdx += `${enrichment.aside.content}\n`;
     mdx += `</Aside>\n\n`;
   }
-  
+
   mdx += `---\n\n`;
   return mdx;
 }
