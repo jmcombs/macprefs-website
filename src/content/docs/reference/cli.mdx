@@ -40,7 +40,7 @@ macprefs list [--domain <domain>] [--format <format>]
 | Flag | Description | Tier |
 |------|-------------|------|
 | `--domain <domain>` | Show keys within this domain instead of listing domains | Free |
-| `--format <format>` | Output format (table|json) - json requires Pro+ tier (default: table) | Pro+ |
+| `--format <format>` | Output format (table|json) - json requires Pro tier (default: table) | Pro+ |
 | `--version` | Show the version. | Free |
 | `-h,` | --help              Show help information. | Free |
 
@@ -58,7 +58,7 @@ macprefs inspect [--domains <domains>] [--keys <keys>] [--format <format>]
 |------|-------------|------|
 | `--domains <domains>` | Comma-separated domains to inspect | Free |
 | `--keys <keys>` | Comma-separated keys to filter | Free |
-| `--format <format>` | Output format (table|json) - json requires Pro+ tier (default: table) | Pro+ |
+| `--format <format>` | Output format (table|json) - json requires Pro tier (default: table) | Pro+ |
 | `--version` | Show the version. | Free |
 | `-h,` | --help              Show help information. | Free |
 
@@ -75,7 +75,7 @@ macprefs export <output-file> [--domains <domains>] [--baseline] [--no-progress]
 | Flag | Description | Tier |
 |------|-------------|------|
 | `--domains <domains>` | Comma-separated domains to include (overrides tier-based scope) | Free |
-| `--baseline` | Compare against baseline (Pro+ only, v1.1) | Pro+ |
+| `--baseline` | Compare against baseline (Pro only, v1.1) | Pro+ |
 | `--no-progress` | Suppress progress output (for CI/scripting) | Free |
 | `--version` | Show the version. | Free |
 | `-h,` | --help              Show help information. | Free |
@@ -93,7 +93,7 @@ macprefs validate [--config <config>] [--format <format>]
 | Flag | Description | Tier |
 |------|-------------|------|
 | `-c,` | --config <config>   Path to config JSON | Free |
-| `--format <format>` | Output format (table|json) - json requires Pro+ tier (default: table) | Pro+ |
+| `--format <format>` | Output format (table|json) - json requires Pro tier (default: table) | Pro+ |
 | `--version` | Show the version. | Free |
 | `-h,` | --help              Show help information. | Free |
 
@@ -110,9 +110,9 @@ macprefs plan [--config <config>] [--format <format>] [--verbose] [--filter <fil
 | Flag | Description | Tier |
 |------|-------------|------|
 | `-c,` | --config <config>   Path to config JSON | Free |
-| `--format <format>` | Output format (table|json) - json requires Pro+ tier (default: table) | Pro+ |
+| `--format <format>` | Output format (table|json) - json requires Pro tier (default: table) | Pro+ |
 | `-v,` | --verbose           Show all changes in detail | Free |
-| `--filter <filter>` | Filter changes: conflicts, additions, all (Pro+ required) | Pro+ |
+| `--filter <filter>` | Filter changes: conflicts, additions, all (Pro required) | Pro+ |
 | `--version` | Show the version. | Free |
 | `-h,` | --help              Show help information. | Free |
 
@@ -133,7 +133,7 @@ macprefs apply [--config <config>] [--yes] [--rollback-on-fail] [--no-rollback-o
 | Flag | Description | Tier |
 |------|-------------|------|
 | `-c,` | --config <config>   Path to config JSON | Free |
-| `--yes` | Auto-confirm apply (Pro+ tier, for CI/CD) | Pro+ |
+| `--yes` | Auto-confirm apply (Pro tier, for CI/CD) | Pro+ |
 | `--rollback-on-fail/--no-rollback-on-fail` |  Rollback on failure (default: --rollback-on-fail) | Free |
 | `--verbose` | Verbose output | Free |
 | `--version` | Show the version. | Free |
@@ -166,7 +166,7 @@ macprefs rollback [--run-id <run-id>]
 Manage license activation and status.
 
 ```bash
-macprefs license status
+macprefs license <subcommand>
 ```
 
 | Flag | Description | Tier |
@@ -226,12 +226,12 @@ macprefs license status
 Activate a license key on this device
 
 ```bash
-macprefs license activate --key <key>
+macprefs license activate [--key <key>]
 ```
 
 | Flag | Description | Tier |
 |------|-------------|------|
-| `--key <key>` | License key to activate | Free |
+| `--key <key>` | License key (prompts interactively if omitted) | Free |
 | `--version` | Show the version. | Free |
 | `-h,` | --help              Show help information. | Free |
 

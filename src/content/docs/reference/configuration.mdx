@@ -9,10 +9,10 @@ All examples have been validated on macOS 26 (Tahoe).
 
 ## License Tier Scope
 
-- **Free tier**: Config files can only reference Apple domains (`com.apple.*`, `NSGlobalDomain`)
-- **Pro+ tier**: Config files can include third-party domains (e.g., `com.googlecode.iterm2`)
+- **Free tier**: Apple domains only (`com.apple.*`, `NSGlobalDomain`)
+- **Pro tier**: JSON output, headless execution, rollback to any run
 
-When using a config with third-party domains on Free tier, `plan` and `apply` will skip non-Apple domains with a warning.
+Note: Third-party domain support is planned for a future release.
 
 ## Minimal Config
 
@@ -119,31 +119,6 @@ Configs with 100+ domains are supported with good performance (~73ms per domain)
 }
 ```json
 
-## Pro+ Example: Third-Party Domains
-
-With a Pro+ license, you can manage third-party application preferences:
-
-```json
-{
-  "version": "1.0",
-  "os": "26",
-  "domains": {
-    "com.apple.dock": {
-      "autohide": true
-    },
-    "com.googlecode.iterm2": {
-      "PromptOnQuit": false,
-      "OnlyWhenMoreTabs": true
-    },
-    "com.microsoft.VSCode": {
-      "ApplePressAndHoldEnabled": false
-    }
-  }
-}
-```json
-
-**Note**: Third-party domains are only processed with Pro+ license. Free tier will skip these domains with a warning.
-
 ## Required Fields
 
 Every config must have:
@@ -170,7 +145,7 @@ macprefs plan --config my-prefs.json
 macprefs apply --config my-prefs.json
 ```json
 
-### CI/CD Workflow (Pro+ Required)
+### CI/CD Workflow (Pro Required)
 
 ```bash
 # Headless apply for automation
@@ -185,7 +160,7 @@ macprefs plan --config my-prefs.json --format json
 - **Shorthand form**: Direct `"key": value` infers type from JSON
 - **Extended form**: `"key": {"value": ..., "compare": "unordered", "note": "..."}` for options
 - **Managed-subset apply**: Only listed keys are compared/applied; unlisted keys ignored
-- **Domain scope**: Free tier supports Apple domains only; Pro+ supports all domains
+- **Domain scope**: Apple domains only in v0.1.3 (third-party support planned for future release)
 - **Types**: JSON bool → plist integer (0/1), JSON number → plist integer/float, JSON string → plist string
 
 ---
