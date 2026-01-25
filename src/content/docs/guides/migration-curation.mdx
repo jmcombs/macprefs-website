@@ -1,0 +1,207 @@
+---
+title: "Manual Curation Workflow"
+description: "Step-by-step guide to curating your macOS preferences for safe migration"
+---
+import { Aside } from '@astrojs/starlight/components';
+
+## Manual Curation Workflow
+
+This section provides a practical, step-by-step process for creating a clean configuration from a raw export. Use this if you want to build your config from scratch rather than starting with the template.
+
+> **Future Enhancement**: We plan to automate this curation process using an LLM with a specialized system prompt to identify and filter ephemeral keys automatically. For now, manual curation ensures you have full control and understanding of what's being migrated.
+
+### Step 1: Understand What You're Looking At
+
+Open your raw export in a text editor:
+
+```bash
+# Export your current preferences
+macprefs export raw-export.json
+
+# Open in your editor
+code raw-export.json  # or vim, nano, etc.
+```
+
+You'll see a structure like this:
+
+```json
+{
+  "version": "1.0",
+  "os": "26",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,                    // ✓ Safe - behavioral setting
+      "LastBootUUID": "F5D7B691-...",      // ✗ Ephemeral - device identifier
+      "CKStartupTime": 1768687416,         // ✗ Ephemeral - timestamp
+      "show-recents": false                // ✓ Safe - behavioral setting
+    }
+  }
+}
+```
+
+### Step 2: Create Your Clean Config File
+
+Start with the basic structure:
+
+```bash
+# Create your curated config
+cat > my-config.json << 'EOF'
+{
+  "version": "1.0",
+  "domains": {}
+}
+EOF
+```
+
+### Step 3: Identify Safe Settings to Migrate
+
+For each domain in your raw export, ask these questions:
+
+#### ✓ **Safe to Migrate** (Behavioral Settings)
+
+These define **how you want macOS to behave**:
+
+- **Boolean preferences**: `autohide`, `magnification`, `ShowPathbar`
+- **Numeric settings**: `largesize`, `tilesize`, mouse/trackpad speeds
+- **String values**: View styles (`FXPreferredViewStyle: "Nlsv"`), interface themes
+- **Stable arrays**: Persistent apps in Dock (if manually curated)
+
+**Example safe keys:**
+```json
+{
+  "com.apple.dock": {
+    "autohide": true,
+    "magnification": true,
+    "largesize": 128,
+    "show-recents": false
+  }
+}
+```
+
+#### ✗ **Never Migrate** (Ephemeral Keys)
+
+These are **machine-specific or time-dependent**:
+
+| Pattern | Examples | Why Exclude |
+|---------|----------|-------------|
+| `*UUID` | `GuestPassDeviceUUID`, `LastBootUUID` | Hardware identifiers |
+| `*Time`, `*Date` | `CKStartupTime`, `LastUpdatesCheck` | Timestamps |
+| `NSWindow Frame *` | `NSWindow Frame MainWindow` | Display-specific positions |
+| `Recent*`, `Last*` | `RecentDocuments`, `LastTrashState` | Ephemeral history |
+| `*Cache*` | `CachedBag`, `CacheSignature` | Stale cache data |
+| `*BootSession*` | `lastLaunchBootSessionUUID` | Session identifiers |
+| Absolute paths | `/Users/oldname/...` | User-specific paths |
+
+See [Ephemeral Keys Reference](EPHEMERAL_KEYS.md) for a comprehensive list.
+
+### Step 4: Copy Safe Settings to Your Config
+
+For each domain you care about, copy only the safe settings:
+
+```bash
+# Example: Curating com.apple.dock
+# From raw-export.json, copy only behavioral settings:
+
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,              // ✓ Copied
+      "magnification": true,         // ✓ Copied
+      "largesize": 128,              // ✓ Copied
+      // "LastBootUUID": "...",      // ✗ Skipped (ephemeral)
+      // "CKStartupTime": 1768...,   // ✗ Skipped (ephemeral)
+      "show-recents": false          // ✓ Copied
+    }
+  }
+}
+```
+
+### Step 5: Focus on Essential Domains
+
+Don't try to migrate everything. Start with domains that matter most:
+
+**Recommended starting domains:**
+- `com.apple.dock` - Dock behavior
+- `com.apple.finder` - Finder preferences
+- `NSGlobalDomain` - System-wide settings
+- `com.apple.AppleMultitouchTrackpad` - Trackpad settings
+- `com.apple.driver.AppleBluetoothMultitouch.trackpad` - Bluetooth trackpad
+
+**Skip these domains** (they're usually ephemeral or auto-managed):
+- `com.apple.LaunchServices` - Mostly cache data
+- `com.apple.universalaccess` - Often machine-specific
+- Third-party apps - Unless you have specific preferences to migrate
+
+### Step 6: Validate Your Config
+
+Test your curated config before committing:
+
+```bash
+# Validate JSON syntax
+macprefs validate --config my-config.json
+
+# Preview what would change (dry run)
+macprefs plan --config my-config.json
+
+# Look for unexpected changes - if you see many UUIDs or timestamps,
+# you may have included ephemeral keys
+```
+
+### Step 7: Test on a Non-Critical System First
+
+If possible, test your config on a VM or secondary Mac before applying to your primary machine:
+
+```bash
+# Apply and verify
+macprefs apply --config my-config.json
+
+# Check for issues
+macprefs plan --config my-config.json  # Should show minimal drift
+
+# Rollback if needed
+macprefs rollback
+```
+
+### Real-World Example: Curating Dock Preferences
+
+**Raw export** (contains ephemeral keys):
+```json
+{
+  "com.apple.dock": {
+    "autohide": true,
+    "magnification": true,
+    "largesize": 128,
+    "LastBootUUID": "F5D7B691-8542-4CA2-820D-97FD524F0589",
+    "CKStartupTime": 1768687416,
+    "lastLaunchBootSessionUUID": "89093FFD-2653-4340-B8EE-0E688CA3C564",
+    "show-recents": false,
+    "minimize-to-application": true,
+    "NSWindow Frame PreferencesWindow": "728 469 1104 471 0 0 2560 1415"
+  }
+}
+```
+
+**Curated config** (only behavioral settings):
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "magnification": true,
+      "largesize": 128,
+      "show-recents": false,
+      "minimize-to-application": true
+    }
+  }
+}
+```
+
+**What was removed:**
+- `LastBootUUID` - Device identifier (changes per Mac)
+- `CKStartupTime` - Timestamp (stale on new Mac)
+- `lastLaunchBootSessionUUID` - Session identifier (conflicts)
+- `NSWindow Frame PreferencesWindow` - Window position (display-specific)
+
+---

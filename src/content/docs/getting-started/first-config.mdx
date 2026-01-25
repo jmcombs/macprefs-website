@@ -2,127 +2,158 @@
 title: First Config
 description: Create your first macprefs configuration file
 ---
-
 import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
-Learn how to create and structure your macprefs configuration file.
+## Recommended Configuration Template
 
-## Configuration Structure
+This is a **battle-tested starting point** for your macOS preferences migration. It includes commonly customized settings with annotations explaining each one.
 
-A macprefs configuration is a JSON file that defines your desired macOS preferences:
+### How to Use This Template
+
+1. **Copy the entire template** below to a new file (e.g., `my-config.json`)
+2. **Remove settings you don't want** (e.g., if you don't use Stage Manager, remove that section)
+3. **Adjust values** to match your preferences (e.g., change `largesize` from 128 to your preferred dock magnification)
+4. **Optionally add more settings** by referencing your raw export (following the [Manual Curation Workflow](#manual-curation-workflow))
+
+### The Template
+
+> **Note**: This template uses an extended JSON format with `"value"` and `"note"` properties for documentation. When applying with `macprefs apply`, the tool extracts only the `"value"` fields. For simple settings without notes, values are provided directly. Both formats work equally well.
 
 ```json
 {
   "version": "1.0",
+  "os": "26",
   "domains": {
+    "com.apple.AppleMultitouchTrackpad": {
+      "Clicking": {
+        "value": true,
+        "note": "Tap to click - essential for laptop users"
+      },
+      "TrackpadThreeFingerDrag": {
+        "value": true,
+        "note": "Three finger drag - power user favorite"
+      },
+      "TrackpadThreeFingerHorizSwipeGesture": 0,
+      "TrackpadThreeFingerTapGesture": 0,
+      "TrackpadThreeFingerVertSwipeGesture": 0
+    },
+    "com.apple.driver.AppleBluetoothMultitouch.trackpad": {
+      "Clicking": true,
+      "TrackpadThreeFingerDrag": true,
+      "TrackpadThreeFingerHorizSwipeGesture": 0,
+      "TrackpadThreeFingerTapGesture": 0,
+      "TrackpadThreeFingerVertSwipeGesture": 0
+    },
     "com.apple.dock": {
-      "autohide": true,
-      "tilesize": 48
+      "autohide": {
+        "value": true,
+        "note": "Auto-hide dock for more screen space"
+      },
+      "magnification": {
+        "value": true,
+        "note": "Enable dock magnification on hover"
+      },
+      "largesize": {
+        "value": 128,
+        "note": "Magnified icon size (16-128)"
+      },
+      "minimize-to-application": {
+        "value": true,
+        "note": "Minimize windows into app icon"
+      },
+      "mru-spaces": {
+        "value": false,
+        "note": "Don't auto-rearrange Spaces based on recent use"
+      },
+      "show-recents": {
+        "value": false,
+        "note": "Hide recent apps section in dock"
+      },
+      "showAppExposeGestureEnabled": {
+        "value": true,
+        "note": "Enable app expose gesture"
+      },
+      "wvous-br-corner": {
+        "value": 14,
+        "note": "Hot corner bottom-right: Quick Note (14)"
+      }
+    },
+    "com.apple.WindowManager": {
+      "GloballyEnabled": {
+        "value": true,
+        "note": "Stage Manager enabled globally"
+      },
+      "AppWindowGroupingBehavior": false,
+      "HideDesktop": false,
+      "StandardHideDesktopIcons": false,
+      "StandardHideWidgets": false
+    },
+    "com.apple.menuextra.clock": {
+      "ShowSeconds": {
+        "value": true,
+        "note": "Show seconds in menu bar clock"
+      }
+    },
+    "com.apple.finder": {
+      "FXPreferredViewStyle": {
+        "value": "Nlsv",
+        "note": "Default to List view (Nlsv=List, icnv=Icon, clmv=Column, Flwv=Gallery)"
+      },
+      "FXPreferredSearchViewStyle": "Nlsv",
+      "ShowStatusBar": {
+        "value": true,
+        "note": "Show status bar at bottom of Finder windows"
+      },
+      "ShowPathbar": {
+        "value": true,
+        "note": "Show path bar at bottom of Finder windows"
+      },
+      "FXEnableExtensionChangeWarning": true,
+      "WarnOnEmptyTrash": true,
+      "FXICloudDriveDesktop": true,
+      "FXICloudDriveDocuments": true
+    },
+    "NSGlobalDomain": {
+      "com.apple.mouse.scaling": {
+        "value": 2,
+        "note": "Mouse tracking speed (0-3)"
+      },
+      "com.apple.trackpad.forceClick": {
+        "value": true,
+        "note": "Enable Force Click on trackpad"
+      },
+      "com.apple.trackpad.scaling": {
+        "value": 1,
+        "note": "Trackpad tracking speed"
+      },
+      "AppleEnableMouseSwipeNavigateWithScrolls": {
+        "value": false,
+        "note": "Disable swipe navigation with mouse"
+      },
+      "AppleEnableSwipeNavigateWithScrolls": {
+        "value": false,
+        "note": "Disable swipe navigation in apps"
+      },
+      "AppleMiniaturizeOnDoubleClick": {
+        "value": false,
+        "note": "Don't minimize on title bar double-click"
+      }
+    },
+    "com.apple.controlcenter": {
+      "NSStatusItem Visible Battery": {
+        "value": false,
+        "note": "Hide battery in menu bar (visible in Control Center)"
+      },
+      "NSStatusItem Visible Display": false
+    },
+    "com.apple.assistant.support": {
+      "Assistant Enabled": {
+        "value": true,
+        "note": "Enable Siri"
+      }
     }
   }
 }
 ```
 
-<Aside type="note">
-The schema uses `domains` as the top-level key (not `preferences`). Each domain corresponds to a macOS preference domain like `com.apple.dock` or `NSGlobalDomain`.
-</Aside>
-
-## Creating a Config from Scratch
-
-You can create a config file manually, or export your current settings as a starting point:
-
-<Tabs>
-  <TabItem label="Export Current Settings">
-```bash
-# Export all current preferences
-macprefs export my-prefs.json
-
-# Then edit the file to keep only what you want
-```
-  </TabItem>
-  <TabItem label="Create Manually">
-```bash
-# Create a new config file
-cat > my-prefs.json << 'EOF'
-{
-  "version": "1.0",
-  "domains": {
-    "com.apple.dock": {
-      "autohide": true,
-      "tilesize": 48,
-      "orientation": "bottom"
-    }
-  }
-}
-EOF
-```
-  </TabItem>
-</Tabs>
-
-## Domain Structure
-
-Each key under `domains` is a preference domain (like `com.apple.dock`). Within each domain, you specify key-value pairs for the preferences you want to manage.
-
-Common domains include:
-- `com.apple.dock` — Dock settings
-- `com.apple.finder` — Finder settings
-- `NSGlobalDomain` — System-wide settings
-- `com.apple.screencapture` — Screenshot settings
-
-<Aside type="tip">
-Use `macprefs list` to see all available domains, and `macprefs list --domain com.apple.dock` to see keys within a specific domain.
-</Aside>
-
-## Discovering Preference Keys
-
-To find which keys control a specific setting:
-
-```bash
-# List all keys in a domain
-macprefs list --domain com.apple.dock
-
-# Inspect specific key values
-macprefs inspect --domains com.apple.dock --keys autohide,tilesize
-```
-
-## Supported Value Types
-
-macprefs supports all macOS preference types:
-
-| Type | Example | Description |
-|------|---------|-------------|
-| String | `"value"` | Text values |
-| Integer | `42` | Whole numbers |
-| Float | `3.14` | Decimal numbers |
-| Boolean | `true` / `false` | True or false |
-| Array | `["a", "b"]` | Ordered lists |
-| Dictionary | `{"key": "val"}` | Nested objects |
-
-## Validate Your Config
-
-Before applying, validate your configuration:
-
-```bash
-macprefs validate --config my-prefs.json
-```
-
-This checks for schema errors, unknown domains, and invalid keys.
-
-## Preview and Apply
-
-```bash
-# Preview changes (dry run)
-macprefs plan --config my-prefs.json
-
-# Apply changes
-macprefs apply --config my-prefs.json
-
-# Restart affected apps to see changes
-killall Dock Finder
-```
-
-## Next Steps
-
-- See [Dock examples](/examples/dock/) for common configurations
-- Learn about [Finder preferences](/examples/finder/)
-- Read the [config format reference](/reference/config-format/)
+---

@@ -1,0 +1,18 @@
+{{!--
+  Configuration Reference Template
+  Generates the configuration.mdx page from config-examples.md content.
+
+  Expected context:
+  - title: string - Page title
+  - description: string - Page description
+  - body: string - Transformed markdown content (already processed: Asides, code blocks, etc.)
+
+  Note: The frontmatter partial already includes the Starlight component imports.
+--}}
+{{> frontmatter title=title description=description}}
+{{{body}}}
+
+---
+
+*Documentation auto-synced from macprefs configuration examples.*
+

@@ -5,6 +5,7 @@ description: Complete command-line interface reference for macprefs
 
 import { Tabs, TabItem, Badge, Aside } from '@astrojs/starlight/components';
 
+
 Complete documentation for all macprefs commands and flags.
 
 ## Commands
@@ -23,11 +24,17 @@ macprefs preflight [--config <config>]
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 **Exit codes:**
 - `0` — All checks passed
 - `2` — One or more issues detected
 
+<Aside type="note">
+Free tier users should rely on human-readable output for status. See [Exit Codes Reference](/reference/exit-codes/) for details.
+</Aside>
+
 ---
+
 
 ### `list`
 
@@ -44,7 +51,13 @@ macprefs list [--domain <domain>] [--format <format>]
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
+<Aside type="tip">
+Free tier shows Apple domains only. Pro+ unlocks third-party app domains.
+</Aside>
+
 ---
+
 
 ### `inspect`
 
@@ -62,7 +75,9 @@ macprefs inspect [--domains <domains>] [--keys <keys>] [--format <format>]
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 ---
+
 
 ### `export`
 
@@ -83,7 +98,13 @@ macprefs export <output-file> [--domains <domains>] [--baseline] [--no-progress]
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
+<Aside type="note">
+Free tier exports Apple domains only. Pro+ exports all domains including third-party apps.
+</Aside>
+
 ---
+
 
 ### `validate`
 
@@ -100,7 +121,9 @@ macprefs validate [--config <config>] [--format <format>]
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 ---
+
 
 ### `plan`
 
@@ -119,11 +142,17 @@ macprefs plan [--config <config>] [--format <format>] [--verbose] [--filter <fil
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 **Exit codes:**
 - `0` — No changes needed (in sync)
 - `2` — Changes detected (drift found)
 
+<Aside type="note">
+`--filter` and `--verbose` are mutually exclusive.
+</Aside>
+
 ---
+
 
 ### `apply`
 
@@ -143,11 +172,17 @@ macprefs apply [--config <config>] [--yes] [--rollback-on-fail] [--no-rollback-o
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 **Exit codes:**
 - `0` — Changes applied successfully (or no changes needed)
 - `1` — Apply failed
 
+<Aside type="caution">
+Without `--yes`, Free tier will prompt for confirmation before applying changes.
+</Aside>
+
 ---
+
 
 ### `rollback`
 
@@ -163,7 +198,9 @@ macprefs rollback [--run-id <run-id>]
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 ---
+
 
 ### `license`
 
@@ -178,9 +215,11 @@ macprefs license <subcommand>
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 **Subcommands:** `status`, `activate`, `deactivate`
 
 ---
+
 
 ### `upgrade`
 
@@ -195,7 +234,9 @@ macprefs upgrade
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 ---
+
 
 ### `about`
 
@@ -210,7 +251,9 @@ macprefs about
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 ---
+
 
 ### `license status`
 
@@ -225,7 +268,9 @@ macprefs license status
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 ---
+
 
 ### `license activate`
 
@@ -241,7 +286,9 @@ macprefs license activate [--key <key>]
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 ---
+
 
 ### `license deactivate`
 
@@ -257,7 +304,9 @@ macprefs license deactivate [--yes]
 | `--version` | Show the version. | Free |
 | `-h, --help` | Show help information. | Free |
 
+
 ---
+
 
 ## Tier Feature Comparison
 
@@ -280,3 +329,5 @@ When a gated feature is used without proper license, the CLI returns exit code 1
 ---
 
 *Documentation auto-synced from macprefs CLI help.*
+
+

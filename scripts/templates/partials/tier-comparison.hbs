@@ -1,0 +1,26 @@
+{{!-- 
+  Tier comparison table partial
+  
+  Context:
+    features: TierFeature[] - Array of feature comparison objects with:
+      feature: string - Feature name
+      free: boolean - Available in free tier
+      pro: boolean - Available in pro tier
+    cautionMessage: string - Caution aside message about gated features
+--}}
+## Tier Feature Comparison
+
+| Feature | Free | Pro+ |
+|---------|:----:|:----:|
+{{#each features}}
+| {{{feature}}} | {{{tierCheck free}}} | {{{tierCheck pro}}} |
+{{/each}}
+
+<Aside type="caution">
+{{{cautionMessage}}}
+</Aside>
+
+---
+
+*Documentation auto-synced from macprefs CLI help.*
+

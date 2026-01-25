@@ -1,0 +1,20 @@
+{{!-- 
+  Flags table partial for CLI command documentation
+  
+  Context:
+    flags: Flag[] - Array of flag objects with:
+      short?: string - Short flag (e.g., "-c")
+      long: string - Long flag (e.g., "--config")
+      argument?: string - Argument name if flag takes one
+      description: string - Flag description
+      tier: string - "free" or "pro"
+--}}
+{{#if flags.length}}
+| Flag | Description | Tier |
+|------|-------------|------|
+{{#each flags}}
+| `{{{formatFlag this}}}` | {{{description}}} | {{{formatTier tier}}} |
+{{/each}}
+
+{{/if}}
+

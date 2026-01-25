@@ -1,0 +1,65 @@
+---
+title: "Troubleshooting"
+description: "Solutions to common issues when using macprefs for preference migration"
+---
+import { Aside } from '@astrojs/starlight/components';
+
+## Troubleshooting Migration Issues
+
+### "Plan shows unexpected drift"
+
+**Cause**: Some keys have values that change constantly (timestamps, counters).
+
+**Solution**: These are ephemeral keys—remove them from your config:
+
+```bash
+# Check which keys are drifting
+macprefs plan --config my-config.json --verbose
+```
+
+### "Apply failed: Could not write to domain"
+
+**Cause**: The domain is protected or requires elevation.
+
+**Solution**:
+
+```bash
+# Run preflight to diagnose
+macprefs preflight
+
+# Check for MDM profiles that might restrict preferences
+sudo profiles list
+```
+
+### "Settings don't take effect"
+
+**Cause**: Some settings require restarting the affected process.
+
+**Solution**:
+
+```bash
+# Restart common services
+killall Dock        # For dock settings
+killall Finder      # For Finder settings
+killall SystemUIServer  # For menu bar settings
+
+# Or log out and back in for comprehensive refresh
+```
+
+### "Config validation fails"
+
+**Cause**: JSON syntax error or schema issue.
+
+**Solution**:
+
+```bash
+# Validate your config
+macprefs validate --config my-config.json
+
+# Common issues:
+# - Trailing commas in JSON
+# - Missing "version": "1.0"
+# - Missing "domains" key
+```
+
+---

@@ -886,4 +886,102 @@ gh run list --workflow=deploy.yml
 
 ---
 
+## TypeScript + Handlebars Migration
+
+### Overview
+
+The documentation transformation pipeline is being migrated from CommonJS scripts to TypeScript + Handlebars for improved maintainability, type safety, and testability.
+
+### Current Status
+
+- **Phase 1 Complete:** Infrastructure setup (dependencies, types, helpers, directory structure)
+- **Phase 2 Complete:** CLI docs migration
+  - TypeScript + Handlebars transform implemented (`scripts/transform-cli-docs.ts`)
+  - Templates created in `scripts/templates/` with partials for commands, flags, and tier comparison
+  - Validation: `npm run check` passes with 0 errors; `npm run build` succeeds
+  - Improvement: New transform includes all Asides from enrichments (previously missing in legacy CJS)
+  - GitHub Actions workflow updated to use TypeScript transform with rollback comments
+- **Phase 3 Complete:** Config docs migration
+  - TypeScript + Handlebars transform implemented (`scripts/transform-config-docs.ts`)
+  - Improved code block language detection (only adds `json` to opening blocks)
+  - Validation: `npm run check` passes with 0 errors; `npm run build` succeeds
+  - GitHub Actions workflow updated to use TypeScript transform with rollback comments
+- **Phase 4 Complete:** Migration guide sync
+  - Task 4.0: Renamed `MIGRATION_GUIDE.md` to `MIGRATION_SETUP_CONFIG_AND_TROUBLESHOOTING.md` in macprefs
+  - Task 4.1: Section mapping documented below
+  - Task 4.2: Implemented `scripts/transform-migration-docs.ts` - multi-page transformer
+  - Task 4.3: Validated all 6 target MDX files, idempotence verified, build passes
+  - Task 4.4: Wired into GitHub Actions workflow with rollback comments
+- **Phase 5:** Documentation and rollout (pending)
+
+### Phase 4: Migration Guide Section Mapping
+
+The migration guide (`docs/MIGRATION_SETUP_CONFIG_AND_TROUBLESHOOTING.md` in macprefs) will be transformed into multiple MDX pages on the website. This is the authoritative mapping:
+
+| Source Section (Line Range) | Target File | Strategy |
+|----------------------------|-------------|----------|
+| Quick Start (lines 26-149) | `getting-started/quick-start.mdx` | **Replace**: Overwrite existing unsafe workflow with safe curation-focused content |
+| Manual Curation Workflow (lines 150-351) | `guides/migration-curation.mdx` | **Create**: New guide page |
+| Recommended Configuration Template (lines 352-505) | `getting-started/first-config.mdx` | **Merge**: Integrate template with existing config examples |
+| Common Pitfalls (lines 506-570) | `guides/migration-pitfalls.mdx` | **Create**: New guide page |
+| Free vs Pro Workflow (lines 571-622) | Include in relevant pages | Distributed content |
+| Integration with Dotfiles (lines 623-737) | `guides/power-users.mdx` | **Replace section**: Update Multi-Mac Sync section only |
+| Troubleshooting Migration Issues (lines 738-797) | `reference/troubleshooting.mdx` | **Create/Merge**: New or merge with existing troubleshooting |
+
+#### Extraction Strategy
+
+The transform script will use **heading-based extraction**:
+- H2 headings (`## Section Name`) mark major section boundaries
+- Content between H2 headings belongs to that section
+- H3/H4 subheadings are included within their parent H2 section
+
+No explicit markers needed in the source file - heading structure is sufficient.
+
+### Rollback Instructions
+
+If issues are discovered with the new TypeScript + Handlebars transforms, you can revert to the legacy CommonJS scripts:
+
+#### Option 1: Revert in GitHub Actions Workflow
+
+Edit `.github/workflows/receive-docs-sync.yml`:
+
+```yaml
+# Replace the new TypeScript transforms:
+npx tsx scripts/transform-cli-docs.ts macprefs-source/docs/CLI.json src/content/docs/reference/cli.mdx
+npx tsx scripts/transform-config-docs.ts macprefs-source/docs/config-examples.md src/content/docs/reference/configuration.mdx
+
+# With the legacy CommonJS scripts:
+node scripts/legacy/transform-cli-docs.cjs macprefs-source/docs/CLI.json src/content/docs/reference/cli.mdx
+node scripts/legacy/transform-config-docs.cjs macprefs-source/docs/config-examples.md src/content/docs/reference/configuration.mdx
+```
+
+#### Option 2: Run Legacy Scripts Locally
+
+```bash
+# CLI docs
+node scripts/legacy/transform-cli-docs.cjs docs/CLI.json src/content/docs/reference/cli.mdx
+
+# Config docs
+node scripts/legacy/transform-config-docs.cjs docs/config-examples.md src/content/docs/reference/configuration.mdx
+```
+
+### Legacy Scripts Location
+
+The original CommonJS scripts are preserved in `scripts/legacy/`:
+
+- `scripts/legacy/transform-cli-docs.cjs` - Original CLI documentation transformer
+- `scripts/legacy/transform-config-docs.cjs` - Original config documentation transformer
+- `scripts/legacy/README.md` - Rollback instructions
+
+### New TypeScript Scripts
+
+- `scripts/transform-cli-docs.ts` - TypeScript + Handlebars CLI transformer
+- `scripts/transform-config-docs.ts` - TypeScript + Handlebars config transformer
+- `scripts/transform-migration-docs.ts` - Multi-page migration guide transformer (Phase 4)
+- `scripts/types/cli-types.ts` - Shared TypeScript type definitions
+- `scripts/helpers/cli-helpers.ts` - Shared Handlebars helpers
+- `scripts/templates/` - Handlebars templates and partials
+
+---
+
 *This document is self-contained and can be used in a new Augment chat session to implement the macprefs.app website without additional context.*

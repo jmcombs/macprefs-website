@@ -1,0 +1,70 @@
+---
+title: "Common Migration Pitfalls"
+description: "Avoid these common mistakes when migrating macOS preferences with macprefs"
+---
+import { Aside } from '@astrojs/starlight/components';
+
+## Common Pitfalls and How to Avoid Them
+
+These are real-world examples of what goes wrong when ephemeral keys are migrated. Use this section to understand **why** the manual curation workflow is necessary.
+
+### Pitfall 1: Migrating Window Frame Settings
+
+**Problem**: You export window positions from a 27" iMac and apply them to a 14" MacBook.
+
+```json
+// DON'T migrate these
+"NSWindow Frame MainWindow": "728 469 1104 471 0 0 2560 1415"
+```
+
+Windows end up off-screen or sized incorrectly.
+
+**Solution**: macprefs recommends excluding all `NSWindow Frame *` keys. Your apps will remember their positions after you arrange them once.
+
+### Pitfall 2: UUID Conflicts
+
+**Problem**: Device-specific UUIDs get migrated and conflict with the new Mac's identifiers.
+
+```json
+// DON'T migrate these
+"GuestPassDeviceUUID": "89093FFD-2653-4340-B8EE-0E688CA3C564",
+"LastBootUUID": "F5D7B691-8542-4CA2-820D-97FD524F0589"
+```
+
+**Solution**: Never include keys ending in `UUID` or containing `BootSession` in your migration config.
+
+### Pitfall 3: Cache Timestamps
+
+**Problem**: Migrated timestamps confuse cache invalidation and update checking.
+
+```json
+// DON'T migrate these
+"CKStartupTime": 1768687416,
+"LastUpdatesCheck": "2026-01-15T10:30:00Z"
+```
+
+**Solution**: Exclude all `*Time`, `*Date`, and `*Check` keys that represent temporal data.
+
+### Pitfall 4: User Path Dependencies
+
+**Problem**: Paths referencing your old username break on the new Mac.
+
+```json
+// DON'T migrate these
+"RecentDocuments": ["/Users/oldname/Documents/..."]
+```
+
+**Solution**: Avoid migrating Recent* and path-containing keys. iCloud sync handles documents.
+
+### Pitfall 5: Importing Too Many Domains
+
+**Problem**: Attempting to migrate every preference domain causes conflicts.
+
+**Solution**: Start with essential domains only:
+
+```bash
+# Focus on what matters
+macprefs export --domains com.apple.dock,com.apple.finder,NSGlobalDomain focused-prefs.json
+```
+
+---

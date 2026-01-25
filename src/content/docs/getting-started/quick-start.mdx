@@ -2,75 +2,128 @@
 title: Quick Start
 description: Get up and running with macprefs in 5 minutes
 ---
-
 import { Aside, Steps } from '@astrojs/starlight/components';
 
-Get started with macprefs in just a few minutes.
+## Quick Start: Your First Migration
 
-<Steps>
+> **⚠️ Critical**: Never apply a raw export directly to a new Mac. Raw exports contain ephemeral keys (UUIDs, timestamps, cache data) that will cause conflicts. Always curate your configuration first.
 
-1. ## Install macprefs
+### Overview: The Safe Migration Workflow
 
-   Install macprefs via Homebrew:
+1. **Export** → Create a raw preferences snapshot (reference only)
+2. **Curate** → Build a clean config with only desired settings (required step)
+3. **Version Control** → Commit the curated config to your dotfiles
+4. **Apply** → Use the curated config on your new Mac
 
-   ```bash
-   brew install macprefs
-   ```
+---
 
-2. ## Run Preflight Check
+### Step 1: Export Your Current Preferences (Reference Only)
 
-   Verify your system is ready:
+On your **current Mac**, export your preferences to use as a reference:
 
-   ```bash
-   macprefs preflight
-   ```
+```bash
+# Export current Apple preferences
+macprefs export raw-export.json
+```
 
-   This checks system permissions, disk space, and other prerequisites.
+**Important**: This raw export is a **reference document only**. It contains:
+- ✓ Your actual preference values (useful for reference)
+- ✗ Ephemeral keys that should never be migrated (UUIDs, timestamps, cache data)
+- ✗ Machine-specific settings (window positions, device identifiers)
 
-3. ## Export Current Preferences
+**Do not apply this file directly.** Use it to inform your curated configuration.
 
-   Capture your current system preferences to a config file:
+---
 
-   ```bash
-   macprefs export my-prefs.json
-   ```
+### Step 2: Create Your Curated Configuration (Required)
 
-   This creates a JSON file with your current settings that you can customize.
+**This is the crucial step that ensures a safe migration.** You'll create a clean configuration file containing only the settings you want to migrate.
 
-4. ## Preview Changes
+#### Option A: Start with the Recommended Template (Easiest)
 
-   Before applying a configuration, preview what would change:
+Copy the [Recommended Configuration Template](#recommended-configuration-template) below:
 
-   ```bash
-   macprefs plan --config my-prefs.json
-   ```
+```bash
+# Create your configuration file
+touch my-config.json
+# Copy the template from the "Recommended Configuration Template" section below
+# Paste into my-config.json and customize
+```
 
-   The plan command shows a diff of changes without modifying anything.
+Then customize it:
+1. Remove settings you don't want
+2. Adjust values to match your preferences
+3. Optionally reference your `raw-export.json` to find additional settings
 
-5. ## Apply Configuration
+#### Option B: Manual Curation from Raw Export (Advanced)
 
-   Once you're happy with the planned changes, apply them:
+If you prefer to build from your raw export, follow the [Manual Curation Workflow](#manual-curation-workflow) section below for step-by-step guidance on identifying safe vs. ephemeral keys.
 
-   ```bash
-   macprefs apply --config my-prefs.json
-   ```
+---
 
-   <Aside type="tip">
-   A snapshot is automatically created before applying, so you can always rollback.
-   </Aside>
+### Step 3: Version Control Your Curated Config
 
-6. ## Rollback if Needed
+```bash
+# Add to your dotfiles repository
+cd ~/.dotfiles
+cp my-config.json macprefs.json
+git add macprefs.json
+git commit -m "Add curated macOS preferences configuration"
+git push
+```
 
-   Made a mistake? Rollback to the previous state:
+**What to commit**: Only your curated configuration file, never the raw export.
 
-   ```bash
-   macprefs rollback
-   ```
+---
 
-</Steps>
+### Step 4: Apply on Your New Mac
 
-## Next Steps
+On your **new Mac**:
 
-- Learn about [creating your first config](/getting-started/first-config/)
-- Explore [configuration examples](/examples/dock/)
-- Read the [CLI reference](/reference/cli/)
+```bash
+# Install macprefs via Homebrew
+brew install jmcombs/macprefs/macprefs
+
+# Clone your dotfiles
+git clone https://github.com/you/dotfiles ~/.dotfiles
+
+# Review what will change (dry run)
+macprefs plan --config ~/.dotfiles/macprefs.json
+
+# Apply with confirmation (Free tier)
+macprefs apply --config ~/.dotfiles/macprefs.json
+
+# Or apply headlessly (Pro tier)
+macprefs apply --config ~/.dotfiles/macprefs.json --yes
+```
+
+> **Note**: The `plan` output shows only settings that differ from the current state. On a fresh macOS installation, ~70-80% of your curated settings will typically need to be changed, while the rest may already match macOS defaults.
+
+---
+
+### Step 5: Verify and Reboot
+
+Some macOS preferences require a reboot to take effect (e.g., trackpad settings, Stage Manager). After applying:
+
+```bash
+# Verify key settings were applied
+defaults read com.apple.dock autohide        # Should return 1 if configured
+defaults read com.apple.finder ShowPathbar   # Should return 1 if configured
+
+# Reboot to ensure all changes take effect
+sudo shutdown -r now
+```
+
+---
+
+### Step 6: Rollback if Needed
+
+```bash
+# Something not right? Rollback immediately
+macprefs rollback
+
+# Or check for drift later
+macprefs plan --config ~/.dotfiles/macprefs.json
+```
+
+---
