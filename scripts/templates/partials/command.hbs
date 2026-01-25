@@ -1,0 +1,50 @@
+{{!-- 
+  Single command section partial
+  
+  Context:
+    name: string - Command name (e.g., "preflight", "plan")
+    overview: string - Command description/overview
+    usage: string - Usage example
+    arguments: Argument[] - Array of arguments
+    flags: Flag[] - Array of flags
+    subcommands: string[] - Array of subcommand names
+    exitCodes: object - Exit codes mapping (code -> description)
+    aside: { type: string, content: string } - Optional aside callout
+--}}
+### `{{{name}}}`
+
+{{{overview}}}
+
+{{#if usage}}
+```bash
+{{{usage}}}
+```
+
+{{/if}}
+{{#if arguments.length}}
+**Arguments:**
+{{#each arguments}}
+- `<{{{argument}}}>` — {{{description}}}{{#if is_required}} (required){{/if}}
+{{/each}}
+
+{{/if}}
+{{> flags-table flags=flags}}
+{{#if subcommands.length}}
+**Subcommands:** {{{codeList subcommands ", "}}}
+
+{{/if}}
+{{#if exitCodes}}
+**Exit codes:**
+{{#each exitCodes}}
+- `{{{@key}}}` — {{{this}}}
+{{/each}}
+
+{{/if}}
+{{#if aside}}
+<Aside type="{{{aside.type}}}">
+{{{aside.content}}}
+</Aside>
+
+{{/if}}
+---
+
