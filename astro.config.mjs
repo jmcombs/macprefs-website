@@ -43,7 +43,6 @@ export default defineConfig({
           label: "Guides",
           items: [
             { label: "Power Users", slug: "guides/power-users" },
-            { label: "Fleet Management", slug: "guides/fleet-management" },
             { label: "CI/CD", slug: "guides/ci-cd" },
           ],
         },
