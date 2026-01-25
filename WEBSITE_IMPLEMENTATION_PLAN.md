@@ -7,6 +7,10 @@
 
 ---
 
+> **⚠️ Developer Note**: All development work on macprefs-website should be done within the dev container. Configuration is in the `.devcontainer/` folder. Using the dev container ensures consistent Node.js version, pre-installed dependencies, and proper environment setup.
+
+---
+
 ## Executive Summary
 
 This document provides a complete, self-contained implementation plan for the macprefs public website. It is designed to be imported into a new Augment chat session in the website repository for immediate implementation without requiring context from prior conversations.
