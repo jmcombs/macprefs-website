@@ -32,12 +32,33 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Transform documentation
         run: |
-          # Use JSON for CLI docs (more robust than markdown parsing)
-          node scripts/transform-cli-docs.cjs macprefs-source/docs/CLI.json src/content/docs/reference/cli.mdx
+          # CLI docs: TypeScript + Handlebars transformation (Phase 2)
+          # Rollback: Replace with `node scripts/legacy/transform-cli-docs.cjs` if issues discovered
+          # Note: Legacy scripts in scripts/legacy/ require cli-enrichments.json to be in same directory
+          npx tsx scripts/transform-cli-docs.ts macprefs-source/docs/CLI.json src/content/docs/reference/cli.mdx
+
+          # Config docs: TypeScript + Handlebars transformation (Phase 3)
+          # Rollback: Replace with `node scripts/legacy/transform-config-docs.cjs` if issues discovered
           if [ -f macprefs-source/docs/config-examples.md ]; then
-            node scripts/transform-config-docs.cjs macprefs-source/docs/config-examples.md src/content/docs/reference/configuration.mdx
+            npx tsx scripts/transform-config-docs.ts macprefs-source/docs/config-examples.md src/content/docs/reference/configuration.mdx
+          fi
+
+          # Migration docs: TypeScript multi-page transformation (Phase 4)
+          # This transforms the migration guide into 6 target MDX files:
+          #   - getting-started/quick-start.mdx
+          #   - guides/migration-curation.mdx
+          #   - getting-started/first-config.mdx
+          #   - guides/migration-pitfalls.mdx
+          #   - guides/power-users.mdx (merge-section)
+          #   - reference/troubleshooting.mdx
+          # Rollback: Comment out this block to disable migration guide sync
+          if [ -f macprefs-source/docs/MIGRATION_SETUP_CONFIG_AND_TROUBLESHOOTING.md ]; then
+            npx tsx scripts/transform-migration-docs.ts macprefs-source/docs/MIGRATION_SETUP_CONFIG_AND_TROUBLESHOOTING.md
           fi
 
       - name: Cleanup source checkout
