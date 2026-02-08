@@ -26,6 +26,10 @@ export default defineConfig({
       },
       sidebar: [
         {
+          label: "Pricing",
+          slug: "pricing",
+        },
+        {
           label: "Getting Started",
           items: [
             {
@@ -97,6 +101,13 @@ export default defineConfig({
           attrs: {
             name: "theme-color",
             content: "#3465a4",
+          },
+        },
+        {
+          tag: "script",
+          attrs: {
+            src: "https://app.lemonsqueezy.com/js/lemon.js",
+            defer: true,
           },
         },
       ],

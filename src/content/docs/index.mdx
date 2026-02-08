@@ -12,9 +12,19 @@ hero:
     - text: Get Started
       link: /getting-started/installation/
       icon: right-arrow
+    - text: Get macprefs Pro
+      link: /pricing/
+      icon: external
+      variant: secondary
 ---
 
-import { Card, CardGrid } from "@astrojs/starlight/components";
+import {
+  Card,
+  CardGrid,
+  Tabs,
+  TabItem,
+  LinkCard,
+} from "@astrojs/starlight/components";
 
 ## Why macprefs?
 
@@ -26,7 +36,7 @@ import { Card, CardGrid } from "@astrojs/starlight/components";
   <Card title="Drift Detection" icon="magnifier">
     See exactly what will change before applying. Plan before you commit.
   </Card>
-  <Card title="Instant Rollback" icon="backward">
+  <Card title="Instant Rollback" icon="left-arrow">
     Undo any change with one command. Every apply is automatically backed up.
   </Card>
   <Card title="Fast & Native" icon="rocket">
@@ -41,12 +51,72 @@ import { Card, CardGrid } from "@astrojs/starlight/components";
   </Card>
 </CardGrid>
 
+---
+
+## See it in action
+
+Real examples of macOS preferences managed with macprefs:
+
+<CardGrid>
+  <LinkCard
+    title="Dock Configuration"
+    href="/examples/dock/"
+    description="Auto-hide, tile size, minimize effects, and more"
+  />
+  <LinkCard
+    title="Finder Preferences"
+    href="/examples/finder/"
+    description="Default view, file extensions, path bar settings"
+  />
+  <LinkCard
+    title="Keyboard Settings"
+    href="/examples/keyboard/"
+    description="Key repeat, press-and-hold, function keys"
+  />
+  <LinkCard
+    title="Workflow Examples"
+    href="/examples/workflows/"
+    description="CI/CD, rollback, new machine setup patterns"
+  />
+</CardGrid>
+
+---
+
+## Choose your tier
+
+<Tabs>
+  <TabItem label="Free — $0 forever">
+    **Everything you need for Apple preferences.**
+
+    - ✅ Apple domains (`com.apple.*`, `NSGlobalDomain`)
+    - ✅ Plan, Apply, Rollback
+    - ✅ Drift detection
+    - ✅ Table output & interactive confirmation
+
+  </TabItem>
+  <TabItem label="Pro — $39 one-time">
+    **Automation and advanced features for power users.**
+
+    Everything in Free, plus:
+
+    - ✅ JSON export (`--format json`)
+    - ✅ Headless mode (`--yes`)
+    - ✅ `--filter`, `--run-id`, `--baseline` flags
+    - ✅ Semantic exit codes
+
+    <a href="https://shop.macprefs.app/buy/e446e7bc-6d32-4207-a3d6-0e2e1e156ab7" class="lemonsqueezy-button" style="display:inline-block;padding:0.75rem 1.5rem;background:var(--mp-path-blue);color:#fff;border-radius:0.375rem;text-decoration:none;font-weight:600;margin-top:1rem;">Buy macprefs Pro — $39</a>
+
+    [See full comparison →](/pricing/)
+
+  </TabItem>
+</Tabs>
+
+---
+
 ## Quick Install
 
 ```bash
 brew install jmcombs/macprefs/macprefs
 ```
 
-## Getting Started
-
-Ready to take control of your Mac preferences? Check out our [Quick Start guide](/getting-started/quick-start/) to get up and running in minutes.
+Ready to take control of your Mac preferences? Check out the [Quick Start guide](/getting-started/quick-start/) to get up and running in minutes.
