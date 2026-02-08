@@ -1,0 +1,149 @@
+---
+title: Pricing
+description: Choose the right macprefs plan for your workflow. Free for personal use, Pro for automation and advanced features.
+---
+
+import {
+  Tabs,
+  TabItem,
+  Card,
+  CardGrid,
+  Aside,
+  Steps,
+} from "@astrojs/starlight/components";
+
+macprefs Free is a full-featured tool for Apple preferences.
+Pro unlocks automation, advanced output formats, and powerful workflow features.
+
+---
+
+## Plans
+
+<Tabs>
+  <TabItem label="Free — $0 forever">
+    **Everything you need for Apple preferences.**
+
+    - ✅ Apple domains (`com.apple.*`, `NSGlobalDomain`)
+    - ✅ Plan, Apply, Rollback commands
+    - ✅ Drift detection
+    - ✅ Table output format
+    - ✅ Interactive confirmation prompts
+    - ✅ Automatic backup on every apply
+
+    Free tier is a complete tool — use it as long as you like, no strings attached.
+
+  </TabItem>
+  <TabItem label="Pro — $39 one-time">
+    **Go further with automation and advanced features.**
+
+    Everything in Free, plus:
+
+    - ✅ JSON export format (`--format json`)
+    - ✅ Headless mode (`--yes`) — skip interactive prompts
+    - ✅ `--filter` flag for targeted plan output
+    - ✅ Semantic exit codes (exit code 2 = drift detected)
+    - ✅ `--run-id` — rollback to a specific run
+    - ✅ `--baseline` — export a baseline snapshot
+    - 🔜 Third-party app domains — *Coming Soon*
+
+    <a href="https://shop.macprefs.app/buy/e446e7bc-6d32-4207-a3d6-0e2e1e156ab7" class="lemonsqueezy-button" style="display:inline-block;padding:0.75rem 1.5rem;background:var(--mp-path-blue);color:#fff;border-radius:0.375rem;text-decoration:none;font-weight:600;margin-top:1rem;">Buy macprefs Pro — $39</a>
+
+    One-time purchase. No subscription. No recurring fees.
+
+  </TabItem>
+</Tabs>
+
+---
+
+## Feature Comparison
+
+| Feature                                         | Free |      Pro       |
+| ----------------------------------------------- | :--: | :------------: |
+| Apple domains (`com.apple.*`, `NSGlobalDomain`) |  ✅  |       ✅       |
+| Plan / Apply / Rollback commands                |  ✅  |       ✅       |
+| Drift detection                                 |  ✅  |       ✅       |
+| Table output format                             |  ✅  |       ✅       |
+| Interactive confirmation                        |  ✅  |       ✅       |
+| Automatic backup on apply                       |  ✅  |       ✅       |
+| JSON export format (`--format json`)            |  —   |       ✅       |
+| Headless mode (`--yes`)                         |  —   |       ✅       |
+| `--filter` flag (plan)                          |  —   |       ✅       |
+| Semantic exit codes (2 = drift)                 |  —   |       ✅       |
+| `--run-id` (rollback to specific run)           |  —   |       ✅       |
+| `--baseline` (export)                           |  —   |       ✅       |
+| Third-party app domains                         |  —   | 🔜 Coming Soon |
+
+---
+
+## Why Upgrade to Pro?
+
+<CardGrid>
+  <Card title="CI/CD Automation" icon="setting">
+    Headless mode (`--yes`) enables unattended execution in CI/CD pipelines.
+    Apply preferences across fleets without interactive prompts.
+  </Card>
+  <Card title="Machine-Readable Output" icon="document">
+    JSON export (`--format json`) integrates with scripts, dashboards, and
+    monitoring tools. Parse, filter, and process output programmatically.
+  </Card>
+  <Card title="Precise Rollback" icon="left-arrow">
+    Target a specific run with `--run-id` for surgical recovery. Go beyond "undo
+    last change" to restore any previous state.
+  </Card>
+  <Card title="Smart Drift Detection" icon="magnifier">
+    Semantic exit codes let CI pipelines detect drift automatically (exit 2).
+    Use `--filter` to focus plan output on specific domains.
+  </Card>
+</CardGrid>
+
+---
+
+## How Licensing Works
+
+<Steps>
+1. **Purchase** — Buy macprefs Pro above (or from the CLI: `macprefs upgrade`)
+
+2. **Receive license key** — Lemon Squeezy emails your license key immediately after purchase
+
+3. **Activate** — Run the activation command on your Mac:
+
+   ```bash
+   macprefs license activate --key <your-license-key>
+   ```
+
+4. **Done** — Pro features are unlocked instantly. No restart required.
+</Steps>
+
+<Aside type="tip">
+  Need to move your license to a new Mac? Deactivate on the old machine with
+  `macprefs license deactivate`, then activate on the new one. Your license key
+  works indefinitely.
+</Aside>
+
+---
+
+## Frequently Asked Questions
+
+### Can I use the Free tier long-term?
+
+Absolutely. macprefs Free is a complete tool for managing Apple preferences. It's not a trial — use it as long as you want.
+
+### What happens when I get a new Mac?
+
+Deactivate your license on the old Mac (`macprefs license deactivate`), then activate on the new one. Your license key never expires.
+
+### How do I activate my license?
+
+After purchase, you'll receive a license key via email. Run `macprefs license activate --key <key>` and Pro features unlock immediately.
+
+### What payment methods are accepted?
+
+Payments are handled securely by [Lemon Squeezy](https://www.lemonsqueezy.com). They accept credit/debit cards, PayPal, and other regional payment methods.
+
+### Is this a subscription?
+
+No. macprefs Pro is a **one-time purchase** of $39. No recurring fees, no annual renewals.
+
+### What about third-party app domains?
+
+Third-party app domain support is a planned feature for a future release. Currently, macprefs manages Apple preference domains (`com.apple.*` and `NSGlobalDomain`). We'll announce third-party domain support when it's available.
