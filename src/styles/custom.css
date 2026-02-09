@@ -558,3 +558,11 @@ starlight-menu-button button {
   opacity: 0.9;
   color: #fff !important;
 }
+
+/* ==========================================================================
+   Feature Details Link Styling
+   ========================================================================== */
+.sl-markdown-content a[href="/pricing/"]:hover {
+  background: var(--sl-color-gray-5) !important;
+  border-color: var(--sl-color-gray-4) !important;
+}

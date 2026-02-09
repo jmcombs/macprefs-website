@@ -1,0 +1,13 @@
+{
+  "remote.autoForwardPorts": true,
+  "remote.autoForwardPortsSource": "process",
+  "remote.forwardOnOpen": true,
+  "remote.portsAttributes": {
+    "4321": {
+      "label": "Astro Dev Server",
+      "onAutoForward": "notify",
+      "elevateIfNeeded": false
+    }
+  }
+}
+
