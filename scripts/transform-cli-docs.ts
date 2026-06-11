@@ -1,13 +1,13 @@
 #!/usr/bin/env npx tsx
 /**
  * transform-cli-docs.ts
- * 
+ *
  * Transforms docs/CLI.json (structured format) to Starlight MDX format
  * using TypeScript and Handlebars templates.
- * 
+ *
  * Usage:
  *   npx tsx scripts/transform-cli-docs.ts <input-json> [output-mdx]
- * 
+ *
  * See scripts/legacy/transform-cli-docs.cjs for the original CJS implementation.
  */
 
@@ -25,17 +25,14 @@ const __dirname = path.dirname(__filename);
 // Command ordering for consistent output
 const COMMAND_ORDER = [
   'preflight', 'list', 'inspect', 'export', 'validate',
-  'plan', 'apply', 'rollback', 'license', 'upgrade', 'about',
-  'license_status', 'license_activate', 'license_deactivate'
+  'plan', 'apply', 'rollback', 'about'
 ];
 
 // Page configuration
 const PAGE_CONFIG = {
   title: 'CLI Reference',
   description: 'Complete command-line interface reference for macprefs',
-  intro: 'Complete documentation for all macprefs commands and flags.',
-  cautionMessage: `When a gated feature is used without proper license, the CLI returns exit code 1 with message:
-\`This feature requires Pro tier or higher. Run 'macprefs upgrade' to unlock.\``
+  intro: 'Complete documentation for all macprefs commands and flags.'
 };
 
 /**
@@ -60,10 +57,6 @@ interface TemplateContext {
   description: string;
   intro: string;
   commands: PreparedCommand[];
-  tierComparison: {
-    features: Enrichments['tierComparison']['features'];
-    cautionMessage: string;
-  };
 }
 
 /**
@@ -71,7 +64,7 @@ interface TemplateContext {
  */
 function prepareCommand(cmdData: Command, enrichments: Enrichments): PreparedCommand {
   const enrichment = enrichments.commands[cmdData.name] || {};
-  
+
   return {
     name: cmdData.name,
     overview: enrichment.description || cmdData.description || cmdData.abstract,
@@ -90,15 +83,15 @@ function prepareCommand(cmdData: Command, enrichments: Enrichments): PreparedCom
 function loadTemplates(hbs: typeof Handlebars): Handlebars.TemplateDelegate<TemplateContext> {
   const templatesDir = path.join(__dirname, 'templates');
   const partialsDir = path.join(templatesDir, 'partials');
-  
+
   // Register partials
-  const partialFiles = ['frontmatter', 'command', 'flags-table', 'tier-comparison'];
+  const partialFiles = ['frontmatter', 'command', 'flags-table'];
   for (const partial of partialFiles) {
     const partialPath = path.join(partialsDir, `${partial}.hbs`);
     const partialContent = fs.readFileSync(partialPath, 'utf8');
     hbs.registerPartial(partial, partialContent);
   }
-  
+
   // Compile main template
   const mainTemplatePath = path.join(templatesDir, 'cli-reference.hbs');
   const mainTemplate = fs.readFileSync(mainTemplatePath, 'utf8');
@@ -111,10 +104,10 @@ function loadTemplates(hbs: typeof Handlebars): Handlebars.TemplateDelegate<Temp
 function transform(cliData: CLIData, enrichments: Enrichments): string {
   // Create configured Handlebars instance with helpers
   const hbs = createHandlebarsInstance();
-  
+
   // Load and compile templates
   const template = loadTemplates(hbs);
-  
+
   // Prepare commands in specified order
   const commands: PreparedCommand[] = [];
   for (const cmdKey of COMMAND_ORDER) {
@@ -123,19 +116,15 @@ function transform(cliData: CLIData, enrichments: Enrichments): string {
       commands.push(prepareCommand(cmdData, enrichments));
     }
   }
-  
+
   // Build template context
   const context: TemplateContext = {
     title: PAGE_CONFIG.title,
     description: PAGE_CONFIG.description,
     intro: PAGE_CONFIG.intro,
-    commands,
-    tierComparison: {
-      features: enrichments.tierComparison.features,
-      cautionMessage: PAGE_CONFIG.cautionMessage
-    }
+    commands
   };
-  
+
   // Render template
   return template(context);
 }
@@ -175,4 +164,3 @@ if (outputPath) {
 } else {
   console.log(mdx);
 }
-
