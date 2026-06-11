@@ -245,3 +245,118 @@ defaults export com.apple.dock -
 ### Community Resources
 
 - [macOS Defaults](https://macos-defaults.com/) — Curated database of macOS preference keys with descriptions and examples
+
+## Integration with Dotfiles
+
+### Recommended: GNU Stow Integration
+
+Use GNU Stow to manage your macprefs config as a symlink alongside other dotfiles:
+
+```bash
+# Dotfiles structure with stow packages
+~/.dotfiles/
+├── Brewfile                    # Include: brew "jmcombs/macprefs/macprefs"
+├── install.sh                  # Main setup script
+├── zsh/                        # Stow package for shell config
+│   └── .zshrc
+├── git/                        # Stow package for git config
+│   └── .gitconfig
+└── macprefs/                   # Stow package for macprefs config
+    └── .config/
+        └── macprefs/
+            └── macos-config.json   # Your curated preferences
+```
+
+**Brewfile entry:**
+
+```ruby
+tap "jmcombs/macprefs"
+brew "jmcombs/macprefs/macprefs"    # Fully qualified tap/formula name required
+```
+
+**install.sh integration (add after stow deployment):**
+
+```bash
+#!/bin/bash
+set -e
+
+# Deploy dotfiles with stow
+stow zsh git macprefs
+
+# Apply macOS preferences
+MACPREFS_CONFIG="$HOME/.config/macprefs/macos-config.json"
+
+echo "Applying macOS system preferences..."
+if command -v macprefs &> /dev/null; then
+  if [ -f "$MACPREFS_CONFIG" ]; then
+    # Interactive mode - user reviews and confirms each setting
+    macprefs apply --config "$MACPREFS_CONFIG"
+  else
+    echo "Warning: macprefs config not found at $MACPREFS_CONFIG"
+  fi
+else
+  echo "Warning: macprefs not installed. Run: brew install jmcombs/macprefs/macprefs"
+fi
+
+# Prompt for reboot (some settings require it)
+echo ""
+echo "Some macOS preference changes require a reboot to take effect."
+read -p "Would you like to reboot now? (y/N): " reboot_choice
+if [[ "$reboot_choice" =~ ^[Yy]$ ]]; then
+  sudo shutdown -r now
+fi
+```
+
+### Basic Dotfiles Integration
+
+For simpler setups without stow:
+
+```bash
+# In your dotfiles repository
+~/.dotfiles/
+├── .zshrc
+├── .gitconfig
+├── macprefs.json        # Your curated preferences
+└── setup.sh
+```
+
+**setup.sh:**
+
+```bash
+#!/bin/bash
+set -e
+
+echo "Applying macOS preferences..."
+if command -v macprefs &> /dev/null; then
+    macprefs apply --config ~/.dotfiles/macprefs.json
+else
+    echo "macprefs not installed. Run: brew install jmcombs/macprefs/macprefs"
+fi
+
+echo "Restarting affected services..."
+killall Dock Finder SystemUIServer 2>/dev/null || true
+```
+
+### Advanced: Modular Configuration
+
+Split your config for different contexts:
+
+```bash
+~/.dotfiles/
+├── macprefs/
+│   ├── base.json         # Core preferences (always applied)
+│   ├── personal.json     # Home Mac additions
+│   └── work.json         # Work Mac additions
+└── setup.sh
+```
+
+Apply based on context:
+
+```bash
+macprefs apply --config ~/.dotfiles/macprefs/base.json
+macprefs apply --config ~/.dotfiles/macprefs/personal.json  # or work.json
+```
+
+
+
+---
