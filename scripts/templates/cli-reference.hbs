@@ -1,17 +1,13 @@
-{{!-- 
+{{!--
   CLI Reference main template
-  
+
   Generates the complete CLI reference MDX page from CLI.json and enrichments data.
-  
+
   Context:
     title: string - Page title
     description: string - Page description
     intro: string - Introductory text
     commands: PreparedCommand[] - Array of command objects prepared for rendering
-    tierComparison: {
-      features: TierFeature[]
-      cautionMessage: string
-    }
 --}}
 {{> frontmatter title=title description=description}}
 
@@ -20,17 +16,16 @@
 ## Commands
 
 {{#each commands}}
-{{> command 
-    name=name 
-    overview=overview 
-    usage=usage 
-    arguments=arguments 
-    flags=flags 
-    subcommands=subcommands 
-    exitCodes=exitCodes 
+{{> command
+    name=name
+    overview=overview
+    usage=usage
+    arguments=arguments
+    flags=flags
+    subcommands=subcommands
+    exitCodes=exitCodes
     aside=aside
 }}
 
 {{/each}}
-{{> tier-comparison features=tierComparison.features cautionMessage=tierComparison.cautionMessage}}
-
+*Documentation auto-synced from macprefs CLI help.*
