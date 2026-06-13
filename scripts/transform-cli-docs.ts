@@ -24,7 +24,7 @@ const __dirname = path.dirname(__filename);
 
 // Command ordering for consistent output
 const COMMAND_ORDER = [
-  'preflight', 'list', 'inspect', 'export', 'validate',
+  'preflight', 'list', 'inspect', 'export', 'filter', 'validate',
   'plan', 'apply', 'rollback', 'about'
 ];
 
