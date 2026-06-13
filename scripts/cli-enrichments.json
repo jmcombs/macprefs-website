@@ -34,6 +34,23 @@
         "--no-progress": { "description": "Suppress progress output" }
       }
     },
+    "filter": {
+      "description": "Classifies every key in a config using deterministic guardrails (value-facts, name-pattern overrides, and an optional baseline diff) and writes a keep-only config (immediately apply-safe) plus a separate human-readable report of skip/review keys. No AI.",
+      "asides": [
+        {
+          "type": "note",
+          "content": "Deterministic and batch — the AI-assisted interactive experience is reserved for the paid GUI (Macprefs Studio)."
+        }
+      ],
+      "exitCodes": { "0": "completed; no keys need review", "2": "completed; one or more keys need review" },
+      "flags": {
+        "--output": { "description": "Keep-only output config (default: <input>.filtered.json)" },
+        "--report": { "description": "Report path (default: <input>.report.txt)" },
+        "--baseline": { "description": "Optional baseline config for changed-from-default detection" },
+        "--domains": { "description": "Comma-separated domains to include (defaults to all in the input)" },
+        "--no-progress": { "description": "Suppress progress output" }
+      }
+    },
     "validate": {
       "description": "Checks that a config file is valid JSON with correct structure.",
       "asides": [],
