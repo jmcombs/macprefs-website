@@ -90,6 +90,38 @@ macprefs export <output-file> [--domains <domains>] [--baseline] [--no-progress]
 ---
 
 
+### `filter`
+
+Classifies every key in a config using deterministic guardrails (value-facts, name-pattern overrides, and an optional baseline diff) and writes a keep-only config (immediately apply-safe) plus a separate human-readable report of skip/review keys. No AI.
+
+```bash
+macprefs filter <input-file> [--output <output>] [--report <report>] [--baseline <baseline>] [--domains <domains>] [--no-progress]
+```
+
+**Arguments:**
+- `<input-file>` — Input config JSON (export output or hand-authored) (required)
+
+| Flag | Description |
+|------|-------------|
+| `-o, --output <output>` | Keep-only output config (default: <input>.filtered.json) |
+| `--report <report>` | Report path (default: <input>.report.txt) |
+| `--baseline <baseline>` | Optional baseline config for changed-from-default detection |
+| `--domains <domains>` | Comma-separated domains to include (defaults to all in the input) |
+| `--no-progress` | Suppress progress output (for CI/scripting) |
+| `--version` | Show the version. |
+| `-h, --help` | Show help information. |
+
+**Exit codes:**
+- `0` — Completed; no keys require human review (config is apply-safe)
+- `2` — Completed, but one or more keys need review
+
+<Aside type="note">
+Deterministic and batch — the AI-assisted interactive experience is reserved for the paid GUI (Macprefs Studio).
+</Aside>
+
+---
+
+
 ### `validate`
 
 Checks that a config file is valid JSON with correct structure.

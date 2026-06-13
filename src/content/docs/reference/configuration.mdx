@@ -144,14 +144,41 @@ macprefs plan --config my-prefs.json
 macprefs apply --config my-prefs.json
 ```
 
-### CI/CD Workflow
+### Filter Ephemeral Keys
+
+`filter` turns a raw export into a clean, apply-safe config. It classifies every
+key with local guardrails (value-facts, name patterns, optional baseline diff)
+and writes a keep-only config plus a report of the `skip`/`review` keys:
 
 ```bash
-# Headless apply for automation
-macprefs apply --config my-prefs.json --yes
+# Export everything, then filter to a keep-only config + report
+macprefs export raw.json
+macprefs filter raw.json -o clean.json            # writes clean.json + raw.report.txt
 
-# JSON output for parsing
+# Optional: use a baseline to detect intentionally-changed keys
+macprefs filter raw.json -o clean.json --baseline baseline.json
+
+# clean.json is immediately consumable by plan/apply
+macprefs plan --config clean.json
+```
+
+`filter` exits `0` when nothing needs review, `2` when one or more keys are
+flagged for human review.
+
+### CI/CD Workflow
+
+The recommended pipeline gates on `validate`, reports drift with `plan`, then
+enforces with `apply` — all license-free:
+
+```bash
+# 1. Gate: fail the build on an invalid config (exit 1)
+macprefs validate --config my-prefs.json
+
+# 2. Report drift (exit 2 = drift, informational)
 macprefs plan --config my-prefs.json --format json
+
+# 3. Enforce headlessly
+macprefs apply --config my-prefs.json --yes
 ```
 
 ## Notes
