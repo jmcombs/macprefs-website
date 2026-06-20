@@ -131,7 +131,7 @@ Optional fields:
 
 ## Workflow Examples
 
-### Export and Apply (Free Tier)
+### Export and Apply
 
 ```bash
 # Export current Apple preferences
@@ -164,6 +164,85 @@ macprefs plan --config clean.json
 
 `filter` exits `0` when nothing needs review, `2` when one or more keys are
 flagged for human review.
+
+Given a raw export `raw.json` like this:
+
+```json
+{
+  "version": "1.0",
+  "domains": {
+    "com.apple.dock": {
+      "autohide": true,
+      "trash-full": false,
+      "RecentApps-UUID": "1F2E-AA"
+    },
+    "com.apple.finder": {
+      "ShowPathbar": true,
+      "GoToField": "/Users/alice/Projects",
+      "FXRecentFolders": ["/Users/alice/Downloads"]
+    }
+  }
+}
+```
+
+`macprefs filter raw.json -o clean.json` writes a **keep-only config**
+(`clean.json`) containing just the apply-safe keys (in the extended
+`{ "value": … }` form, keys sorted):
+
+```json
+{
+  "domains" : {
+    "com.apple.dock" : {
+      "autohide" : {
+        "value" : true
+      }
+    },
+    "com.apple.finder" : {
+      "ShowPathbar" : {
+        "value" : true
+      }
+    }
+  },
+  "version" : "1.0"
+}
+```
+
+…plus a human-readable **report** (`raw.report.txt`) of the keys it set aside,
+each with its reason, source, and confidence:
+
+```text
+macprefs filter report
+======================
+Input:    raw.json
+Baseline: (none)
+Summary:  2 keep, 3 skip, 1 review
+
+SKIP (3)
+--------
+[com.apple.dock]
+  RecentApps-UUID
+      reason:     matches hard-skip pattern suffix("UUID")
+      source:     pattern  confidence: 1.00
+[com.apple.finder]
+  FXRecentFolders
+      reason:     an array element contains a user-specific path
+      source:     valueFact  confidence: 1.00
+  GoToField
+      reason:     value contains a user-specific path
+      source:     valueFact  confidence: 1.00
+
+REVIEW (1)
+----------
+[com.apple.dock]
+  trash-full
+      reason:     uncertain — no signal
+      source:     pattern  confidence: 0.50
+```
+
+`clean.json` is immediately consumable by `plan`/`apply`/`validate`; the report
+is your audit trail for the keys that need a human decision (here `trash-full`
+has no deterministic signal, so it's flagged for you rather than guessed). Since
+one key needs review, `filter` exits `2`.
 
 ### CI/CD Workflow
 
