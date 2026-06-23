@@ -1,0 +1,42 @@
+<!-- @dsCard group="Colors" viewport="700x170" name="Neutrals — Surface Ramp" subtitle="Crust → base content panes and the text-on-them ramp" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--surface-page); color: var(--text-primary); }
+  .wrap { padding: 16px 20px; display:flex; flex-direction:column; gap: 12px; }
+  .ramp { display: grid; grid-template-columns: repeat(12, 1fr); gap: 0; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-xs); border: 1px solid var(--border); }
+  .ramp div { height: 46px; display:flex; align-items:flex-end; justify-content:center; padding-bottom:4px; font-family: var(--font-mono); font-size: 9px; color: var(--text-tertiary); }
+  .ramp div.dark { color: var(--latte-base); }
+  .texts { display:flex; gap: 18px; flex-wrap: wrap; }
+  .texts span { font-size: 14px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="ramp">
+      <div class="dark" style="background:var(--latte-text)">text</div>
+      <div class="dark" style="background:var(--latte-subtext1)">sub1</div>
+      <div class="dark" style="background:var(--latte-subtext0)">sub0</div>
+      <div class="dark" style="background:var(--latte-overlay2)">ov2</div>
+      <div class="dark" style="background:var(--latte-overlay1)">ov1</div>
+      <div style="background:var(--latte-overlay0)">ov0</div>
+      <div style="background:var(--latte-surface2)">surf2</div>
+      <div style="background:var(--latte-surface1)">surf1</div>
+      <div style="background:var(--latte-surface0)">surf0</div>
+      <div style="background:var(--latte-base)">base</div>
+      <div style="background:var(--latte-mantle)">mantle</div>
+      <div style="background:var(--latte-crust)">crust</div>
+    </div>
+    <div class="texts">
+      <span style="color:var(--text-primary)">Primary text</span>
+      <span style="color:var(--text-secondary)">Secondary</span>
+      <span style="color:var(--text-tertiary)">Tertiary</span>
+      <span style="color:var(--text-muted)">Muted</span>
+      <span style="color:var(--text-subtle)">Subtle / disabled</span>
+    </div>
+  </div>
+</body>
+</html>

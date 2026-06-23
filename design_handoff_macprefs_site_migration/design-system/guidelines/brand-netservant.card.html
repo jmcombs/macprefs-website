@@ -1,0 +1,35 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Netservant Logo" subtitle="The @e wordmark — 1998 mark refreshed in Path Blue" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--surface-page); color: var(--text-primary); display:flex; }
+  .wrap { display:flex; width:100%; align-items:stretch; }
+  .pane { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:20px; }
+  .pane.blue { background: var(--psl-path-blue); flex:0 0 36%; }
+  .word { display:inline-flex; align-items:center; line-height:1; font-size:42px; }
+  .word .dark, .word .slate { font-family: var(--font-sans); letter-spacing:-0.02em; }
+  .word .dark { font-weight:700; color: var(--latte-text); }
+  .word .slate { font-weight:700; color: var(--latte-text); }
+  .word .mark { height:1.55em; margin:0 -0.06em; display:block; }
+  .tagline { font-family: var(--font-serif); font-style:italic; color: var(--latte-overlay2); font-size:15px; white-space:nowrap; }
+  .icons { display:flex; gap:14px; align-items:center; }
+  .icons img { border-radius:24%; box-shadow: var(--shadow-paper); display:block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pane">
+    <div class="word"><span class="dark">N</span><img class="mark" src="../assets/netservant-e.png" alt="e"><span class="dark">t</span><span class="slate">servant</span></div>
+  </div>
+  <div class="pane blue">
+    <div class="icons">
+      <img src="../assets/netservant-icon-512.png" alt="app icon" style="width:66px;height:66px">
+      <img src="../assets/netservant-icon-512.png" alt="app icon" style="width:40px;height:40px">
+    </div>
+  </div>
+</div>
+</body>
+</html>

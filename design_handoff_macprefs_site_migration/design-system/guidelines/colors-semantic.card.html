@@ -1,0 +1,30 @@
+<!-- @dsCard group="Colors" viewport="700x140" name="Semantic — Status & Links" subtitle="Success, warning, error, info + link states" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--surface-page); color: var(--text-primary); }
+  .wrap { padding: 18px 20px; display:flex; gap: 10px; align-items:center; flex-wrap:wrap; }
+  .pill { display:inline-flex; align-items:center; gap:8px; padding: 7px 13px; border-radius: var(--radius-full); font-size: 13px; font-weight: 600; }
+  .dot { width:9px; height:9px; border-radius:50%; }
+  .soft { background: var(--surface-panel); }
+  .links { margin-left:auto; display:flex; gap:16px; font-size:14px; }
+  .links a { font-weight:600; text-decoration: underline; text-underline-offset: 3px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="pill soft" style="color:var(--success)"><span class="dot" style="background:var(--success)"></span>Success</span>
+    <span class="pill soft" style="color:var(--warning)"><span class="dot" style="background:var(--warning)"></span>Warning</span>
+    <span class="pill soft" style="color:var(--error)"><span class="dot" style="background:var(--error)"></span>Error</span>
+    <span class="pill soft" style="color:var(--info)"><span class="dot" style="background:var(--info)"></span>Info</span>
+    <div class="links">
+      <a style="color:var(--link)">link</a>
+      <a style="color:var(--link-hover)">hover</a>
+      <a style="color:var(--link-visited)">visited</a>
+    </div>
+  </div>
+</body>
+</html>

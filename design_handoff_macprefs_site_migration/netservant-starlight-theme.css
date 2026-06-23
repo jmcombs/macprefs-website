@@ -1,0 +1,114 @@
+/* ==========================================================================
+   netservant-starlight-theme.css
+   Drop-in token diff to bring apps/docs (Starlight) onto the Netservant
+   Design System.
+
+   HOW TO USE
+   ----------
+   Replace the :root[data-theme="light"] and :root[data-theme="dark"] TOKEN
+   blocks in apps/docs/src/styles/custom.css with the two blocks below.
+   The component-level overrides further down custom.css (.card, .sidebar,
+   .sl-link-card, pagination, hero, lemonsqueezy-button, etc.) can STAY, but
+   their hardcoded hex values must be remapped — see the find/replace table in
+   the handoff README §4.3.
+
+   Load the webfonts (Manrope + JetBrains Mono) per app — see README §4.2.
+
+   Base palette: Catppuccin Latte (light) / Catppuccin Mocha (dark).
+   Signature accent: Path Blue #3465a4 (lightened to #7aa2d6 on dark).
+   ========================================================================== */
+
+/* Path Blue — header in both modes (unchanged from current site) */
+:root {
+  --mp-path-blue: #3465a4;
+  --mp-path-blue-light: #5a85c2; /* DS path-blue-soft (was #729fcf) */
+  --mp-path-blue-dark: #2855a3;  /* DS path-blue-active (was #204a87) */
+}
+
+/* ==========================================================================
+   LIGHT MODE — Netservant / Catppuccin Latte (cool neutrals)
+   Replaces the former "Blue PSL 10K" warm-Stone light theme.
+   Starlight naming is semantic: white = page bg, black = darkest text.
+   ========================================================================== */
+:root[data-theme="light"] {
+  /* Accent — Path Blue */
+  --sl-color-accent-low: #dbe6f3;          /* soft path-blue tint */
+  --sl-color-accent: var(--mp-path-blue);  /* #3465a4 */
+  --sl-color-accent-high: var(--mp-path-blue-dark); /* #2855a3 */
+
+  /* Latte neutral ramp (light → dark) */
+  --sl-color-white: #eff1f5; /* latte-base    — page background */
+  --sl-color-gray-1: #e6e9ef; /* latte-mantle   — sidebar / nav */
+  --sl-color-gray-2: #dce0e8; /* latte-crust    — borders, code bg */
+  --sl-color-gray-3: #ccd0da; /* latte-surface0 — heavier borders */
+  --sl-color-gray-4: #8c8fa1; /* latte-overlay1 — muted text */
+  --sl-color-gray-5: #6c6f85; /* latte-subtext0 — secondary text */
+  --sl-color-gray-6: #5c5f77; /* latte-subtext1 — strong text */
+  --sl-color-black: #4c4f69;  /* latte-text     — headings */
+
+  --sl-color-text: #4c4f69;
+  --sl-color-text-accent: var(--mp-path-blue);
+
+  /* Derived background / hairline vars */
+  --sl-color-bg: #eff1f5;
+  --sl-color-bg-nav: #e6e9ef;
+  --sl-color-bg-sidebar: #e6e9ef;
+  --sl-color-bg-inline-code: #dce0e8;
+  --sl-color-hairline-light: #e6e9ef;
+  --sl-color-hairline: #ccd0da;
+  --sl-color-hairline-shade: #acb0be; /* latte-surface2 */
+
+  /* Status — Catppuccin Latte */
+  --psl-success: #40a02b;
+  --psl-warning: #df8e1d;
+  --psl-error: #d20f39;
+  --psl-info: #179299;
+
+  /* Typography — Manrope (UI/marketing) + JetBrains Mono */
+  --sl-font: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sl-font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", monospace;
+}
+
+/* ==========================================================================
+   DARK MODE — Catppuccin Mocha (already aligned with the DS dark ramp)
+   Neutrals are unchanged from the current site (they already match Mocha).
+   Changes: accent → DS lightened Path Blue #7aa2d6; Manrope/JetBrains type.
+   ========================================================================== */
+:root[data-theme="dark"] {
+  /* Accent — DS lightened Path Blue (was Catppuccin blue #89b4fa) */
+  --sl-color-accent-low: #313244;          /* mocha surface0 */
+  --sl-color-accent: #7aa2d6;
+  --sl-color-accent-high: #8fb3e0;
+
+  /* Mocha neutral ramp (light → dark) — unchanged, matches DS exactly */
+  --sl-color-white: #cdd6f4;  /* mocha text */
+  --sl-color-gray-1: #bac2de;
+  --sl-color-gray-2: #a6adc8;
+  --sl-color-gray-3: #6c7086;
+  --sl-color-gray-4: #585b70;
+  --sl-color-gray-5: #45475a;
+  --sl-color-gray-6: #313244;
+  --sl-color-black: #1e1e2e;  /* mocha base — page background */
+
+  --sl-color-text: #cdd6f4;
+  --sl-color-text-accent: #7aa2d6;
+
+  /* Status — Catppuccin Mocha */
+  --psl-success: #a6e3a1;
+  --psl-warning: #f9e2af;
+  --psl-error: #f38ba8;
+  --psl-info: #94e2d5;
+
+  /* Typography */
+  --sl-font: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sl-font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", monospace;
+}
+
+/* ==========================================================================
+   Hero H1 accent — keep in sync with the accent change
+   ========================================================================== */
+:root[data-theme="light"] .hero h1 { color: var(--mp-path-blue) !important; font-weight: 700 !important; }
+:root[data-theme="dark"]  .hero h1 { color: #7aa2d6 !important; font-weight: 700 !important; }
+
+/* Reminder (do in astro.config.mjs, not here):
+   expressiveCode.themes: ["catppuccin-latte", "catppuccin-mocha"]  // was ...-frappe */

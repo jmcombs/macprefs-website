@@ -1,0 +1,37 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Radius & Shadow" subtitle="Restrained chrome radii, sharp powerline segments, soft Latte shadows" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--surface-panel); color: var(--text-primary); }
+  .wrap { padding: 22px 24px; display:flex; gap: 28px; align-items:center; }
+  .group { display:flex; gap: 14px; align-items:flex-end; }
+  .box { width: 60px; height: 60px; background: var(--surface-page); border: 1px solid var(--border); display:flex; align-items:flex-end; justify-content:center; }
+  .box span { font-family: var(--font-mono); font-size: 9px; color: var(--text-tertiary); padding-bottom:4px; }
+  .sh { width: 78px; height: 60px; background: var(--surface-page); border-radius: var(--radius-md); display:flex; align-items:flex-end; justify-content:center; }
+  .sh span { font-family: var(--font-mono); font-size: 9px; color: var(--text-tertiary); padding-bottom:4px; }
+  .divider { width:1px; align-self:stretch; background: var(--border); }
+  .lbl { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); text-transform:uppercase; letter-spacing: var(--tracking-caps); position:absolute; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="group">
+      <div class="box" style="border-radius:var(--radius-sharp)"><span>sharp</span></div>
+      <div class="box" style="border-radius:var(--radius-sm)"><span>4</span></div>
+      <div class="box" style="border-radius:var(--radius-md)"><span>6</span></div>
+      <div class="box" style="border-radius:var(--radius-lg)"><span>10</span></div>
+      <div class="box" style="border-radius:var(--radius-2xl)"><span>20</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="group">
+      <div class="sh" style="box-shadow:var(--shadow-xs)"><span>xs</span></div>
+      <div class="sh" style="box-shadow:var(--shadow-sm)"><span>sm</span></div>
+      <div class="sh" style="box-shadow:var(--shadow-md)"><span>md</span></div>
+      <div class="sh" style="box-shadow:var(--shadow-lg)"><span>lg</span></div>
+    </div>
+  </div>
+</body>
+</html>

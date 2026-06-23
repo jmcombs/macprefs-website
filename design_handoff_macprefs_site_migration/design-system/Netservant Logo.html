@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Netservant — Logo</title>
+<link rel="icon" type="image/png" href="assets/netservant-favicon-32.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+  :root { --ink: var(--latte-text); --slate: var(--latte-subtext1); --accent: var(--psl-path-blue); }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-sans); background: var(--latte-mantle); color: var(--text-primary); padding: 48px; }
+  .page { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
+  .head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 4px; }
+  .head h1 { font-family: var(--font-serif); font-weight: 400; font-size: 32px; margin: 0; line-height: 1; }
+  .head .k { color: var(--accent); }
+  .head p { margin: 0; color: var(--text-tertiary); font-size: 13px; font-family: var(--font-mono); }
+  .frame { background: var(--surface-page); border-radius: var(--radius-paper); box-shadow: var(--shadow-paper); overflow: hidden; }
+  .frame .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--text-tertiary); padding: 14px 20px 0; }
+  .frame .body { display: flex; align-items: center; justify-content: center; padding: 44px 32px 52px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+
+  /* Wordmark lockup driven by --u */
+  .lockup { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .word { display: inline-flex; align-items: center; line-height: 1; font-size: var(--u, 64px); }
+  .word .dark, .word .slate { font-family: var(--font-sans); letter-spacing: -0.02em; }
+  .word .dark { font-weight: 700; color: var(--ink); }
+  .word .slate { font-weight: 700; color: var(--ink); }
+  .word .mark { height: 1.55em; margin: 0 -0.06em; display: block; }
+  .tagline { font-family: var(--font-serif); font-style: italic; color: var(--latte-overlay2); white-space: nowrap; font-size: calc(var(--u, 64px) * 0.32); margin-right: 0.1em; }
+
+  .inv { background: var(--psl-path-blue); }
+  .inv .dark { color: #fff; }
+  .inv .slate { color: #fff; }
+  .inv .tagline { color: color-mix(in srgb, #fff 68%, transparent); }
+
+  .iconwrap { display: flex; gap: 22px; align-items: center; }
+  .iconwrap img { border-radius: 22%; box-shadow: var(--shadow-paper); display: block; }
+  .markrow { display: flex; gap: 30px; align-items: center; }
+  .markrow .chip { width: 120px; height: 120px; border-radius: var(--radius-paper); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); }
+  .markrow .chip.lt { background: var(--surface-page); border: 1px solid var(--border); }
+  .markrow .chip.bl { background: var(--psl-path-blue); }
+  .markrow .chip img { height: 64%; display: block; }
+  .cmp { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .cmp img.orig { height: 60px; }
+  .cmp .cap { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; }
+  .center { display: flex; gap: 30px; flex-wrap: wrap; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="head">
+    <h1>Net<span class="k">servant</span> · Logo</h1>
+    <p>the @e mark · Manrope wordmark, one weight · Path Blue #3465a4</p>
+  </div>
+
+  <!-- Primary lockup -->
+  <div class="frame">
+    <div class="label">Primary lockup</div>
+    <div class="body">
+      <div class="word" style="--u:74px"><span class="dark">N</span><img class="mark" src="assets/netservant-e.png" alt="e"><span class="dark">t</span><span class="slate">servant</span></div>
+    </div>
+  </div>
+
+  <!-- Tagline (separate brand element, not part of the logo) -->
+  <div class="frame">
+    <div class="label">Tagline — separate from the logo</div>
+    <div class="body" style="padding:32px"><span style="font-family:var(--font-serif); font-style:italic; font-size:30px; color:var(--latte-overlay2)">“How may we serve you?”</span></div>
+  </div>
+
+  <div class="row">
+    <!-- Inverted -->
+    <div class="frame inv">
+      <div class="label" style="color:rgba(255,255,255,0.6)">On Path Blue</div>
+      <div class="body">
+        <div class="word" style="--u:52px"><span class="dark">N</span><img class="mark" src="assets/netservant-e-white.png" alt="e"><span class="dark">t</span><span class="slate">servant</span></div>
+      </div>
+    </div>
+    <!-- Compact wordmark -->
+    <div class="frame">
+      <div class="label">Compact wordmark</div>
+      <div class="body">
+        <div class="word" style="--u:48px"><span class="dark">N</span><img class="mark" src="assets/netservant-e.png" alt="e"><span class="dark">t</span><span class="slate">servant</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mark + app icon -->
+  <div class="frame">
+    <div class="label">The @e mark · app icon</div>
+    <div class="body">
+      <div class="markrow">
+        <div class="chip lt"><img src="assets/netservant-e.png" alt="mark"></div>
+        <div class="chip bl"><img src="assets/netservant-e-white.png" alt="mark"></div>
+        <div class="iconwrap">
+          <img src="assets/netservant-icon-512.png" alt="app icon" style="width:120px;height:120px">
+          <img src="assets/netservant-icon-512.png" alt="app icon" style="width:64px;height:64px">
+          <img src="assets/netservant-icon-512.png" alt="app icon" style="width:40px;height:40px">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Before / after -->
+  <div class="frame">
+    <div class="label">1998 original → 2026 refresh</div>
+    <div class="body">
+      <div class="center" style="gap:54px">
+        <div class="cmp"><img class="orig" src="uploads/NSLogoBig.gif" alt="original"><span class="cap">1998 original</span></div>
+        <div style="font-size:32px; color:var(--text-subtle)">→</div>
+        <div class="cmp">
+          <div class="word" style="--u:42px"><span class="dark">N</span><img class="mark" src="assets/netservant-e.png" alt="e"><span class="dark">t</span><span class="slate">servant</span></div>
+          <span class="cap" style="margin-top:6px">2026 refresh</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

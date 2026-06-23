@@ -1,0 +1,35 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Signature — Path Blue" subtitle="The #3465a4 anchor color and its states" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--surface-page); color: var(--text-primary); }
+  .wrap { display: flex; gap: 14px; padding: 18px 20px; align-items: stretch; }
+  .chip { flex: 1; border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; justify-content: space-between; min-height: 104px; box-shadow: var(--shadow-xs); }
+  .chip .name { font-size: 13px; font-weight: 600; }
+  .chip .hex { font-family: var(--font-mono); font-size: 12px; opacity: 0.85; }
+  .on-blue { color: var(--accent-fg); }
+  .swatch-sm { display:flex; gap:10px; }
+  .mini { flex:1; border-radius: var(--radius-sm); min-height:104px; display:flex; flex-direction:column; justify-content:flex-end; padding:10px; }
+  .mini .l { font-family: var(--font-mono); font-size: 11px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="chip" style="background: var(--psl-path-blue); flex: 2;">
+      <span class="name on-blue">Path Blue</span>
+      <div>
+        <div class="name on-blue" style="font-size:15px;">Directories · prompt · accent</div>
+        <span class="hex on-blue">#3465a4</span>
+      </div>
+    </div>
+    <div class="swatch-sm" style="flex:2;">
+      <div class="mini" style="background: var(--psl-path-blue-active); color:#fff;"><span class="l">active</span><span class="l">#2855a3</span></div>
+      <div class="mini" style="background: var(--psl-path-blue-soft); color:#fff;"><span class="l">soft / hover</span><span class="l">#5a85c2</span></div>
+      <div class="mini" style="background: var(--psl-selection-bg); color: var(--psl-selection-fg);"><span class="l">selection</span><span class="l">#a9c1e2</span></div>
+    </div>
+  </div>
+</body>
+</html>

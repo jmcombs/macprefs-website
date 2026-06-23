@@ -1,0 +1,58 @@
+<!-- @dsCard group="Colors" viewport="700x220" name="Dark Mode" subtitle="data-theme=&quot;dark&quot; flips the ramp to Mocha + a lightened Path Blue" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-sans); display: flex; }
+  .pane { flex: 1; background: var(--surface-page); color: var(--text-primary); padding: 22px 24px; display: flex; flex-direction: column; gap: 12px; }
+  .lbl { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-tertiary); }
+  .sw { display: flex; gap: 7px; }
+  .chip { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); }
+  .title { font-weight: 700; font-size: 16px; letter-spacing: -0.02em; }
+  .sub { font-size: 13px; color: var(--text-tertiary); }
+  .row { display: flex; gap: 10px; align-items: center; margin-top: 2px; }
+  .btn { display: inline-flex; align-items: center; padding: 7px 15px; border-radius: 999px; background: var(--accent); color: var(--accent-fg); font-size: 13px; font-weight: 600; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+</style>
+</head>
+<body>
+  <div class="pane">
+    <div class="lbl">Light · default</div>
+    <div class="sw">
+      <div class="chip" style="background:var(--surface-page)"></div>
+      <div class="chip" style="background:var(--surface-panel)"></div>
+      <div class="chip" style="background:var(--surface-chrome)"></div>
+      <div class="chip" style="background:var(--surface-raised)"></div>
+    </div>
+    <div class="title">Netservant</div>
+    <div class="sub">Surfaces, text &amp; accent all flip with the theme.</div>
+    <div class="row">
+      <span class="btn">Primary</span>
+      <span class="dot" style="background:var(--success)"></span>
+      <span class="dot" style="background:var(--warning)"></span>
+      <span class="dot" style="background:var(--error)"></span>
+      <span class="dot" style="background:var(--info)"></span>
+    </div>
+  </div>
+  <div class="pane" data-theme="dark">
+    <div class="lbl">Dark · data-theme="dark"</div>
+    <div class="sw">
+      <div class="chip" style="background:var(--surface-page)"></div>
+      <div class="chip" style="background:var(--surface-panel)"></div>
+      <div class="chip" style="background:var(--surface-chrome)"></div>
+      <div class="chip" style="background:var(--surface-raised)"></div>
+    </div>
+    <div class="title">Netservant</div>
+    <div class="sub">Surfaces, text &amp; accent all flip with the theme.</div>
+    <div class="row">
+      <span class="btn">Primary</span>
+      <span class="dot" style="background:var(--success)"></span>
+      <span class="dot" style="background:var(--warning)"></span>
+      <span class="dot" style="background:var(--error)"></span>
+      <span class="dot" style="background:var(--info)"></span>
+    </div>
+  </div>
+</body>
+</html>
