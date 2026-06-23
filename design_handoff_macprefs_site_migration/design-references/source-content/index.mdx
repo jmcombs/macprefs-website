@@ -1,0 +1,117 @@
+---
+title: Declare your Mac
+description: Declarative macOS preferences management. Your Mac, your rules. JSON-powered, no MDM excuses.
+template: splash
+hero:
+  tagline: "Your Mac, your rules. JSON-powered, no MDM excuses."
+  image:
+    dark: ../../assets/logo-symbol.svg
+    light: ../../assets/logo-symbol-blue.svg
+    alt: "macprefs icon"
+  actions:
+    - text: Get Started
+      link: /getting-started/installation/
+      icon: right-arrow
+    - text: Get macprefs Pro
+      link: /pricing/
+      icon: right-arrow
+      variant: secondary
+---
+
+import {
+  Card,
+  CardGrid,
+  Tabs,
+  TabItem,
+  LinkCard,
+} from "@astrojs/starlight/components";
+
+## Why macprefs?
+
+<CardGrid stagger>
+  <Card title="JSON Config" icon="document">
+    Single file defines all your preferences. Human-readable,
+    version-controllable, shareable.
+  </Card>
+  <Card title="Drift Detection" icon="magnifier">
+    See exactly what will change before applying. Plan before you commit.
+  </Card>
+  <Card title="Instant Rollback" icon="left-arrow">
+    Undo any change with one command. Every apply is automatically backed up.
+  </Card>
+  <Card title="Fast & Native" icon="rocket">
+    Pure Swift, universal binary. Process 100+ domains in under 10 seconds.
+  </Card>
+  <Card title="No Elevation" icon="approve-check">
+    User-level preferences only. No sudo required, no system modifications.
+  </Card>
+  <Card title="CI/CD Ready" icon="setting">
+    Headless mode for automation. Perfect for fleet management and testing.
+    (Pro)
+  </Card>
+</CardGrid>
+
+---
+
+## See it in action
+
+Real examples of macOS preferences managed with macprefs:
+
+<CardGrid>
+  <LinkCard
+    title="Dock Configuration"
+    href="/examples/dock/"
+    description="Auto-hide, tile size, minimize effects, and more"
+  />
+  <LinkCard
+    title="Finder Preferences"
+    href="/examples/finder/"
+    description="Default view, file extensions, path bar settings"
+  />
+  <LinkCard
+    title="Keyboard Settings"
+    href="/examples/keyboard/"
+    description="Key repeat, press-and-hold, function keys"
+  />
+  <LinkCard
+    title="Workflow Examples"
+    href="/examples/workflows/"
+    description="CI/CD, rollback, new machine setup patterns"
+  />
+</CardGrid>
+
+---
+
+## Choose your tier
+
+| Feature | Free | Pro |
+|---------|:----:|:---:|
+| **Price** | **$0 forever** | **$39 one-time** <br/> <a href="https://shop.macprefs.app/checkout/buy/000a6a3d-ae40-453e-8efe-e620a0d603c8" class="lemonsqueezy-button">Buy Now</a> |
+| Apple domains (`com.apple.*`, `NSGlobalDomain`) | ✅ | ✅ |
+| Plan, Apply, Rollback commands | ✅ | ✅ |
+| Drift detection | ✅ | ✅ |
+| Table output & interactive confirmation | ✅ | ✅ |
+| Automatic backup on apply | ✅ | ✅ |
+| JSON export format (`--format json`) | — | ✅ |
+| Headless mode (`--yes`) for CI/CD | — | ✅ |
+| `--filter`, `--run-id`, `--baseline` flags | — | ✅ |
+| Semantic exit codes (exit 2 = drift) | — | ✅ |
+| Third-party app domains | — | 🔜 Coming Soon |
+
+**Free tier** is a complete tool — use it as long as you like, no strings attached.
+
+**Pro tier** unlocks automation and advanced features for power users and teams.
+
+<div style="margin-top: 1.5rem; text-align: center;">
+  <a href="/pricing/" class="lemonsqueezy-button">See full feature details →</a>
+</div>
+
+---
+
+## Quick Install
+
+```bash
+brew install jmcombs/macprefs/macprefs
+```
+
+Ready to take control of your Mac preferences? Check out the [Quick Start guide](/getting-started/quick-start/) to get up and running in minutes.

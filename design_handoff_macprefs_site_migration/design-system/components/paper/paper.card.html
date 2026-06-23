@@ -1,0 +1,73 @@
+<!-- @dsCard group="Components" viewport="700x640" name="Paper Kit — Buttons · Cards · Team · Contact" subtitle="Rounded paper shapes, Netservant palette" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@vscode/codicons@0.0.36/dist/codicon.css">
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--surface-panel); color: var(--text-primary); padding: 26px; }
+  .stack { display:flex; flex-direction:column; gap: 26px; }
+  .row { display:flex; gap: 14px; align-items:center; flex-wrap:wrap; }
+  .label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: var(--tracking-caps); color: var(--text-tertiary); width: 100%; margin-bottom: 2px; }
+  .grid3 { display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { PaperButton, PaperCard, FeatureItem, TeamCard, ContactForm } = window.BluePSL10KDesignSystem_ff9c76;
+
+  function Avatar({ a = 'mauve', b = 'lavender', initials = 'HF' }) {
+    return (
+      <div style={{ width: '100%', height: '100%', display:'flex', alignItems:'center', justifyContent:'center',
+        background: `linear-gradient(135deg, var(--latte-${a}), var(--latte-${b}))`,
+        color: '#fff', fontFamily: 'var(--font-serif)', fontSize: 34 }}>{initials}</div>
+    );
+  }
+
+  function Demo() {
+    return (
+      <div className="stack">
+        <div className="row">
+          <span className="label">Paper buttons</span>
+          <PaperButton>Get started</PaperButton>
+          <PaperButton variant="neutral" iconLeft={<i className="codicon codicon-play-circle" />}>Watch video</PaperButton>
+          <PaperButton variant="outline" accent="peach">Download</PaperButton>
+          <PaperButton variant="link" accent="mauve">Learn more →</PaperButton>
+          <PaperButton size="sm" accent="green">Small</PaperButton>
+        </div>
+
+        <div>
+          <div className="label">Feature cards (pastel tints)</div>
+          <div className="grid3">
+            <PaperCard tint="teal" interactive>
+              <FeatureItem icon="device-camera" accent="teal" title="Beautiful gallery" linkText="See more">Spend your time generating new ideas.</FeatureItem>
+            </PaperCard>
+            <PaperCard tint="peach" interactive>
+              <FeatureItem icon="lightbulb" accent="peach" title="New ideas" linkText="See more">Larger, yet dramatically thinner.</FeatureItem>
+            </PaperCard>
+            <PaperCard tint="mauve" interactive>
+              <FeatureItem icon="graph" accent="mauve" title="Statistics" linkText="See more">Colors resembling sugar-paper pastels.</FeatureItem>
+            </PaperCard>
+          </div>
+        </div>
+
+        <div className="grid3" style={{ gridTemplateColumns: '0.9fr 1.1fr', alignItems: 'start' }}>
+          <TeamCard avatar={<Avatar a="mauve" b="lavender" initials="HF" />} name="Henry Ford" role="Product Manager"
+            accent="mauve" socials={[{icon:'github'},{icon:'twitter'},{icon:'link'}]}>
+            No one can whistle a symphony — it takes an orchestra to play it.
+          </TeamCard>
+          <ContactForm blurb="Drop us a line — we read every message." align="left" />
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

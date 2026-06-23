@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/netservant-design-system-ff9c7601-b992-47d0-a764-2ea2293cbabd/tokens/fonts.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .tile { border-radius: 22.37%; box-shadow: 0 4px 14px rgba(40,81,138,.22); display:block; }
+    .card { background:#fff; border:1px solid #d6dae3; border-radius:16px; box-shadow:0 1px 3px rgba(60,66,90,.08); }
+    .mono { font-family:'JetBrains Mono',monospace; }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; box-sizing: border-box; padding: 56px 48px 80px; background: #e7e5df; font-family: 'Manrope', system-ui, sans-serif;">
+ <div style="max-width: 1040px; margin: 0 auto;">
+
+  <!-- HEADER -->
+  <div style="margin-bottom: 30px;">
+    <div class="mono" style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6c6f85; margin-bottom: 10px;">macprefs · app icon · final</div>
+    <div style="font-size: 34px; font-weight: 800; color: #2b2d3a; letter-spacing: -0.025em;">Option B — Liquid Glass toggle · Light &amp; Dark</div>
+    <div style="font-size: 15.5px; color: #5c5f77; margin-top: 10px; max-width: 780px; line-height: 1.55;">The shipping icon, in both appearances: one bold System Settings switch with the Netservant <strong>@e</strong> set ©-small in the lower-right. <strong>Light</strong> = light glass tile + Path-Blue toggle + blue @e. <strong>Dark</strong> = Path-Blue glass + white toggle + white @e. Same composition, tonally adapted. Every asset lives in <span class="mono" style="font-size:13px;">assets/macprefs-icon/</span>.</div>
+  </div>
+
+  <!-- HERO: LIGHT + DARK -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 22px;">
+    <div class="card" style="padding: 30px; text-align:center;">
+      <img class="tile" src="assets/macprefs-icon/icon-light-1024.png" alt="macprefs app icon · light" style="width: 220px; height: 220px; margin:0 auto;">
+      <div style="font-size: 16px; font-weight: 800; color: #2b2d3a; margin-top: 18px;">Light appearance</div>
+      <div style="font-size: 12.5px; color: #6c6f85; margin-top: 6px;">Light glass · Path-Blue toggle · blue @e</div>
+    </div>
+    <div class="card" style="padding: 30px; text-align:center;">
+      <img class="tile" src="assets/macprefs-icon/icon-1024.png" alt="macprefs app icon · dark" style="width: 220px; height: 220px; margin:0 auto;">
+      <div style="font-size: 16px; font-weight: 800; color: #2b2d3a; margin-top: 18px;">Dark appearance</div>
+      <div style="font-size: 12.5px; color: #6c6f85; margin-top: 6px;">Path-Blue glass · white toggle · white @e</div>
+    </div>
+  </div>
+
+  <!-- RATIONALE -->
+  <div class="card" style="padding: 26px 30px; margin-bottom: 30px;">
+    <div style="font-size: 13px; font-weight: 800; color: #2b2d3a; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 16px;">Construction</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px 28px;">
+      <div style="font-size:13px; color:#4c4f69; line-height:1.5;"><strong>Squircle.</strong> 22.37% continuous-corner radius — nests into the macOS&nbsp;26 glass container.</div>
+      <div style="font-size:13px; color:#4c4f69; line-height:1.5;"><strong>Material.</strong> Light: #fdfdff→#e9edf4. Dark: 160° Path-Blue #5b8ad0→#3465a4→#28518a. Both with a top-left specular.</div>
+      <div style="font-size:13px; color:#4c4f69; line-height:1.5;"><strong>Glyph.</strong> One <span class="mono" style="font-size:12px;">NSSwitch</span>, knob right — Path Blue on light, white on dark.</div>
+      <div style="font-size:13px; color:#4c4f69; line-height:1.5;"><strong>Mark.</strong> @e, ©-sized, 7% inset lower-right — blue on light, white on dark. Drops below 128px.</div>
+    </div>
+    <div style="margin-top:20px; padding-top:18px; border-top:1px solid #e7eaf0; display:flex; gap:30px; flex-wrap:wrap;">
+      <div><div class="mono" style="font-size:11px; color:#8c8fa1;">PATH BLUE</div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><span style="width:16px;height:16px;border-radius:4px;background:#3465a4;display:inline-block;"></span><span class="mono" style="font-size:13px; color:#2b2d3a;">#3465a4</span></div></div>
+      <div><div class="mono" style="font-size:11px; color:#8c8fa1;">LIGHT TILE</div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><span style="width:16px;height:16px;border-radius:4px;background:linear-gradient(180deg,#fdfdff,#e9edf4);border:1px solid #d6dae3;display:inline-block;"></span><span class="mono" style="font-size:13px; color:#2b2d3a;">#fdfdff→#e9edf4</span></div></div>
+      <div><div class="mono" style="font-size:11px; color:#8c8fa1;">FORMAT</div><div style="margin-top:5px;"><span class="mono" style="font-size:13px; color:#2b2d3a;">PNG · transparent</span></div></div>
+    </div>
+  </div>
+
+  <!-- SIZE MATRIX -->
+  <div class="card" style="padding: 28px 30px; margin-bottom: 22px;">
+    <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:22px;">
+      <div style="font-size: 13px; font-weight: 800; color: #2b2d3a; text-transform: uppercase; letter-spacing: 0.03em;">Exported sizes</div>
+      <div class="mono" style="font-size:12px; color:#8c8fa1;">app icon · @e holds ≥128, drops below</div>
+    </div>
+    <div class="mono" style="font-size:11px; color:#8c8fa1; margin-bottom:12px;">LIGHT</div>
+    <div style="display:flex; gap:30px; align-items:flex-end; flex-wrap:wrap; margin-bottom:24px;">
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-light-512.png" style="width:128px;height:128px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">512</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-light-256.png" style="width:88px;height:88px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">256</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-light-128.png" style="width:64px;height:64px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">128</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-light-64.png" style="width:48px;height:48px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">64</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-light-32.png" style="width:32px;height:32px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">32</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-light-16.png" style="width:16px;height:16px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">16</div></div>
+    </div>
+    <div class="mono" style="font-size:11px; color:#8c8fa1; margin-bottom:12px;">DARK</div>
+    <div style="display:flex; gap:30px; align-items:flex-end; flex-wrap:wrap;">
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-512.png" style="width:128px;height:128px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">512</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-256.png" style="width:88px;height:88px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">256</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-128.png" style="width:64px;height:64px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">128</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-64.png" style="width:48px;height:48px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">64</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-32.png" style="width:32px;height:32px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">32</div></div>
+      <div style="text-align:center;"><img class="tile" src="assets/macprefs-icon/icon-16.png" style="width:16px;height:16px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">16</div></div>
+    </div>
+  </div>
+
+  <!-- DOCK CONTEXTS -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:22px;">
+    <div class="card" style="padding:24px; overflow:hidden;">
+      <div class="mono" style="font-size:11px; color:#8c8fa1; margin-bottom:16px;">in the dock · light desktop → light icon</div>
+      <div style="background: linear-gradient(160deg,#dfe7f2,#c7d3e6); border-radius:14px; padding:20px 0;">
+        <div style="display:flex; gap:14px; align-items:flex-end; justify-content:center;">
+          <div style="width:46px;height:46px;border-radius:22.37%;background:linear-gradient(180deg,#f2f4f7,#d6dbe3);box-shadow:0 3px 8px rgba(0,0,0,.14);"></div>
+          <div style="width:46px;height:46px;border-radius:22.37%;background:linear-gradient(180deg,#e7b04f,#d2912f);box-shadow:0 3px 8px rgba(0,0,0,.14);"></div>
+          <img class="tile" src="assets/macprefs-icon/icon-light-256.png" style="width:58px;height:58px;">
+          <div style="width:46px;height:46px;border-radius:22.37%;background:linear-gradient(180deg,#5fb95f,#3f9540);box-shadow:0 3px 8px rgba(0,0,0,.14);"></div>
+          <div style="width:46px;height:46px;border-radius:22.37%;background:linear-gradient(180deg,#e06a5e,#c1453c);box-shadow:0 3px 8px rgba(0,0,0,.14);"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:24px; overflow:hidden;">
+      <div class="mono" style="font-size:11px; color:#8c8fa1; margin-bottom:16px;">in the dock · dark desktop → dark icon</div>
+      <div style="background: linear-gradient(160deg,#2a2c34,#181a1f); border-radius:14px; padding:20px 0;">
+        <div style="display:flex; gap:14px; align-items:flex-end; justify-content:center;">
+          <div style="width:46px;height:46px;border-radius:22.37%;background:linear-gradient(180deg,#4a4d57,#34363d);box-shadow:0 3px 8px rgba(0,0,0,.3);"></div>
+          <div style="width:46px;height:46px;border-radius:22.37%;background:linear-gradient(180deg,#e7b04f,#d2912f);box-shadow:0 3px 8px rgba(0,0,0,.3);"></div>
+          <img class="tile" src="assets/macprefs-icon/icon-256.png" style="width:58px;height:58px;">
+          <div style="width:46px;height:46px;border-radius:22.37%;background:linear-gradient(180deg,#5fb95f,#3f9540);box-shadow:0 3px 8px rgba(0,0,0,.3);"></div>
+          <div style="width:46px;height:46px;border-radius:22.37%;background:linear-gradient(180deg,#e06a5e,#c1453c);box-shadow:0 3px 8px rgba(0,0,0,.3);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEB / FAVICON -->
+  <div class="card" style="padding: 28px 30px; margin-bottom:22px;">
+    <div style="font-size: 13px; font-weight: 800; color: #2b2d3a; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom:20px;">Web &amp; favicon</div>
+    <div style="display:flex; gap:40px; align-items:flex-start; flex-wrap:wrap;">
+      <div>
+        <div class="mono" style="font-size:11px; color:#8c8fa1; margin-bottom:14px;">LIGHT · prefers-color-scheme: light</div>
+        <div style="display:flex; gap:26px; align-items:flex-end;">
+          <div style="text-align:center;"><img src="assets/macprefs-icon/apple-touch-icon-light-180.png" style="width:72px;height:72px;border-radius:22.37%;box-shadow:0 4px 14px rgba(40,81,138,.16);"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">apple-touch · 180</div></div>
+          <div style="text-align:center;"><img src="assets/macprefs-icon/favicon-light-32.png" style="width:32px;height:32px;border-radius:7px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">favicon · 32</div></div>
+          <div style="text-align:center;"><img src="assets/macprefs-icon/favicon-light-16.png" style="width:16px;height:16px;border-radius:4px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">16</div></div>
+        </div>
+        <div style="margin-top:18px;">
+          <div style="display:inline-flex; align-items:center; gap:8px; background:#eceff4; border:1px solid #d6dae3; border-radius:9px 9px 0 0; padding:8px 14px 8px 12px; max-width:240px;">
+            <img src="assets/macprefs-icon/favicon-light-32.png" style="width:16px;height:16px;border-radius:3px;flex:none;">
+            <span style="font-size:13px; color:#4c4f69; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">macprefs · Declare your Mac</span>
+            <span style="color:#8c8fa1; font-size:14px; margin-left:4px;">×</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="mono" style="font-size:11px; color:#8c8fa1; margin-bottom:14px;">DARK · prefers-color-scheme: dark</div>
+        <div style="display:flex; gap:26px; align-items:flex-end;">
+          <div style="text-align:center;"><img src="assets/macprefs-icon/apple-touch-icon-180.png" style="width:72px;height:72px;border-radius:22.37%;box-shadow:0 4px 14px rgba(40,81,138,.22);"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">apple-touch · 180</div></div>
+          <div style="text-align:center;"><img src="assets/macprefs-icon/favicon-32.png" style="width:32px;height:32px;border-radius:7px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">favicon · 32</div></div>
+          <div style="text-align:center;"><img src="assets/macprefs-icon/favicon-16.png" style="width:16px;height:16px;border-radius:4px;"><div class="mono" style="font-size:11px;color:#8c8fa1;margin-top:9px;">16</div></div>
+        </div>
+        <div style="margin-top:18px;">
+          <div style="display:inline-flex; align-items:center; gap:8px; background:#23262d; border:1px solid #34373f; border-radius:9px 9px 0 0; padding:8px 14px 8px 12px; max-width:240px;">
+            <img src="assets/macprefs-icon/favicon-32.png" style="width:16px;height:16px;border-radius:3px;flex:none;">
+            <span style="font-size:13px; color:#c9ccd6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">macprefs · Declare your Mac</span>
+            <span style="color:#8c8fa1; font-size:14px; margin-left:4px;">×</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANIFEST -->
+  <div class="card" style="padding: 28px 30px;">
+    <div style="font-size: 13px; font-weight: 800; color: #2b2d3a; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom:18px;">Asset manifest <span class="mono" style="font-weight:500; text-transform:none; letter-spacing:0; color:#8c8fa1; font-size:12px;">· assets/macprefs-icon/</span></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px 40px;">
+      <div>
+        <div class="mono" style="font-size:11px; color:#8c8fa1; margin-bottom:8px;">DARK (primary)</div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">icon-1024.png</span><span style="font-size:12px; color:#8c8fa1;">App Store / master</span></div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">icon-512 / 256 / 128.png</span><span style="font-size:12px; color:#8c8fa1;">.icns iconset</span></div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">icon-64 / 32 / 16.png</span><span style="font-size:12px; color:#8c8fa1;">small dock / Finder</span></div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">apple-touch-icon-180.png</span><span style="font-size:12px; color:#8c8fa1;">iOS / web</span></div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">favicon-32 / 16.png</span><span style="font-size:12px; color:#8c8fa1;">site favicon</span></div>
+      </div>
+      <div>
+        <div class="mono" style="font-size:11px; color:#8c8fa1; margin-bottom:8px;">LIGHT</div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">icon-light-1024.png</span><span style="font-size:12px; color:#8c8fa1;">master</span></div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">icon-light-512 / 256 / 128.png</span><span style="font-size:12px; color:#8c8fa1;">.icns iconset</span></div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">icon-light-64 / 32 / 16.png</span><span style="font-size:12px; color:#8c8fa1;">small dock / Finder</span></div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">apple-touch-icon-light-180.png</span><span style="font-size:12px; color:#8c8fa1;">iOS / web</span></div>
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid #f0f2f5;"><span class="mono" style="font-size:12.5px; color:#3465a4;">favicon-light-32 / 16.png</span><span style="font-size:12px; color:#8c8fa1;">site favicon</span></div>
+      </div>
+    </div>
+  </div>
+
+ </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1136, &quot;height&quot;: 900}}"></script>
+</body>
+</html>
