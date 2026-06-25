@@ -79,16 +79,16 @@ the current Starlight site keeps building from root until Phase 3 lifts it. Boun
 - A single root `package-lock.json` remains the only lockfile.
 
 ### Actionable TODOs
-- [ ] **Root `package.json`** (`package.json`): add `"private": true`,
+- [x] **Root `package.json`** (`package.json`): add `"private": true`,
   `"workspaces": ["apps/*", "packages/*"]`, keep `"type": "module"`, add `"engines": { "node": ">=20" }`;
   replace app build scripts with fan-out scripts (`"build": "npm run build --workspaces --if-present"`,
   same shape for `dev`/`check`). App-specific deps (astro, starlight, etc.) are removed from root and
   re-declared per app in Phases 3/6.
-- [ ] **Workspace dirs**: create `apps/.gitkeep` and `packages/.gitkeep`.
-- [ ] **Root `tsconfig.json`** (`tsconfig.json`): keep a base config that per-package tsconfigs `extends`.
-- [ ] **`.gitignore`**: add `.vercel`; confirm `dist/`, `.astro/`, `node_modules/` are ignored
+- [x] **Workspace dirs**: create `apps/.gitkeep` and `packages/.gitkeep`.
+- [x] **Root `tsconfig.json`** (`tsconfig.json`): keep a base config that per-package tsconfigs `extends`.
+- [x] **`.gitignore`**: add `.vercel`; confirm `dist/`, `.astro/`, `node_modules/` are ignored
   (they will appear under each workspace).
-- [ ] **`.devcontainer`**: leave intact (`npm install` post-create still valid for workspaces).
+- [x] **`.devcontainer`**: leave intact (`npm install` post-create still valid for workspaces).
 
 ### Testing Gates
 | Criterion | Command | Expected |
@@ -457,7 +457,7 @@ Deviations from a TODO's literal spec, or any Locked-Decision exception, require
 
 # Appendix C — Master TODO index (verifier-ticked)
 
-- [ ] Phase 1 — Monorepo scaffold
+- [x] Phase 1 — Monorepo scaffold
 - [ ] Phase 2 — `packages/design-system`
 - [ ] Phase 3 — `apps/docs` lift
 - [ ] Phase 4 — docs-sync retarget
