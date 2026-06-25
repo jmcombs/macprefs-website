@@ -453,7 +453,7 @@ Deviations from a TODO's literal spec, or any Locked-Decision exception, require
 
 | ADR | Phase | Title | Status | Kind |
 |---|---|---|---|---|
-| _(none yet)_ | | | | |
+| [0001](docs/decisions/0001-build-script-empty-workspace-guard.md) | 1 | Build-script empty-workspace guard | Accepted | Forced workaround |
 
 # Appendix C — Master TODO index (verifier-ticked)
 
