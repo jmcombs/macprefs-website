@@ -1,32 +1,27 @@
 {
   "name": "macprefs-website",
+  "private": true,
   "type": "module",
   "version": "1.0.0",
   "description": "Marketing and documentation site for macprefs",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "dev": "astro dev --host",
-    "start": "astro dev --host",
-    "build": "astro build",
-    "preview": "astro preview",
-    "check": "astro check",
-    "astro": "astro",
+    "dev": "sh -c 'if npm query .workspace | grep -q \"\\\"name\\\"\"; then npm run dev --workspaces --if-present; else exit 0; fi'",
+    "build": "sh -c 'if npm query .workspace | grep -q \"\\\"name\\\"\"; then npm run build --workspaces --if-present; else exit 0; fi'",
+    "check": "sh -c 'if npm query .workspace | grep -q \"\\\"name\\\"\"; then npm run check --workspaces --if-present; else exit 0; fi'",
     "transform:cli": "tsx scripts/transform-cli-docs.ts",
     "transform:config": "tsx scripts/transform-config-docs.ts",
     "transform:migration": "tsx scripts/transform-migration-docs.ts"
   },
-  "dependencies": {
-    "@astrojs/check": "^0.9.6",
-    "@astrojs/sitemap": "^3.6.0",
-    "@astrojs/starlight": "^0.37.1",
-    "@tailwindcss/vite": "^4.1.18",
-    "astro": "^5.6.1",
-    "astro-seo": "^0.8.4",
-    "handlebars": "^4.7.8",
-    "sharp": "^0.34.2",
-    "tailwindcss": "^4.1.18"
-  },
   "devDependencies": {
     "@types/node": "^25.0.10",
+    "handlebars": "^4.7.8",
     "tsx": "^4.21.0"
   }
 }
