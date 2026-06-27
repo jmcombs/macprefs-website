@@ -13,7 +13,7 @@
 --}}
 ### `{{{name}}}`
 
-{{{overview}}}
+{{{escapeMdxText overview}}}
 
 {{#if usage}}
 ```bash
@@ -24,7 +24,7 @@
 {{#if arguments.length}}
 **Arguments:**
 {{#each arguments}}
-- `<{{{argument}}}>` — {{{description}}}{{#if is_required}} (required){{/if}}
+- `<{{{argument}}}>` — {{{escapeMdxText description}}}{{#if is_required}} (required){{/if}}
 {{/each}}
 
 {{/if}}
@@ -36,7 +36,7 @@
 {{#if exitCodes}}
 **Exit codes:**
 {{#each exitCodes}}
-- `{{{@key}}}` — {{{this}}}
+- `{{{@key}}}` — {{{escapeMdxText this}}}
 {{/each}}
 
 {{/if}}

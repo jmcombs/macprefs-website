@@ -17,11 +17,14 @@
     "check": "npm run check --workspaces --if-present",
     "transform:cli": "tsx scripts/transform-cli-docs.ts",
     "transform:config": "tsx scripts/transform-config-docs.ts",
-    "transform:migration": "tsx scripts/transform-migration-docs.ts"
+    "transform:migration": "tsx scripts/transform-migration-docs.ts",
+    "test:mdx-safety": "node --import tsx scripts/__tests__/mdx-safety.mjs"
   },
   "devDependencies": {
+    "@mdx-js/mdx": "^3.1.1",
     "@types/node": "^25.0.10",
     "handlebars": "^4.7.8",
+    "remark-gfm": "^4.0.0",
     "tsx": "^4.21.0"
   }
 }
