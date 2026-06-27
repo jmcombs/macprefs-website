@@ -117,16 +117,16 @@ Phase 6); this phase only stands up the package and proves it imports + type-che
 - The prebuilt `_ds_bundle.js` global namespace is **not** the consumption path (kept only as reference).
 
 ### Actionable TODOs
-- [ ] **Copy DS source** into `packages/design-system/`: `components/{core,paper,brand,code}/*`,
+- [x] **Copy DS source** into `packages/design-system/`: `components/{core,paper,brand,code}/*`,
   `tokens/{colors,typography,spacing,fonts}.css`, `styles.css`, `assets/`, `_ds_manifest.json`,
   `readme.md` — from `design_handoff_macprefs_site_migration/design-system/` (preserve subfolders).
-- [ ] **`packages/design-system/package.json`**: name `@macprefs/design-system`, `"type": "module"`,
+- [x] **`packages/design-system/package.json`**: name `@macprefs/design-system`, `"type": "module"`,
   `"peerDependencies": { "react": "...", "react-dom": "..." }`, an `"exports"` map exposing
   `"."` → `./src/index.js`, `"./styles.css"`, and `"./tokens/*"`; `"sideEffects": ["*.css"]`.
-- [ ] **`packages/design-system/src/index.js`** barrel re-exporting all components:
+- [x] **`packages/design-system/src/index.js`** barrel re-exporting all components:
   `Button, Badge, Card, PaperButton, PaperCard, FeatureItem, TeamCard, ContactForm, CommandBox,
   CodeBlock, Tok, Swatch`.
-- [ ] **`packages/design-system/tsconfig.json`** (`extends` root) to type-check the bundled `.d.ts`.
+- [x] **`packages/design-system/tsconfig.json`** (`extends` root) to type-check the bundled `.d.ts`.
 - [ ] **(Optional)** wire `_adherence.oxlintrc.json` as an `oxlint` check script in the package.
 
 ### Testing Gates
@@ -459,7 +459,7 @@ Deviations from a TODO's literal spec, or any Locked-Decision exception, require
 # Appendix C — Master TODO index (verifier-ticked)
 
 - [x] Phase 1 — Monorepo scaffold
-- [ ] Phase 2 — `packages/design-system`
+- [x] Phase 2 — `packages/design-system`
 - [ ] Phase 3 — `apps/docs` lift
 - [ ] Phase 4 — docs-sync retarget
 - [ ] Phase 5 — docs theming
