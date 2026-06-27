@@ -164,8 +164,10 @@ Boundary: do not apply the token diff, change fonts, or touch the docs-sync work
   `apps/docs/astro.config.mjs`.
 - [ ] **`apps/docs/package.json`**: name `@macprefs/docs`; deps `astro`, `@astrojs/starlight`,
   `@astrojs/sitemap`, `astro-seo`, `@tailwindcss/vite`, `tailwindcss`, `sharp`, `handlebars`, `tsx`,
-  `@astrojs/check`; scripts `dev`/`build`/`check` and `transform:{cli,config,migration}` pointing at
-  `apps/docs/scripts/*`.
+  `@astrojs/check`, plus `@mdx-js/mdx` + `remark-gfm` (the **ADR-0003** MDX-safety test deps);
+  scripts `dev`/`build`/`check`, `transform:{cli,config,migration}`, and `test:mdx-safety` pointing at
+  `apps/docs/scripts/*`. (The ADR-0003 `scripts/__tests__/` + `scripts/__fixtures__/` and the
+  `test:mdx-safety` script move with `scripts/`; the corresponding root scripts/devDeps are removed.)
 - [ ] **Keep** `apps/docs/astro.config.mjs` head/lemon/expressiveCode as-is (theming = Phase 5).
 
 ### Testing Gates
