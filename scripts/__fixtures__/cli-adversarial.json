@@ -1,0 +1,74 @@
+{
+  "generated": "2026-01-01T00:00:00Z",
+  "version": "0.0.0-fixture",
+  "commands": {
+    "filter": {
+      "name": "filter",
+      "abstract": "Adversarial fixture command",
+      "description": "Overview prose with MDX-control chars: a <placeholder>, a {brace}, a pipe a|b, and a `backtick` span.",
+      "usage": "macprefs filter <input-file> [--output <output>] [--report <report>]",
+      "arguments": [
+        {
+          "argument": "input-file",
+          "description": "Config to filter; supports <glob> patterns, {brace} tokens, a|b alternation, and a `backtick`.",
+          "is_required": true,
+          "tier": "free"
+        }
+      ],
+      "flags": [
+        {
+          "short": "-o",
+          "long": "--output",
+          "argument": "output",
+          "description": "Keep-only output config (default: <input>.filtered.json)",
+          "is_required": false,
+          "tier": "free"
+        },
+        {
+          "long": "--report",
+          "argument": "report",
+          "description": "Report path (default: <input>.report.txt)",
+          "is_required": false,
+          "tier": "free"
+        },
+        {
+          "long": "--format",
+          "argument": "format",
+          "description": "Output format (table|json)",
+          "is_required": false,
+          "tier": "free"
+        },
+        {
+          "long": "--expr",
+          "argument": "expr",
+          "description": "Match expression like {key: <value>} containing a `code` span and a a|b pipe.",
+          "is_required": false,
+          "tier": "free"
+        }
+      ],
+      "exit_codes": {
+        "0": "completed; no keys need review",
+        "2": "needs review when <count> exceeds {threshold} or a|b mismatch"
+      },
+      "subcommands": []
+    },
+    "plan": {
+      "name": "plan",
+      "abstract": "Plan fixture command (exercises authored aside passthrough)",
+      "description": "Shows what changes would be made without applying them.",
+      "usage": "macprefs plan --config <config>",
+      "arguments": [],
+      "flags": [
+        {
+          "long": "--filter",
+          "argument": "filter",
+          "description": "Filter expression with <chars> and {braces}",
+          "is_required": false,
+          "tier": "free"
+        }
+      ],
+      "exit_codes": { "0": "no drift", "2": "drift detected" },
+      "subcommands": []
+    }
+  }
+}

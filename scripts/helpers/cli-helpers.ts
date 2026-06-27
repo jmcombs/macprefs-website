@@ -54,6 +54,44 @@ export function escapeForMdx(content: string): string {
 }
 
 /**
+ * Escape MDX-control characters in *plain-prose* text so it renders literally.
+ *
+ * MDX is a superset of Markdown that also parses JSX, so a bare `<` is read as
+ * the start of a JSX element (`<input>` → "expected a closing tag") and a bare
+ * `{` is read as the start of a JS expression. Upstream CLI help text legitimately
+ * contains `<placeholder>` and `{...}` tokens, so any prose field rendered into the
+ * MDX body must neutralize these. We emit HTML entities, which MDX renders as the
+ * literal character.
+ *
+ * Intentionally does NOT escape backticks: prose fields such as enriched command
+ * overviews use deliberate inline code (e.g. "runs a safe `defaults` smoke test"),
+ * and a stray, unmatched backtick is harmless to MDX compilation. Backtick handling
+ * is the separate concern of `escapeForMdx` for code-only contexts.
+ *
+ * Use ONLY for plain CLI/enrichment prose — never for authored Markdown/MDX such as
+ * aside content, which intentionally contains real markup.
+ */
+export function escapeMdxText(content: unknown): string {
+  if (content === null || content === undefined) return '';
+  return String(content)
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\{/g, '&#123;')
+    .replace(/\}/g, '&#125;');
+}
+
+/**
+ * Escape plain-prose text destined for a Markdown table cell.
+ *
+ * Extends `escapeMdxText` with `|` → `\|`. An unescaped pipe inside a GFM table
+ * cell is read as a column delimiter, which both breaks the table layout (the
+ * cosmetic `(table|json)` stray-column bug) and can corrupt the row structure.
+ */
+export function escapeMdxTableCell(content: unknown): string {
+  return escapeMdxText(content).replace(/\|/g, '\\|');
+}
+
+/**
  * Generate an Aside component string
  */
 export function generateAside(type: AsideType, content: string): string {
@@ -95,6 +133,16 @@ export function registerHelpers(hbs: typeof Handlebars): void {
   // Escape content for MDX
   hbs.registerHelper('escapeForMdx', function(content: string): string {
     return escapeForMdx(content);
+  });
+
+  // Escape plain-prose text so MDX-control chars render literally
+  hbs.registerHelper('escapeMdxText', function(content: unknown): string {
+    return escapeMdxText(content);
+  });
+
+  // Escape plain-prose text for a Markdown table cell (also escapes `|`)
+  hbs.registerHelper('escapeMdxTableCell', function(content: unknown): string {
+    return escapeMdxTableCell(content);
   });
 
   // Generate an Aside component

@@ -455,11 +455,16 @@ Deviations from a TODO's literal spec, or any Locked-Decision exception, require
 
 | ADR | Phase | Title | Status | Kind |
 |---|---|---|---|---|
+| [0003](docs/decisions/0003-mdx-safe-transform.md) | 3 | Make the docs-sync CLI transform emit MDX-safe output | Accepted | Bug fix (D5 deviation) |
 
-_No active ADRs. (ADR 0001 was retired at Phase 2 closeout when the root `dev`/`build`/`check`
-scripts returned to PLAN's literal fan-out form — the empty-workspace guard became dead code once
+_ADR 0003 is active: the docs-sync CLI transform's **behavior** changes (not just its paths) to
+escape MDX-control characters in plain-prose fields — a deviation from Locked Decision D5 required to
+fix the live build-breaking bug in issue #31._
+
+_Retired: ADR 0001 was retired at Phase 2 closeout when the root `dev`/`build`/`check` scripts
+returned to PLAN's literal fan-out form — the empty-workspace guard became dead code once
 `packages/design-system` existed. The Phase 2 workaround ADR 0002 was earlier superseded by the
-`node --import tsx` Barrel-exports gate fix.)_
+`node --import tsx` Barrel-exports gate fix._
 
 # Appendix C — Master TODO index (verifier-ticked)
 
