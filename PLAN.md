@@ -174,7 +174,7 @@ Boundary: do not apply the token diff, change fonts, or touch the docs-sync work
 | Docs build | `npm run build -w @macprefs/docs` | exit 0; all doc routes emitted |
 | No marketing in docs | `ls apps/docs/src/content/docs/index.mdx` | "No such file" (exit 1) |
 | Scripts moved | `ls apps/docs/scripts/transform-cli-docs.ts` | exists |
-| Transform runs | `npm run transform:cli -w @macprefs/docs -- <fixture CLI.json> apps/docs/src/content/docs/reference/cli.mdx` | exit 0, MDX written |
+| Transform runs | `src="$(mktemp -d)"; gh api repos/jmcombs/macprefs/contents/docs/CLI.json -H "Accept: application/vnd.github.raw" > "$src/CLI.json"; out="$(mktemp -d)/cli.mdx"; npm run transform:cli -w @macprefs/docs -- "$src/CLI.json" "$out" && test -s "$out"` | exit 0; MDX written to a temp path (real `cli.mdx` untouched) |
 
 **Development continues only on PASS.**
 
