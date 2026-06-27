@@ -127,7 +127,9 @@ Phase 6); this phase only stands up the package and proves it imports + type-che
   `Button, Badge, Card, PaperButton, PaperCard, FeatureItem, TeamCard, ContactForm, CommandBox,
   CodeBlock, Tok, Swatch`.
 - [x] **`packages/design-system/tsconfig.json`** (`extends` root) to type-check the bundled `.d.ts`.
-- [ ] **(Optional)** wire `_adherence.oxlintrc.json` as an `oxlint` check script in the package.
+- **(Optional — declined at Phase 2 closeout)** wiring `_adherence.oxlintrc.json` as an `oxlint`
+  check script was **not adopted**: the DS package's only gate is `tsc --noEmit` (`npm run check`);
+  no separate linter is added, and the oxlint config was intentionally not vendored. (No open item.)
 
 ### Testing Gates
 | Criterion | Command | Expected |
@@ -453,7 +455,11 @@ Deviations from a TODO's literal spec, or any Locked-Decision exception, require
 
 | ADR | Phase | Title | Status | Kind |
 |---|---|---|---|---|
-| [0001](docs/decisions/0001-build-script-empty-workspace-guard.md) | 1 | Build-script empty-workspace guard | Accepted | Forced workaround |
+
+_No active ADRs. (ADR 0001 was retired at Phase 2 closeout when the root `dev`/`build`/`check`
+scripts returned to PLAN's literal fan-out form — the empty-workspace guard became dead code once
+`packages/design-system` existed. The Phase 2 workaround ADR 0002 was earlier superseded by the
+`node --import tsx` Barrel-exports gate fix.)_
 
 # Appendix C — Master TODO index (verifier-ticked)
 
