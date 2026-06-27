@@ -133,7 +133,7 @@ Phase 6); this phase only stands up the package and proves it imports + type-che
 | Criterion | Command | Expected |
 |---|---|---|
 | Package resolves | `npm ls @macprefs/design-system` | listed, no errors |
-| Barrel exports | `node --input-type=module -e "import('@macprefs/design-system').then(m=>console.log(Object.keys(m).length))"` | ≥ 12 |
+| Barrel exports | `node --import tsx --input-type=module -e "import('@macprefs/design-system').then(m=>console.log(Object.keys(m).length))"` | ≥ 12 |
 | Types check | `npm run check -w @macprefs/design-system` | exit 0 |
 | Styles present | `test -f packages/design-system/styles.css` | exit 0 |
 
@@ -454,7 +454,6 @@ Deviations from a TODO's literal spec, or any Locked-Decision exception, require
 | ADR | Phase | Title | Status | Kind |
 |---|---|---|---|---|
 | [0001](docs/decisions/0001-build-script-empty-workspace-guard.md) | 1 | Build-script empty-workspace guard | Accepted | Forced workaround |
-| [0002](docs/decisions/0002-design-system-node-smoke-entry.md) | 2 | design-system node smoke entry for the plain-`node` import gate | Accepted | Forced workaround |
 
 # Appendix C — Master TODO index (verifier-ticked)
 
