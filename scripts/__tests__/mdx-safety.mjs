@@ -5,22 +5,26 @@
  *   node --import tsx scripts/__tests__/mdx-safety.mjs
  * (wired as `npm run test:mdx-safety`).
  *
- * It uses `@mdx-js/mdx`'s `compile` — the exact parser Astro/Starlight drives via
- * `@mdx-js/rollup`, the layer that produced the original
- * "Expected a closing tag for `<input>`" build failure (issue #31). A passing
- * compile here is real proof, not "looks fixed".
+ * It compiles with `@mdx-js/mdx` + `remark-gfm` — matching the real Astro/Starlight
+ * pipeline (`@mdx-js/rollup` with `markdown.gfm` on by default), the exact layer that
+ * produced the original "Expected a closing tag for `<input>`" build failure (#31).
+ * GFM is what makes `| ... |` rows behave as tables, so it is required to validate the
+ * table-cell `|`→`\|` escaping with real semantics rather than as a substring.
  *
  * Checks:
+ *   0. Negative control — a known-bad bare `<input>` in a table cell MUST be rejected
+ *      by the compiler (proves the harness is meaningful, not vacuous).
  *   1. Transform an adversarial fixture CLI.json (chars: < > { } | and a backtick)
  *      and compile the output.
- *   2. Compile the committed, regenerated reference/cli.mdx.
- *   3. Compile the committed reference/configuration.mdx (same exposure class).
- *   4. Assert the fixture output neutralized control chars in prose, while
- *      authored aside markdown (backticked inline code) was left intact.
- *   5. Unit-assert the escape helpers directly (covers the overview path too).
+ *   2. Compile the committed, regenerated reference/cli.mdx + configuration.mdx.
+ *   3. Assert real GFM table semantics: escaped `\|` stays one intact cell; an
+ *      unescaped `|` corrupts the cell.
+ *   4. Unit-assert the escape helpers directly (covers the overview path too), incl.
+ *      an overview-style prose doc that compiles.
  */
 
 import { compile } from '@mdx-js/mdx';
+import remarkGfm from 'remark-gfm';
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -30,6 +34,9 @@ import { escapeMdxText, escapeMdxTableCell } from '../helpers/cli-helpers.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..', '..');
+
+// GFM on by default in Astro/Starlight — compile with it on every call.
+const MDX_OPTS = { remarkPlugins: [remarkGfm] };
 
 let failures = 0;
 const pass = (msg) => console.log(`  ✓ ${msg}`);
@@ -42,12 +49,37 @@ function assert(cond, msg) {
 
 async function expectCompiles(label, source) {
   try {
-    await compile(source);
-    pass(`${label} compiles via @mdx-js/mdx`);
+    await compile(source, MDX_OPTS);
+    pass(`${label} compiles via @mdx-js/mdx + remark-gfm`);
   } catch (err) {
     fail(`${label} FAILED to compile: ${err && err.message ? err.message : err}`);
   }
 }
+
+async function expectThrows(label, source) {
+  try {
+    await compile(source, MDX_OPTS);
+    fail(`${label} UNEXPECTEDLY compiled (negative control did not fire)`);
+  } catch (err) {
+    pass(`${label} correctly rejected: ${String(err && err.message).split('\n')[0]}`);
+  }
+}
+
+// Compile a one-row, two-column GFM table and return the rendered `<td>` count.
+async function tableCellCount(descriptionCell) {
+  const src = `| Flag | Description |\n|------|-------------|\n| \`x\` | ${descriptionCell} |\n`;
+  const out = String(await compile(src, MDX_OPTS));
+  return { tds: (out.match(/_components\.td/g) || []).length, out };
+}
+
+// --- 0. Negative control ----------------------------------------------------
+console.log('\n[0] Negative control — bad MDX must be rejected');
+// This is exactly the shape that broke the build before the fix (issue #31):
+// a bare `<input>` (outside backticks) in a GFM table cell.
+await expectThrows(
+  'bare `<input>` in a table cell',
+  '| Flag | Description |\n|------|-------------|\n| `-o, --output <o>` | default: <input>.x |\n'
+);
 
 // --- 1. Transform the adversarial fixture ----------------------------------
 console.log('\n[1] Adversarial fixture transform + compile');
@@ -80,7 +112,7 @@ if (run.status !== 0) {
     'authored aside keeps its literal backticked inline code (not escaped)');
 }
 
-// --- 2 & 3. Committed MDX artifacts ----------------------------------------
+// --- 2. Committed MDX artifacts --------------------------------------------
 console.log('\n[2] Committed MDX artifacts compile');
 const committed = [
   'src/content/docs/reference/cli.mdx',
@@ -99,8 +131,25 @@ assert(!/\(default: <input>/.test(cliMdx),
 assert(!/\(table\|json\)/.test(cliMdx),
   'committed cli.mdx: no unescaped `(table|json)` in table cells');
 
+// --- 3. Real GFM table semantics for `|` escaping --------------------------
+console.log('\n[3] GFM table-cell `|` semantics');
+{
+  // Escaped `\|`: the row stays 2 cells and the pipe text survives intact in cell 2.
+  const esc = await tableCellCount(escapeMdxTableCell('Output format (table|json)'));
+  assert(esc.tds === 2,
+    `escaped \\| keeps a 2-column row (got ${esc.tds} cells)`);
+  assert(esc.out.includes('table|json'),
+    'escaped \\| renders the literal `table|json` intact in one cell');
+
+  // Unescaped `|`: GFM treats it as a column delimiter, corrupting the cell —
+  // the intact "table|json" no longer exists (content split/dropped).
+  const raw = await tableCellCount('Output format (table|json)');
+  assert(!raw.out.includes('table|json'),
+    'unescaped | corrupts the cell — literal `table|json` is lost (why escaping is needed)');
+}
+
 // --- 4. Helper unit contract (covers overview / argument / exit-code prose) -
-console.log('\n[3] Escape-helper unit contract');
+console.log('\n[4] Escape-helper unit contract');
 assert(escapeMdxText('a <x> {y} b') === 'a &lt;x&gt; &#123;y&#125; b',
   'escapeMdxText neutralizes < > { }');
 assert(escapeMdxText('a|b') === 'a|b',

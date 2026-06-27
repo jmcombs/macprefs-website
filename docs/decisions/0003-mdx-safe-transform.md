@@ -27,7 +27,8 @@ that contract must be honored.
 - **`src/content/docs/reference/cli.mdx`** — regenerated from the current upstream
   `jmcombs/macprefs` `docs/CLI.json` so the committed artifact is faithful to the fixed transform.
 - **`scripts/__fixtures__/cli-adversarial.json`** + **`scripts/__tests__/mdx-safety.mjs`** +
-  root devDependency `@mdx-js/mdx` and `npm run test:mdx-safety` — the proof harness.
+  root devDependencies `@mdx-js/mdx` and `remark-gfm` and `npm run test:mdx-safety` — the proof
+  harness.
 
 ### Field-aware rationale (which fields are escaped vs. left raw, and why)
 
@@ -62,9 +63,14 @@ inline code, and a stray unmatched backtick is harmless to MDX compilation.
 - **Files:** see "What changed" above. The `escapeForMdx` helper and its (currently unused) helper
   registration are unchanged — no regression to existing callers.
 - **New gate:** `npm run test:mdx-safety` compiles the adversarial-fixture output, the regenerated
-  `cli.mdx`, and `configuration.mdx` with `@mdx-js/mdx` (the exact parser Astro drives via
-  `@mdx-js/rollup`). A negative control confirms `compile()` still rejects the original bare
-  `<input>` — i.e. the test is meaningful, not vacuous.
+  `cli.mdx`, and `configuration.mdx` with `@mdx-js/mdx` **plus `remark-gfm`** — matching the real
+  Astro/Starlight pipeline (`@mdx-js/rollup` with `markdown.gfm` on by default). GFM is required so
+  `| ... |` rows parse as real tables, which is what validates the `|`→`\|` escaping with true table
+  semantics (the harness asserts an escaped `\|` keeps a 2-column row with the literal `table|json`
+  intact in one cell, while an unescaped `|` corrupts the cell). A **committed negative control**
+  compiles a known-bad bare `<input>` in a table cell and asserts it is rejected (it reproduces the
+  exact #31 error `Expected a closing tag for \`<input>\``) — so the harness is meaningful, not
+  vacuous, and would fail if the bug regressed.
 - **Recurrence:** because the fix lives in the transform (not a one-off `cli.mdx` patch), every future
   docs-sync run now emits MDX-safe output. Closes #31.
 - **Follow-on phases:** Phase 3 moves these scripts/templates into `apps/docs/` carrying this fix;
