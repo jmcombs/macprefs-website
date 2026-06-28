@@ -12,10 +12,10 @@
    These are available in both light and dark mode
    ========================================================================== */
 :root {
-  /* Path Blue - Used for header in both modes */
+  /* Path Blue — header in both modes (unchanged from current site) */
   --mp-path-blue: #3465a4;
-  --mp-path-blue-light: #729fcf;
-  --mp-path-blue-dark: #204a87;
+  --mp-path-blue-light: #5a85c2; /* DS path-blue-soft (was #729fcf) */
+  --mp-path-blue-dark: #2855a3;  /* DS path-blue-active (was #2855a3) */
 }
 
 /* ==========================================================================
@@ -31,59 +31,42 @@
    NOTE: Starlight uses [data-theme="light"] explicitly, not just absence of dark.
    ========================================================================== */
 :root[data-theme="light"] {
-  /* Blue PSL 10K - Semantic Colors */
-  --psl-success: #4e9a06;
-  --psl-warning: #c4a000;
-  --psl-error: #cc0000;
+  /* Accent — Path Blue */
+  --sl-color-accent-low: #dbe6f3;          /* soft path-blue tint */
+  --sl-color-accent: var(--mp-path-blue);  /* #3465a4 */
+  --sl-color-accent-high: var(--mp-path-blue-dark); /* #2855a3 */
 
-  /* Blue PSL 10K - Neutral Grays (Stone palette - warm grays) */
-  --psl-gray-50: #fafaf9;
-  --psl-gray-100: #f5f5f4;
-  --psl-gray-200: #e7e5e4;
-  --psl-gray-300: #d6d3d1;
-  --psl-gray-400: #a8a29e;
-  --psl-gray-500: #78716c;
-  --psl-gray-600: #57534e;
-  --psl-gray-700: #44403c;
-  --psl-gray-800: #292524;
-  --psl-gray-900: #1c1917;
+  /* Latte neutral ramp (light → dark) */
+  --sl-color-white: #eff1f5; /* latte-base    — page background */
+  --sl-color-gray-1: #e6e9ef; /* latte-mantle   — sidebar / nav */
+  --sl-color-gray-2: #dce0e8; /* latte-crust    — borders, code bg */
+  --sl-color-gray-3: #ccd0da; /* latte-surface0 — heavier borders */
+  --sl-color-gray-4: #8c8fa1; /* latte-overlay1 — muted text */
+  --sl-color-gray-5: #6c6f85; /* latte-subtext0 — secondary text */
+  --sl-color-gray-6: #5c5f77; /* latte-subtext1 — strong text */
+  --sl-color-black: #4c4f69;  /* latte-text     — headings */
 
-  /* Starlight Theme Variables - Light Mode
-     Using light gray backgrounds for better contrast and usability
-     Target: Page background #f8f9fa, Sidebar #f1f3f4, Cards white with borders */
-  --sl-color-accent-low: #e8f0fa;
-  --sl-color-accent: var(--mp-path-blue);
-  --sl-color-accent-high: var(--mp-path-blue-dark);
-
-  /* Light mode gray scale (light to dark) - optimized for 4.5:1+ contrast ratio */
-  --sl-color-white: #f8f9fa; /* Light gray page background instead of pure white */
-  --sl-color-gray-1: #f1f3f4; /* Sidebar/nav background */
-  --sl-color-gray-2: #e8eaed; /* Borders, code block backgrounds */
-  --sl-color-gray-3: #dadce0; /* Heavier borders */
-  --sl-color-gray-4: #9aa0a6; /* Muted text */
-  --sl-color-gray-5: #5f6368; /* Secondary text */
-  --sl-color-gray-6: #3c4043; /* Primary text */
-  --sl-color-black: #202124; /* Headings, emphasized text */
-
-  /* Light mode text - dark gray for high contrast (7:1+ ratio) */
-  --sl-color-text: #202124;
+  --sl-color-text: #4c4f69;
   --sl-color-text-accent: var(--mp-path-blue);
 
-  /* Override Starlight's derived background variables for light mode */
-  --sl-color-bg: #f8f9fa; /* Light gray page background */
-  --sl-color-bg-nav: #f1f3f4; /* Slightly darker for nav/sidebar */
-  --sl-color-bg-sidebar: #f1f3f4;
-  --sl-color-bg-inline-code: #e8eaed;
-  --sl-color-hairline-light: #e8eaed;
-  --sl-color-hairline: #dadce0;
-  --sl-color-hairline-shade: #9aa0a6;
+  /* Derived background / hairline vars */
+  --sl-color-bg: #eff1f5;
+  --sl-color-bg-nav: #e6e9ef;
+  --sl-color-bg-sidebar: #e6e9ef;
+  --sl-color-bg-inline-code: #dce0e8;
+  --sl-color-hairline-light: #e6e9ef;
+  --sl-color-hairline: #ccd0da;
+  --sl-color-hairline-shade: #acb0be; /* latte-surface2 */
 
-  /* Typography */
-  --sl-font:
-    system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
-    Roboto, sans-serif;
-  --sl-font-mono:
-    "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code", monospace;
+  /* Status — Catppuccin Latte */
+  --psl-success: #40a02b;
+  --psl-warning: #df8e1d;
+  --psl-error: #d20f39;
+  --psl-info: #179299;
+
+  /* Typography — Manrope (UI/marketing) + JetBrains Mono */
+  --sl-font: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sl-font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", monospace;
 }
 
 /* ==========================================================================
@@ -99,19 +82,19 @@
 :root[data-theme="light"] article.card,
 :root[data-theme="light"] .card.sl-flex {
   background-color: #ffffff !important;
-  border: 1px solid #dadce0 !important;
+  border: 1px solid #ccd0da !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 :root[data-theme="light"] .card .title,
 :root[data-theme="light"] .card p.title,
 :root[data-theme="light"] .card .title span {
-  color: #202124 !important;
+  color: #4c4f69 !important;
 }
 
 :root[data-theme="light"] .card .body,
 :root[data-theme="light"] .card .body p {
-  color: #3c4043 !important;
+  color: #5c5f77 !important;
 }
 
 /* LinkCard Component - Light mode backgrounds and text
@@ -119,26 +102,26 @@
    description, which both resolve to light colors in light mode = invisible. */
 :root[data-theme="light"] .sl-link-card {
   background-color: #ffffff !important;
-  border: 1px solid #dadce0 !important;
+  border: 1px solid #ccd0da !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 :root[data-theme="light"] .sl-link-card:hover {
-  background-color: #f8f9fa !important;
+  background-color: #eff1f5 !important;
   border-color: #3465a4 !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
 }
 
 :root[data-theme="light"] .sl-link-card .title {
-  color: #202124 !important;
+  color: #4c4f69 !important;
 }
 
 :root[data-theme="light"] .sl-link-card .description {
-  color: #5f6368 !important;
+  color: #6c6f85 !important;
 }
 
 :root[data-theme="light"] .sl-link-card .icon {
-  color: #5f6368 !important;
+  color: #6c6f85 !important;
 }
 
 :root[data-theme="light"] .sl-link-card:hover .icon {
@@ -150,7 +133,7 @@
 :root[data-theme="light"] .sidebar,
 :root[data-theme="light"] .sidebar-pane,
 :root[data-theme="light"] .sidebar-content {
-  background-color: #f1f3f4 !important;
+  background-color: #e6e9ef !important;
 }
 
 /* Sidebar text - Dark gray for contrast */
@@ -159,12 +142,12 @@
 :root[data-theme="light"] .sidebar span,
 :root[data-theme="light"] .sidebar .large,
 :root[data-theme="light"] .top-level > li > details > summary {
-  color: #292524 !important;
+  color: #4c4f69 !important;
 }
 
 /* Sidebar group labels */
 :root[data-theme="light"] .sidebar .group-label span {
-  color: #44403c !important;
+  color: #5c5f77 !important;
   font-weight: 600 !important;
 }
 
@@ -189,30 +172,30 @@
 /* Sidebar collapse icons */
 :root[data-theme="light"] .sidebar summary svg,
 :root[data-theme="light"] .sidebar details svg {
-  color: #57534e !important;
+  color: #6c6f85 !important;
 }
 
 /* Main content text - Light mode */
 :root[data-theme="light"] .content-panel,
 :root[data-theme="light"] .sl-markdown-content {
-  color: #292524 !important;
+  color: #4c4f69 !important;
 }
 
 :root[data-theme="light"] .sl-markdown-content h1,
 :root[data-theme="light"] .sl-markdown-content h2,
 :root[data-theme="light"] .sl-markdown-content h3,
 :root[data-theme="light"] .sl-markdown-content h4 {
-  color: #1c1917 !important;
+  color: #4c4f69 !important;
 }
 
 :root[data-theme="light"] .sl-markdown-content p,
 :root[data-theme="light"] .sl-markdown-content li {
-  color: #292524 !important;
+  color: #4c4f69 !important;
 }
 
 /* Right sidebar (table of contents) - Light mode */
 :root[data-theme="light"] .right-sidebar a {
-  color: #57534e !important;
+  color: #6c6f85 !important;
 }
 
 :root[data-theme="light"] .right-sidebar a:hover,
@@ -222,23 +205,23 @@
 
 /* Code blocks in light mode */
 :root[data-theme="light"] .expressive-code pre {
-  background-color: #f5f5f4 !important;
-  border: 1px solid #e7e5e4 !important;
+  background-color: #e6e9ef !important;
+  border: 1px solid #dce0e8 !important;
 }
 
 /* Table styling in light mode */
 :root[data-theme="light"] table {
-  border-color: #e7e5e4 !important;
+  border-color: #dce0e8 !important;
 }
 
 :root[data-theme="light"] th {
-  background-color: #f5f5f4 !important;
-  color: #292524 !important;
+  background-color: #e6e9ef !important;
+  color: #4c4f69 !important;
 }
 
 :root[data-theme="light"] td {
-  color: #292524 !important;
-  border-color: #e7e5e4 !important;
+  color: #4c4f69 !important;
+  border-color: #dce0e8 !important;
 }
 
 /* Link styling in light mode */
@@ -247,19 +230,19 @@
 }
 
 :root[data-theme="light"] .sl-markdown-content a:hover {
-  color: #204a87 !important;
+  color: #2855a3 !important;
 }
 
 /* Main page body - Light mode background */
 :root[data-theme="light"] body,
 :root[data-theme="light"] .main-pane,
 :root[data-theme="light"] main {
-  background-color: #f8f9fa !important;
+  background-color: #eff1f5 !important;
 }
 
 /* Page main content area */
 :root[data-theme="light"] .main-frame {
-  background-color: #f8f9fa !important;
+  background-color: #eff1f5 !important;
 }
 
 /* Content wrapper */
@@ -274,7 +257,7 @@
 
 /* "Why macprefs?" section heading */
 :root[data-theme="light"] h2 {
-  color: #202124 !important;
+  color: #4c4f69 !important;
 }
 
 /* Hero "Get Started" button - White text on Path Blue for contrast */
@@ -285,8 +268,8 @@
 }
 
 :root[data-theme="light"] .sl-link-button.primary:hover {
-  background-color: #204a87 !important;
-  border-color: #204a87 !important;
+  background-color: #2855a3 !important;
+  border-color: #2855a3 !important;
   color: #ffffff !important;
 }
 
@@ -294,20 +277,20 @@
    Starlight default uses color: var(--sl-color-white) which is near-white in light mode. */
 :root[data-theme="light"] .sl-link-button.secondary {
   border-color: #3465a4 !important;
-  color: #202124 !important;
+  color: #4c4f69 !important;
 }
 
 :root[data-theme="light"] .sl-link-button.secondary:hover {
-  border-color: #204a87 !important;
+  border-color: #2855a3 !important;
   background-color: rgba(52, 101, 164, 0.08) !important;
-  color: #204a87 !important;
+  color: #2855a3 !important;
 }
 
 /* Previous/Next pagination links - Dark text for visibility */
 :root[data-theme="light"] .pagination-links a {
-  color: #5f6368 !important;
+  color: #6c6f85 !important;
   background-color: #ffffff !important;
-  border-color: #dadce0 !important;
+  border-color: #ccd0da !important;
 }
 
 :root[data-theme="light"] .pagination-links a:hover {
@@ -317,7 +300,7 @@
 
 /* Pagination link title (page name) - Dark for contrast */
 :root[data-theme="light"] .pagination-links .link-title {
-  color: #202124 !important;
+  color: #4c4f69 !important;
 }
 
 :root[data-theme="light"] .pagination-links a:hover .link-title {
@@ -326,7 +309,7 @@
 
 /* Pagination arrows */
 :root[data-theme="light"] .pagination-links svg {
-  color: #5f6368 !important;
+  color: #6c6f85 !important;
 }
 
 :root[data-theme="light"] .pagination-links a:hover svg {
@@ -339,78 +322,33 @@
    Style Guide: https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md
    ========================================================================== */
 :root[data-theme="dark"] {
-  /* Catppuccin Mocha - Accent Colors */
-  --ctp-rosewater: #f5e0dc;
-  --ctp-flamingo: #f2cdcd;
-  --ctp-pink: #f5c2e7;
-  --ctp-mauve: #cba6f7;
-  --ctp-red: #f38ba8;
-  --ctp-maroon: #eba0ac;
-  --ctp-peach: #fab387;
-  --ctp-yellow: #f9e2af;
-  --ctp-green: #a6e3a1;
-  --ctp-teal: #94e2d5;
-  --ctp-sky: #89dceb;
-  --ctp-sapphire: #74c7ec;
-  --ctp-blue: #89b4fa;
-  --ctp-lavender: #b4befe;
+  /* Accent — DS lightened Path Blue (was Catppuccin blue #89b4fa) */
+  --sl-color-accent-low: #313244;          /* mocha surface0 */
+  --sl-color-accent: #7aa2d6;
+  --sl-color-accent-high: #8fb3e0;
 
-  /* Catppuccin Mocha - Text Colors (per style guide) */
-  --ctp-text: #cdd6f4;
-  --ctp-subtext1: #bac2de;
-  --ctp-subtext0: #a6adc8;
-
-  /* Catppuccin Mocha - Overlay Colors */
-  --ctp-overlay2: #9399b2;
-  --ctp-overlay1: #7f849c;
-  --ctp-overlay0: #6c7086;
-
-  /* Catppuccin Mocha - Surface Colors */
-  --ctp-surface2: #585b70;
-  --ctp-surface1: #45475a;
-  --ctp-surface0: #313244;
-
-  /* Catppuccin Mocha - Base Colors (per style guide) */
-  /* Base = Background Pane, Mantle/Crust = Secondary Panes */
-  --ctp-base: #1e1e2e;
-  --ctp-mantle: #181825;
-  --ctp-crust: #11111b;
-
-  /* Starlight Theme Variables - Dark Mode (Catppuccin Mocha)
-
-     IMPORTANT: Starlight's naming is semantic, NOT literal!
-     - --sl-color-black = page background (darkest in dark mode)
-     - --sl-color-white = text color (lightest in dark mode)
-     - Gray scale 1-6 goes from light (near-white) to dark (near-black)
-
-     For Catppuccin Mocha mapping:
-     - black → base (#1e1e2e) - page background
-     - white → text (#cdd6f4) - main text
-     - gray-1 through gray-6 → surface/overlay colors */
-  --sl-color-accent-low: #313244;
-  --sl-color-accent: #89b4fa;
-  --sl-color-accent-high: #b4befe;
-
-  /* Catppuccin Mocha gray scale (light to dark for text/borders) */
-  --sl-color-white: #cdd6f4;
+  /* Mocha neutral ramp (light → dark) — unchanged, matches DS exactly */
+  --sl-color-white: #cdd6f4;  /* mocha text */
   --sl-color-gray-1: #bac2de;
   --sl-color-gray-2: #a6adc8;
   --sl-color-gray-3: #6c7086;
   --sl-color-gray-4: #585b70;
   --sl-color-gray-5: #45475a;
   --sl-color-gray-6: #313244;
-  --sl-color-black: #1e1e2e;
+  --sl-color-black: #1e1e2e;  /* mocha base — page background */
 
-  /* Dark mode text - matches logo-symbol.svg color */
   --sl-color-text: #cdd6f4;
-  --sl-color-text-accent: #89b4fa;
+  --sl-color-text-accent: #7aa2d6;
+
+  /* Status — Catppuccin Mocha */
+  --psl-success: #a6e3a1;
+  --psl-warning: #f9e2af;
+  --psl-error: #f38ba8;
+  --psl-info: #94e2d5;
 
   /* Typography */
-  --sl-font:
-    system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
-    Roboto, sans-serif;
-  --sl-font-mono:
-    "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code", monospace;
+  --sl-font: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sl-font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", monospace;
 }
 
 /* ==========================================================================
@@ -466,15 +404,15 @@ starlight-menu-button button {
   font-weight: 700 !important;
 }
 
-/* Hero heading - Dark mode: Catppuccin Blue (#89b4fa) */
+/* Hero heading - Dark mode: DS lightened Path Blue (#7aa2d6) */
 :root[data-theme="dark"] .hero h1 {
-  color: #89b4fa !important;
+  color: #7aa2d6 !important;
   font-weight: 700 !important;
 }
 
 /* Hero tagline - Light mode */
 :root[data-theme="light"] .hero .tagline {
-  color: #57534e !important;
+  color: #6c6f85 !important;
 }
 
 /* Hero tagline - Dark mode: Catppuccin Subtext0 */

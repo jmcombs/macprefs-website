@@ -11,9 +11,9 @@ export default defineConfig({
     starlight({
       title: "macprefs",
       description: "Declarative macOS preferences manager",
-      // Use catppuccin themes for code blocks - Latte for light, Frappé for dark
+      // Use catppuccin themes for code blocks - Latte for light, Mocha for dark
       expressiveCode: {
-        themes: ["catppuccin-latte", "catppuccin-frappe"],
+        themes: ["catppuccin-latte", "catppuccin-mocha"],
         styleOverrides: {
           borderRadius: "0.375rem",
         },
@@ -61,6 +61,29 @@ export default defineConfig({
         root: { label: "English", lang: "en" },
       },
       head: [
+        // Netservant DS webfonts — Manrope (UI/body) + JetBrains Mono (code)
+        {
+          tag: "link",
+          attrs: {
+            rel: "preconnect",
+            href: "https://fonts.googleapis.com",
+          },
+        },
+        {
+          tag: "link",
+          attrs: {
+            rel: "preconnect",
+            href: "https://fonts.gstatic.com",
+            crossorigin: true,
+          },
+        },
+        {
+          tag: "link",
+          attrs: {
+            rel: "stylesheet",
+            href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap",
+          },
+        },
         {
           tag: "link",
           attrs: {
