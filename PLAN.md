@@ -229,15 +229,15 @@ themes. Boundary: keep all component-override **structure**; only token values +
 - Path-Blue header stays in both modes; card surfaces stay `#ffffff` on the `#eff1f5` page.
 
 ### Actionable TODOs
-- [ ] **`apps/docs/src/styles/custom.css`**: replace the two token blocks with the contents of
+- [x] **`apps/docs/src/styles/custom.css`**: replace the two token blocks with the contents of
   `design_handoff_macprefs_site_migration/netservant-starlight-theme.css`.
-- [ ] **Hex remap** the component overrides in `custom.css` per README §4.3
+- [x] **Hex remap** the component overrides in `custom.css` per README §4.3
   (`#f8f9fa→#eff1f5`, `#f1f3f4→#e6e9ef`, `#202124→#4c4f69`, `#1c1917→#4c4f69`, … drop the
   `--psl-gray-*` Stone ramp).
-- [ ] **Fonts**: load Manrope + JetBrains Mono via Google Fonts `<link>` in the Starlight `head`
+- [x] **Fonts**: load Manrope + JetBrains Mono via Google Fonts `<link>` in the Starlight `head`
   (`apps/docs/astro.config.mjs`), mirroring netservant-website's preconnect + stylesheet.
-- [ ] **Dark accent**: set `--sl-color-accent`/`--sl-color-text-accent` and hero `h1` dark to `#7aa2d6`.
-- [ ] **expressiveCode**: `themes: ["catppuccin-latte", "catppuccin-mocha"]` (was `…-frappe`).
+- [x] **Dark accent**: set `--sl-color-accent`/`--sl-color-text-accent` and hero `h1` dark to `#7aa2d6`.
+- [x] **expressiveCode**: `themes: ["catppuccin-latte", "catppuccin-mocha"]` (was `…-frappe`).
 
 ### Testing Gates
 | Criterion | Command | Expected |
@@ -474,7 +474,7 @@ returned to PLAN's literal fan-out form — the empty-workspace guard became dea
 - [x] Phase 2 — `packages/design-system`
 - [x] Phase 3 — `apps/docs` lift
 - [x] Phase 4 — docs-sync retarget
-- [ ] Phase 5 — docs theming
+- [x] Phase 5 — docs theming
 - [ ] Phase 6 — `apps/marketing` scaffold
 - [ ] Phase 7 — marketing homepage
 - [ ] Phase 8 — marketing pricing
