@@ -40,12 +40,12 @@ jobs:
           # CLI docs: TypeScript + Handlebars transformation (Phase 2)
           # Rollback: Replace with `node scripts/legacy/transform-cli-docs.cjs` if issues discovered
           # Note: Legacy scripts in scripts/legacy/ require cli-enrichments.json to be in same directory
-          npx tsx scripts/transform-cli-docs.ts macprefs-source/docs/CLI.json src/content/docs/reference/cli.mdx
+          npx tsx apps/docs/scripts/transform-cli-docs.ts macprefs-source/docs/CLI.json apps/docs/src/content/docs/reference/cli.mdx
 
           # Config docs: TypeScript + Handlebars transformation (Phase 3)
           # Rollback: Replace with `node scripts/legacy/transform-config-docs.cjs` if issues discovered
           if [ -f macprefs-source/docs/config-examples.md ]; then
-            npx tsx scripts/transform-config-docs.ts macprefs-source/docs/config-examples.md src/content/docs/reference/configuration.mdx
+            npx tsx apps/docs/scripts/transform-config-docs.ts macprefs-source/docs/config-examples.md apps/docs/src/content/docs/reference/configuration.mdx
           fi
 
           # Migration docs: TypeScript multi-page transformation (Phase 4)
@@ -58,7 +58,7 @@ jobs:
           #   - reference/troubleshooting.mdx
           # Rollback: Comment out this block to disable migration guide sync
           if [ -f macprefs-source/docs/MIGRATION_SETUP_CONFIG_AND_TROUBLESHOOTING.md ]; then
-            npx tsx scripts/transform-migration-docs.ts macprefs-source/docs/MIGRATION_SETUP_CONFIG_AND_TROUBLESHOOTING.md
+            npx tsx apps/docs/scripts/transform-migration-docs.ts macprefs-source/docs/MIGRATION_SETUP_CONFIG_AND_TROUBLESHOOTING.md
           fi
 
       - name: Cleanup source checkout
@@ -80,4 +80,4 @@ jobs:
           author: macprefs-release-bot[bot] <macprefs-release-bot[bot]@users.noreply.github.com>
           # Only include documentation files to avoid requiring workflows permission
           add-paths: |
-            src/content/docs/**
+            apps/docs/src/content/docs/**
