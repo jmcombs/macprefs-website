@@ -157,18 +157,18 @@ Boundary: do not apply the token diff, change fonts, or touch the docs-sync work
 - Starlight `head` (favicons, lemon.js, theme-color), `expressiveCode`, and `customCss` stay as-is.
 
 ### Actionable TODOs
-- [ ] **Move** `src/content/`, `src/assets/`, `src/styles/`, `content.config.ts`, `public/`,
+- [x] **Move** `src/content/`, `src/assets/`, `src/styles/`, `content.config.ts`, `public/`,
   `astro.config.mjs`, and `scripts/` → under `apps/docs/`.
-- [ ] **Drop marketing from docs**: delete `apps/docs/src/content/docs/index.mdx` and
+- [x] **Drop marketing from docs**: delete `apps/docs/src/content/docs/index.mdx` and
   `apps/docs/src/content/docs/pricing.mdx`; remove the **Pricing** entry from the `sidebar` in
   `apps/docs/astro.config.mjs`.
-- [ ] **`apps/docs/package.json`**: name `@macprefs/docs`; deps `astro`, `@astrojs/starlight`,
+- [x] **`apps/docs/package.json`**: name `@macprefs/docs`; deps `astro`, `@astrojs/starlight`,
   `@astrojs/sitemap`, `astro-seo`, `@tailwindcss/vite`, `tailwindcss`, `sharp`, `handlebars`, `tsx`,
   `@astrojs/check`, plus `@mdx-js/mdx` + `remark-gfm` (the **ADR-0003** MDX-safety test deps);
   scripts `dev`/`build`/`check`, `transform:{cli,config,migration}`, and `test:mdx-safety` pointing at
   `apps/docs/scripts/*`. (The ADR-0003 `scripts/__tests__/` + `scripts/__fixtures__/` and the
   `test:mdx-safety` script move with `scripts/`; the corresponding root scripts/devDeps are removed.)
-- [ ] **Keep** `apps/docs/astro.config.mjs` head/lemon/expressiveCode as-is (theming = Phase 5).
+- [x] **Keep** `apps/docs/astro.config.mjs` head/lemon/expressiveCode as-is (theming = Phase 5).
 
 ### Testing Gates
 | Criterion | Command | Expected |
@@ -472,7 +472,7 @@ returned to PLAN's literal fan-out form — the empty-workspace guard became dea
 
 - [x] Phase 1 — Monorepo scaffold
 - [x] Phase 2 — `packages/design-system`
-- [ ] Phase 3 — `apps/docs` lift
+- [x] Phase 3 — `apps/docs` lift
 - [ ] Phase 4 — docs-sync retarget
 - [ ] Phase 5 — docs theming
 - [ ] Phase 6 — `apps/marketing` scaffold
