@@ -14,17 +14,15 @@
   "scripts": {
     "dev": "npm run dev --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
-    "check": "npm run check --workspaces --if-present",
-    "transform:cli": "tsx scripts/transform-cli-docs.ts",
-    "transform:config": "tsx scripts/transform-config-docs.ts",
-    "transform:migration": "tsx scripts/transform-migration-docs.ts",
-    "test:mdx-safety": "node --import tsx scripts/__tests__/mdx-safety.mjs"
+    "check": "npm run check --workspaces --if-present"
   },
   "devDependencies": {
-    "@mdx-js/mdx": "^3.1.1",
-    "@types/node": "^25.0.10",
-    "handlebars": "^4.7.8",
-    "remark-gfm": "^4.0.0",
-    "tsx": "^4.21.0"
+    "@types/node": "^25.0.10"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "esbuild@0.27.7": true,
+    "fsevents@2.3.3": true,
+    "sharp@0.34.5": true
   }
 }
