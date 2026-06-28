@@ -196,11 +196,11 @@ Repoint `.github/workflows/receive-docs-sync.yml` so its transforms read/write u
 - The auto-PR `add-paths` must point at the new docs content path.
 
 ### Actionable TODOs
-- [ ] **`.github/workflows/receive-docs-sync.yml`**: change transform **output** paths to
+- [x] **`.github/workflows/receive-docs-sync.yml`**: change transform **output** paths to
   `apps/docs/src/content/docs/...`; change script invocations to `apps/docs/scripts/...`
   (or `npm run -w @macprefs/docs`); `npm ci` at repo root (installs workspaces); set
   `add-paths: apps/docs/src/content/docs/**`.
-- [ ] **Confirm** the sparse-checkout of `macprefs-source/docs/*` inputs and App-token steps are unchanged.
+- [x] **Confirm** the sparse-checkout of `macprefs-source/docs/*` inputs and App-token steps are unchanged.
 
 ### Testing Gates
 | Criterion | Command | Expected |
@@ -473,7 +473,7 @@ returned to PLAN's literal fan-out form — the empty-workspace guard became dea
 - [x] Phase 1 — Monorepo scaffold
 - [x] Phase 2 — `packages/design-system`
 - [x] Phase 3 — `apps/docs` lift
-- [ ] Phase 4 — docs-sync retarget
+- [x] Phase 4 — docs-sync retarget
 - [ ] Phase 5 — docs theming
 - [ ] Phase 6 — `apps/marketing` scaffold
 - [ ] Phase 7 — marketing homepage
