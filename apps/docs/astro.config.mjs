@@ -26,10 +26,6 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: "Pricing",
-          slug: "pricing",
-        },
-        {
           label: "Getting Started",
           items: [
             {
